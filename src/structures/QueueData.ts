@@ -59,19 +59,9 @@ export default class QueueData {
 		}
 	}
 
-	protected async setEmbedMessage(newEmbedMessage: Message<boolean>) {
+	private async setEmbedMessage(newEmbedMessage: Message<boolean>) {
 		if (newEmbedMessage.embeds.length != 1) {
-			let str: string;
-			switch (newEmbedMessage.embeds.length) {
-				case 0: {
-					str = "no embeds!";
-					break;
-				}
-				default: {
-					str = "more than one embed!";
-					break;
-				}
-			}
+			const str = newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!";
 			return console.error(`Error => QueueData.setEmbedMessage: newEmbedMessage has ${str}`);
 		}
 
@@ -83,10 +73,10 @@ export default class QueueData {
 
 	async deleteEmbedMessage() {
 		try {
-			if (typeof this.embedMessage !== "undefined") {
+			if (this._embedMessage !== undefined) {
 				await this.embedMessage.delete();
 			} else {
-				throw "Can NOT delete embed message! One has not been created yet!";
+				console.log("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");
 			}
 		} catch (error) {
 			console.error(error);
