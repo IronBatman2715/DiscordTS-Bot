@@ -79,7 +79,7 @@ export default class Client extends DiscordClient {
 	}
 
 	/** Load slash commands */
-	protected loadCommands(): void {
+	private loadCommands(): void {
 		console.log("Commands:");
 
 		readdirSync(`${this.basePath}/commands`).forEach((folder) => {
@@ -116,7 +116,7 @@ export default class Client extends DiscordClient {
 	}
 
 	/**
-	 * Register command files with Discord API. MUST have run {@link Client.loadCommands() Client.loadCommands()} first!
+	 * Register command files with Discord API. MUST have run {@link Client.loadCommands() loadCommands()} first!
 	 *
 	 * @param doGlobal [default: false] If true, will register commands globally (to all guilds/servers this bot is in)
 	 */
@@ -176,7 +176,7 @@ export default class Client extends DiscordClient {
 	}
 
 	/** Load events */
-	protected loadEvents(): void {
+	private loadEvents(): void {
 		console.log("Events:");
 
 		readdirSync(`${this.basePath}/events`).forEach((folder) => {
