@@ -10,7 +10,7 @@ import {
 	MessageEmbedOptions,
 	Permissions,
 } from "discord.js";
-import { Routes } from "discord-api-types/v9";
+import { Routes } from "discord-api-types/v10";
 import { REST } from "@discordjs/rest";
 import { Player } from "discord-music-player";
 
@@ -124,7 +124,7 @@ export default class Client extends DiscordClient {
 		const commandDataArr = this.commands.map((command) => command.builder.toJSON());
 
 		if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
-		const rest = new REST({ version: "9" }).setToken(process.env.DISCORD_TOKEN);
+		const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
 		if (this.devMode) {
 			try {
