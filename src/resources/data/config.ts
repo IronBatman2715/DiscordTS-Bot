@@ -9,11 +9,13 @@ type ActivitiesOptions = {
 
 type BotConfig = {
 	name: string;
+	version: string;
 	activities: ActivitiesOptions[];
 };
 
 const config: BotConfig = {
 	name: "Z-Bot",
+	version: "1.0.0",
 	activities: [
 		{
 			type: ActivityTypes.PLAYING,

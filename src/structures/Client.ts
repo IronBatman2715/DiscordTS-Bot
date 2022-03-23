@@ -56,7 +56,7 @@ export default class Client extends DiscordClient {
 			deafenOnJoin: true,
 		});
 
-		console.log(`Loading ${this.config.name}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
+		console.log(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
 
 		//Load events
 		this.loadEvents();
