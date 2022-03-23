@@ -5,18 +5,18 @@ import getGuildQueue from "../../functions/music/getGuildQueue";
 import tempMessage from "../../functions/discord/tempMessage";
 
 export = new Command(
-	new SlashCommandBuilder().setName("resume").setDescription("Resume paused music."),
+  new SlashCommandBuilder().setName("resume").setDescription("Resume paused music."),
 
-	async (client, interaction) => {
-		const guildQueue = await getGuildQueue(client, interaction);
-		if (typeof guildQueue === "undefined") return;
+  async (client, interaction) => {
+    const guildQueue = await getGuildQueue(client, interaction);
+    if (typeof guildQueue === "undefined") return;
 
-		if (!guildQueue.paused) {
-			await tempMessage(interaction, "Queue is not paused right now.");
-		} else {
-			guildQueue.setPaused(false);
+    if (!guildQueue.paused) {
+      await tempMessage(interaction, "Queue is not paused right now.");
+    } else {
+      guildQueue.setPaused(false);
 
-			await interaction.deleteReply();
-		}
-	}
+      await interaction.deleteReply();
+    }
+  }
 );

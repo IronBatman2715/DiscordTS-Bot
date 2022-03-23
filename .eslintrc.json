@@ -1,27 +1,27 @@
 {
-	"root": true,
-	"parser": "@typescript-eslint/parser",
-	"parserOptions": {
-		"project": ["./tsconfig.json"]
-	},
-	"plugins": ["@typescript-eslint"],
-	"extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
-	"rules": {
-		"no-fallthrough": "off",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "no-fallthrough": "off",
 
-		"@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/no-var-requires": "warn",
 
-		"prettier/prettier": [
-			"warn",
-			{
-				"semi": true,
-				"singleQuote": false,
-				"trailingComma": "es5",
-				"endOfLine": "auto",
-				"printWidth": 120,
-				"useTabs": true
-			}
-		]
-	},
-	"ignorePatterns": ["*.json"]
+    "prettier/prettier": [
+      "warn",
+      {
+        "semi": true,
+        "singleQuote": false,
+        "trailingComma": "es5",
+        "endOfLine": "auto",
+        "printWidth": 120,
+        "useTabs": false
+      }
+    ]
+  },
+  "ignorePatterns": ["*.json"]
 }

@@ -1,8 +1,8 @@
 import { GuildMember, PermissionResolvable } from "discord.js";
 
 interface IUserCheckOptions {
-	permissions: PermissionResolvable;
-	userIdList: string[];
+  permissions: PermissionResolvable;
+  userIdList: string[];
 }
 
 /**
@@ -12,27 +12,27 @@ interface IUserCheckOptions {
  *
  */
 export default (member: GuildMember, options: Partial<IUserCheckOptions>): boolean => {
-	//console.log("member: ", member);
-	//console.log("options: ", options);
+  //console.log("member: ", member);
+  //console.log("options: ", options);
 
-	if (Object.keys(options).length > 0) {
-		if (options.permissions !== undefined) {
-			if (!member.permissions.has(options.permissions, true)) {
-				//console.log("User does not have permission!");
-				return false;
-			}
-		}
+  if (Object.keys(options).length > 0) {
+    if (options.permissions !== undefined) {
+      if (!member.permissions.has(options.permissions, true)) {
+        //console.log("User does not have permission!");
+        return false;
+      }
+    }
 
-		if (options.userIdList !== undefined) {
-			if (!options.userIdList.includes(member.user.id)) {
-				//console.log("User is not in specified user list!");
-				return false;
-			}
-		}
+    if (options.userIdList !== undefined) {
+      if (!options.userIdList.includes(member.user.id)) {
+        //console.log("User is not in specified user list!");
+        return false;
+      }
+    }
 
-		//console.log("Function/isUser: User passed all checks!");
-		return true;
-	}
-	//console.log("Function/isUser: No options specified, returning false!");
-	return false;
+    //console.log("Function/isUser: User passed all checks!");
+    return true;
+  }
+  //console.log("Function/isUser: No options specified, returning false!");
+  return false;
 };

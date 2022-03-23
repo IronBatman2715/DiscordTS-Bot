@@ -8,6 +8,6 @@ configDotEnv();
 const client: Client = new Client(true);
 
 client
-	.registerCommands(true)
-	.then(() => console.log("Done!"))
-	.catch((error) => console.error(error));
+  .registerCommands(true)
+  .then(() => console.log("Done!"))
+  .catch((error) => console.error(error));
