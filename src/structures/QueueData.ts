@@ -35,14 +35,26 @@ export default class QueueData {
   async updateNowPlaying(song: Song) {
     //Create now playing embed
     const nowPlayingEmbed = this.client.genEmbed({
-      title: "Now playing",
-      description: `[${song.name}](${song.url})`,
+      title: song.name,
+      url: song.url,
       author: {
         name: song.requestedBy?.username || "unassigned",
         iconURL: song.requestedBy?.avatarURL({ dynamic: true }) || "",
       },
+      fields: [
+        {
+          name: "Channel/Artist",
+          value: song.author,
+          inline: true,
+        },
+        {
+          name: "Duration",
+          value: song.duration,
+          inline: true,
+        },
+      ],
       thumbnail: {
-        url: "attachment://music.png",
+        url: song.thumbnail,
       },
     });
 
@@ -50,7 +62,6 @@ export default class QueueData {
       //Send/update and save embed as message
       const newEmbedMessage = await this.latestInteraction.followUp({
         embeds: [nowPlayingEmbed],
-        files: [`${this.client.basePath}/resources/assets/icons/music.png`],
       });
 
       this.setEmbedMessage(newEmbedMessage as Message<boolean>);
