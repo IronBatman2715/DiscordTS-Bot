@@ -32,6 +32,7 @@ class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
 }
 
 /* --- Mongoose --- */
+/** Sourced from {@link https://mongoosejs.com/docs/connections.html#connection-events mongoose website} */
 type MongooseEventList = {
   connecting: string;
   connected: string;
