@@ -48,7 +48,7 @@ builder
           .setName("overwrite")
           .setDescription("Overwrite current value with a new one.")
           .addChannelOption((subOption) =>
-            subOption.setName("new-value").setDescription("Enter a new value.").addChannelType(0).setRequired(true)
+            subOption.setName("new-value").setDescription("Enter a new value.").addChannelTypes(0).setRequired(true)
           )
       )
       .addSubcommand((option) =>
@@ -65,9 +65,11 @@ builder
           .setName("new-value")
           .setDescription("Enter a new value.")
           .setRequired(true)
-          .addChoice("DISABLED", RepeatMode.DISABLED)
-          .addChoice("SONG", RepeatMode.SONG)
-          .addChoice("QUEUE", RepeatMode.QUEUE)
+          .addChoices(
+            { name: "DISABLED", value: RepeatMode.DISABLED },
+            { name: "SONG", value: RepeatMode.SONG },
+            { name: "QUEUE", value: RepeatMode.QUEUE }
+          )
       )
   );
 

@@ -13,9 +13,11 @@ export = new Command(
         .setName("option")
         .setDescription("Repeat mode to use.")
         .setRequired(true)
-        .addChoice("disable", RepeatMode.DISABLED)
-        .addChoice("song", RepeatMode.SONG)
-        .addChoice("queue", RepeatMode.QUEUE)
+        .addChoices(
+          { name: "disable", value: RepeatMode.DISABLED },
+          { name: "song", value: RepeatMode.SONG },
+          { name: "queue", value: RepeatMode.QUEUE }
+        )
     ),
 
   async (client, interaction) => {
