@@ -69,13 +69,18 @@ export default class Client extends DiscordClient {
 
   /** Login to Discord API */
   async start(): Promise<void> {
-    if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
+    try {
+      if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
 
-    await this.registerCommands();
-    await this.DB.connect();
+      await this.registerCommands();
+      await this.DB.connect();
 
-    logger("Logging in... ");
-    this.login(process.env.DISCORD_TOKEN);
+      logger("Logging in... ");
+      this.login(process.env.DISCORD_TOKEN);
+    } catch (error) {
+      console.error(error);
+      console.log("Could not start the bot! Make sure your environment variables are set!");
+    }
   }
 
   /** Load slash commands */
