@@ -5,9 +5,9 @@ import { GuildConfig, GuildConfigModel } from "../resources/data/mongoModels/Gui
 export default class DB {
   /** Connects to MongoDB server with `DB_TOKEN` environment variable */
   async connect() {
-    if (process.env.DB_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
-
     try {
+      if (process.env.DB_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
+
       await mongoose.connect(process.env.DB_TOKEN);
     } catch (error) {
       console.error(error);
