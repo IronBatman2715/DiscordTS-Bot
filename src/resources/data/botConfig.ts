@@ -1,19 +1,19 @@
 import { ExcludeEnum } from "discord.js";
 import { ActivityTypes } from "discord.js/typings/enums";
 
-type ActivitiesOptions = {
+export type ActivitiesOptions = {
   name: string;
   type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">;
   url?: string;
 };
 
-type BotConfig = {
+export type BotConfig = {
   name: string;
   version: string;
   activities: ActivitiesOptions[];
 };
 
-const config: BotConfig = {
+export const botConfig: BotConfig = {
   name: "Z-Bot",
   version: "1.0.0",
   activities: [
@@ -96,5 +96,4 @@ const config: BotConfig = {
   ],
 };
 
-export { ActivitiesOptions, BotConfig, config };
-export default config;
+export default botConfig;
