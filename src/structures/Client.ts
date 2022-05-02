@@ -20,7 +20,7 @@ import { IBaseEvent } from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import logger from "../functions/general/logger";
 import isUser from "../functions/discord/isUser";
-import botConfig from "../resources/data/config";
+import botConfig from "../resources/data/botConfig";
 
 enum BasePath {
   /** Development */
@@ -80,6 +80,7 @@ export default class Client extends DiscordClient {
     } catch (error) {
       console.error(error);
       console.log("Could not start the bot! Make sure your environment variables are set!");
+      process.exit(1);
     }
   }
 
@@ -264,12 +265,9 @@ export default class Client extends DiscordClient {
         if (process.env.DEV_IDS === undefined) throw "Must set at least one discord userId to DEV_IDS!";
 
         // Parse DEV_IDS
-        const userCheckOptions = {
-          userIdList: process.env.DEV_IDS.includes(", ")
-            ? process.env.DEV_IDS.split(", ")
-            : [process.env.DEV_IDS] || [""],
-        };
+        const userIdList = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
 
+        const userCheckOptions = { userIdList };
         if (!isUser(interaction.member as GuildMember, userCheckOptions)) {
           await interaction.followUp({
             content: `This is a developer only command!`,
