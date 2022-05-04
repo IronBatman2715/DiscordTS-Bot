@@ -3,19 +3,15 @@ import mongoose from "mongoose";
 import { GuildConfig, GuildConfigModel } from "../resources/data/mongoModels/GuildConfig";
 
 export default class DB {
-  /** Connects to MongoDB server with `DB_TOKEN` environment variable */
+  /** Connects to MongoDB server with `DB_URL` environment variable */
   async connect() {
-    try {
-      if (process.env.DB_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
+    if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
 
-      await mongoose.connect(process.env.DB_TOKEN);
-    } catch (error) {
-      console.error(error);
-    }
+    await mongoose.connect(process.env.DB_URL);
   }
 
   validateGuildId(guildId: string | null): void {
-    if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guilId: ${guildId}]!`;
+    if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
   }
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
@@ -48,7 +44,7 @@ export default class DB {
         }
 
         default: {
-          throw `Found multiple config documents for a server [guilId: ${guildId}]!`;
+          throw `Found multiple config documents for a server [guildId: ${guildId}]!`;
         }
       }
     } catch (error) {

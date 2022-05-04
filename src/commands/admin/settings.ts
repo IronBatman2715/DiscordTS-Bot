@@ -8,10 +8,8 @@ import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
 import { guildConfigDefaults, guildConfigDescriptions } from "../../resources/data/mongoModels/GuildConfig";
 
-/** Omit `guildId` and `greetings` from `GuildConfig` */
-const guildConfigSettings = Object.keys(guildConfigDefaults).filter(
-  (setting) => setting !== "guildId" && setting !== "greetings"
-);
+/** Omit `greetings` from `GuildConfig` */
+const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
 
 //Base slash command builder
 const builder = new SlashCommandBuilder()

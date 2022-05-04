@@ -16,7 +16,7 @@ import { Player } from "discord-music-player";
 
 import Command from "./Command";
 import DB from "./DB";
-import { IBaseEvent } from "./Event";
+import BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import logger from "../functions/general/logger";
 import isUser from "../functions/discord/isUser";
@@ -70,13 +70,11 @@ export default class Client extends DiscordClient {
   /** Login to Discord API */
   async start(): Promise<void> {
     try {
-      if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
-
       await this.registerCommands();
       await this.DB.connect();
 
       logger("Logging in... ");
-      this.login(process.env.DISCORD_TOKEN);
+      await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
       console.error(error);
       console.log("Could not start the bot! Make sure your environment variables are set!");
@@ -198,7 +196,7 @@ export default class Client extends DiscordClient {
           const eventFileName = file.slice(0, file.length - 3);
 
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const event: IBaseEvent = require(`../events/${folder}/${file}`);
+          const event: BaseEvent = require(`../events/${folder}/${file}`);
 
           //Bind event to its corresponding event emitter
           event.bindToEventEmitter(this);

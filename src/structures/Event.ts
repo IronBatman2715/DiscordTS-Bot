@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import Client from "./Client";
 
 /* --- BaseEvent --- */
-interface IBaseEvent {
+export interface IBaseEvent {
   event: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
   run: Function;
@@ -17,7 +17,7 @@ type ClientRunFunction<Ev extends keyof ClientEvents> = {
   (client: Client, ...args: ClientEvents[Ev]);
 };
 
-class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
+export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
   readonly event: Ev;
   readonly run: ClientRunFunction<Ev>;
 
@@ -51,7 +51,7 @@ type MongooseRunFunction = {
   (client: Client);
 };
 
-class MongooseEvent<Ev extends keyof MongooseEventList> implements IBaseEvent {
+export class MongooseEvent<Ev extends keyof MongooseEventList> implements IBaseEvent {
   readonly event: Ev;
   readonly run: MongooseRunFunction;
 
@@ -70,7 +70,7 @@ type MusicPlayerRunFunction<Ev extends keyof PlayerEvents> = {
   (client: Client, ...args: PlayerEvents[Ev]);
 };
 
-class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEvent {
+export class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEvent {
   readonly event: Ev;
   readonly run: MusicPlayerRunFunction<Ev>;
 
@@ -85,4 +85,4 @@ class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEvent {
 }
 
 /* --- Export --- */
-export { IBaseEvent, ClientEvent, MongooseEvent, MusicPlayerEvent };
+export default IBaseEvent;

@@ -14,7 +14,7 @@ export = new ClientEvent("ready", (client) => {
 });
 
 function setRandomBotPresence(client: Client, unusedActivities: ActivitiesOptions[]) {
-  //If used all of them, regen array to restart
+  //If used all of them, regenerate array to restart
   if (unusedActivities.length < 1) {
     unusedActivities = client.config.activities.slice();
   }
