@@ -32,7 +32,7 @@ export = new Command(
     const repeatMode = interaction.options.getInteger("option", true);
     const repeatModeStr = RepeatMode[repeatMode].toLowerCase();
 
-    //Change the repeat behvior of the queue
+    //Change the repeat behavior of the queue
     if (guildQueue.repeatMode == repeatMode) {
       return interaction.followUp({
         content: `Already set to that repeat mode (${repeatModeStr})!`,

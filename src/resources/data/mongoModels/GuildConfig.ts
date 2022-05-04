@@ -1,15 +1,16 @@
 import { RepeatMode } from "discord-music-player";
-import { Document, Schema, Model, model } from "mongoose";
+import { model, Schema } from "mongoose";
+import type { Document, Model } from "mongoose";
 
-const guildConfigDescriptions = {
-  greetings: "List of greetings that the bot can send.",
-  maxMessagesCleared: "Maximum number of messages `/clear` can delete in one command call.",
-  musicChannelId: "If specified, ALL music commands MUST be entered in this text channel!",
-  defaultRepeatMode: "Default repeat mode of music player.",
+export type GuildConfig = {
+  guildId: string;
+  greetings: string[];
+  maxMessagesCleared: number;
+  musicChannelId: string;
+  defaultRepeatMode: RepeatMode;
 };
 
-const guildConfigDefaults = {
-  guildId: "",
+export const guildConfigDefaults: Omit<GuildConfig, "guildId"> = {
   greetings: [
     "Hello!",
     "Hello there!",
@@ -27,12 +28,17 @@ const guildConfigDefaults = {
   defaultRepeatMode: RepeatMode.DISABLED,
 };
 
-type GuildConfig = typeof guildConfigDefaults;
+export const guildConfigDescriptions = {
+  greetings: "List of greetings that the bot can send.",
+  maxMessagesCleared: "Maximum number of messages `/clear` can delete in one command call.",
+  musicChannelId: "If specified, ALL music commands MUST be entered in this text channel!",
+  defaultRepeatMode: "Default repeat mode of music player.",
+};
 
 interface IGuildConfig extends Document, GuildConfig {}
 
-const GuildConfigModel: Model<IGuildConfig> = model(
-  "guildConfig",
+export const GuildConfigModel: Model<IGuildConfig> = model(
+  "GuildConfig",
 
   new Schema({
     guildId: {
@@ -61,6 +67,3 @@ const GuildConfigModel: Model<IGuildConfig> = model(
     },
   })
 );
-
-export { guildConfigDefaults, guildConfigDescriptions };
-export { GuildConfig, IGuildConfig, GuildConfigModel };
