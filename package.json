@@ -46,6 +46,6 @@
     "node": ">= 16.6.0"
   },
   "prisma": {
-    "schema": "src/resources/data/mongoModels/schema.prisma"
+    "schema": "src/resources/data/database/schema.prisma"
   }
 }
