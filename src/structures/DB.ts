@@ -1,69 +1,74 @@
-import mongoose from "mongoose";
+import { PrismaClient } from "@prisma/client";
+import type { GuildConfig } from "@prisma/client";
 
-import { GuildConfig, GuildConfigModel } from "../resources/data/mongoModels/GuildConfig";
+import { guildConfigDefaults } from "../resources/data/mongoModels/GuildConfig";
+
+const prisma = new PrismaClient({
+  log: [
+    { emit: "event", level: "error" },
+    { emit: "event", level: "info" },
+    { emit: "event", level: "query" },
+    { emit: "event", level: "warn" },
+  ],
+});
 
 export default class DB {
+  static prisma = prisma;
+
   /** Connects to MongoDB server with `DB_URL` environment variable */
   async connect() {
-    if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
+    try {
+      if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
 
-    await mongoose.connect(process.env.DB_URL);
+      await DB.prisma.$connect();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  validateGuildId(guildId: string | null): void {
-    if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
+  async disconnect() {
+    try {
+      await DB.prisma.$disconnect();
+      console.log("Disconnected from DB!");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
-  async getGuildConfig(guildId: string | null): Promise<GuildConfig> {
-    this.validateGuildId(guildId);
+  async getGuildConfig(guildId: string | null) {
+    if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
-    try {
-      const guildConfigSearch = await GuildConfigModel.find({
+    const query = await DB.prisma.guildConfig.findUnique({ where: { guildId } });
+
+    if (query) return query;
+
+    //Could not find match, creating a new one
+    return await DB.prisma.guildConfig.create({
+      data: {
         guildId,
-      });
-
-      switch (guildConfigSearch.length) {
-        //Guild config document does not exist yet
-        case 0: {
-          //console.log("Guild config document not present. Generating one with the default values!");
-
-          //Create new
-          const guildConfigDefault = new GuildConfigModel({
-            guildId,
-          });
-
-          //Save to DB
-          const guildConfigNew = await guildConfigDefault.save();
-
-          //console.log("New document matching current guildId: ", guildConfigNew);
-          return guildConfigNew.toObject();
-        }
-        case 1: {
-          return guildConfigSearch[0].toObject();
-        }
-
-        default: {
-          throw `Found multiple config documents for a server [guildId: ${guildId}]!`;
-        }
-      }
-    } catch (error) {
-      console.error(error);
-      throw `Errored fetching GuildConfig for guildId: ${guildId}!`;
-    }
+        greetings: guildConfigDefaults.greetings,
+        maxMessagesCleared: guildConfigDefaults.maxMessagesCleared,
+        musicChannelId: guildConfigDefaults.musicChannelId,
+        defaultRepeatMode: guildConfigDefaults.defaultRepeatMode,
+      },
+    });
   }
 
   /** Update the guild config document corresponding to guildId with the data in guildConfig. */
   async updateGuildConfig(guildId: string | null, guildConfig: Partial<GuildConfig>) {
-    this.validateGuildId(guildId);
+    if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
-    return await GuildConfigModel.updateOne({ guildId }, guildConfig).catch((error) => console.error(error));
+    return await DB.prisma.guildConfig.update({
+      where: { guildId },
+      data: guildConfig,
+    });
   }
 
   /** Delete the guild config document corresponding to guildId. */
   async deleteGuildConfig(guildId: string | null) {
-    this.validateGuildId(guildId);
+    if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
-    return await GuildConfigModel.deleteOne({ guildId }).catch((error) => console.error(error));
+    return await DB.prisma.guildConfig.delete({ where: { guildId } });
   }
 }

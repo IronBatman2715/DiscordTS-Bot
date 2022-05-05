@@ -1,16 +1,7 @@
 import { RepeatMode } from "discord-music-player";
-import { model, Schema } from "mongoose";
-import type { Document, Model } from "mongoose";
+import type { GuildConfig } from "@prisma/client";
 
-export type GuildConfig = {
-  guildId: string;
-  greetings: string[];
-  maxMessagesCleared: number;
-  musicChannelId: string;
-  defaultRepeatMode: RepeatMode;
-};
-
-export const guildConfigDefaults: Omit<GuildConfig, "guildId"> = {
+export const guildConfigDefaults: Omit<GuildConfig, "guildId" | "id"> = {
   greetings: [
     "Hello!",
     "Hello there!",
@@ -35,35 +26,4 @@ export const guildConfigDescriptions = {
   defaultRepeatMode: "Default repeat mode of music player.",
 };
 
-interface IGuildConfig extends Document, GuildConfig {}
-
-export const GuildConfigModel: Model<IGuildConfig> = model(
-  "GuildConfig",
-
-  new Schema({
-    guildId: {
-      type: String,
-      required: true,
-    },
-    greetings: {
-      type: [String],
-      required: true,
-      default: guildConfigDefaults.greetings,
-    },
-    maxMessagesCleared: {
-      type: Number,
-      required: true,
-      default: guildConfigDefaults.maxMessagesCleared,
-    },
-    musicChannelId: {
-      type: String,
-      required: false,
-      default: guildConfigDefaults.musicChannelId,
-    },
-    defaultRepeatMode: {
-      type: Number,
-      required: true,
-      default: guildConfigDefaults.defaultRepeatMode,
-    },
-  })
-);
+export default { defaults: guildConfigDefaults, descriptions: guildConfigDescriptions };
