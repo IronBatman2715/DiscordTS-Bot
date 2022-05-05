@@ -1,8 +1,9 @@
 import { ClientEvents } from "discord.js";
+import type { Prisma } from "@prisma/client";
 import { PlayerEvents } from "discord-music-player";
-import mongoose from "mongoose";
 
 import Client from "./Client";
+import DB from "./DB";
 
 /* --- BaseEvent --- */
 export interface IBaseEvent {
@@ -31,37 +32,26 @@ export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
   }
 }
 
-/* --- Mongoose --- */
-/** Sourced from {@link https://mongoosejs.com/docs/connections.html#connection-events mongoose website} */
-type MongooseEventList = {
-  connecting: string;
-  connected: string;
-  open: string;
-  disconnecting: string;
-  disconnected: string;
-  close: string;
-  reconnected: string;
-  error: string;
-  fullsetup: string;
-  all: string;
-  reconnectFailed: string;
+/* --- Prisma --- */
+type PrismaEvents = Prisma.LogLevel;
+
+/** Omit params and duration for MongoDB, as they
+ *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined} */
+type PrismaRunFunction<Ev extends PrismaEvents> = {
+  (client: Client, event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent);
 };
 
-type MongooseRunFunction = {
-  (client: Client);
-};
-
-export class MongooseEvent<Ev extends keyof MongooseEventList> implements IBaseEvent {
+export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
   readonly event: Ev;
-  readonly run: MongooseRunFunction;
+  readonly run: PrismaRunFunction<Ev>;
 
-  constructor(event: Ev, run: MongooseRunFunction) {
+  constructor(event: Ev, run: PrismaRunFunction<Ev>) {
     this.event = event;
     this.run = run;
   }
 
   bindToEventEmitter(client: Client) {
-    mongoose.connection.on(this.event, this.run.bind(null, client));
+    DB.prisma.$on(this.event, this.run.bind(null, client));
   }
 }
 
