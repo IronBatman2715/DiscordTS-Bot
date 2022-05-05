@@ -6,7 +6,7 @@ import Client from "../../structures/Client";
 import Command from "../../structures/Command";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
-import { guildConfigDefaults, guildConfigDescriptions } from "../../resources/data/mongoModels/GuildConfig";
+import { guildConfigDefaults, guildConfigDescriptions } from "../../resources/data/database/GuildConfig";
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");

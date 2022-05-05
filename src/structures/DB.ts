@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { GuildConfig } from "@prisma/client";
 
-import { guildConfigDefaults } from "../resources/data/mongoModels/GuildConfig";
+import { guildConfigDefaults } from "../resources/data/database/GuildConfig";
 
 const prisma = new PrismaClient({
   log: [
