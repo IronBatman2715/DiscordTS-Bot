@@ -1,19 +1,24 @@
 {
   "name": "discordts-bot",
-  "author": "IronBatman2715",
+  "author": {
+    "name": "IronBatman2715",
+    "url": "https://github.com/IronBatman2715/"
+  },
   "repository": "https://github.com/IronBatman2715/DiscordTS-Bot",
   "license": "GNU GPLv3",
   "private": true,
   "main": "./dist/index.js",
   "scripts": {
+    "postinstall": "prisma generate",
+    "prebuild": "rm -rf dist @types",
     "build": "tsc -p . && cp -r ./src/resources/assets ./dist/resources/assets",
-    "predev": "prisma generate",
+    "predev": "npm run updateSchema",
     "dev": "nodemon",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
+    "updateSchema": "prisma format && prisma generate",
+    "viewDB": "prisma studio",
     "registerGlobal": "ts-node ./src/registerGlobalCommands.ts --enable-source-maps",
-    "start": "node .",
-    "updateSchema": "prisma generate",
-    "viewDB": "prisma studio"
+    "start": "node ."
   },
   "dependencies": {
     "@discordjs/builders": "^0.13.0",
@@ -36,6 +41,9 @@
     "prisma": "^3.13.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
+  },
+  "engines": {
+    "node": ">= 16.6.0"
   },
   "prisma": {
     "schema": "src/resources/data/mongoModels/schema.prisma"
