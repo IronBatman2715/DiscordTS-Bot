@@ -1,5 +1,5 @@
 import { MusicPlayerEvent } from "../../structures/Event";
-import QueueWithData from "../../interfaces/QueueWithData";
+import type QueueWithData from "../../interfaces/QueueWithData";
 import tempMessage from "../../functions/discord/tempMessage";
 
 export = new MusicPlayerEvent("songAdd", async (client, baseQueue, song) => {

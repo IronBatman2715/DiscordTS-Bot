@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 import Command from "../../structures/Command";
 

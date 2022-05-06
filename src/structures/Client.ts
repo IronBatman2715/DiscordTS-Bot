@@ -1,22 +1,13 @@
 import { readdirSync } from "fs";
-import {
-  CacheType,
-  Client as DiscordClient,
-  Collection,
-  CommandInteraction,
-  GuildMember,
-  Intents,
-  MessageEmbed,
-  MessageEmbedOptions,
-  Permissions,
-} from "discord.js";
+import { Client as DiscordClient, Collection, Intents, MessageEmbed, Permissions } from "discord.js";
+import type { CacheType, CommandInteraction, GuildMember, MessageEmbedOptions } from "discord.js";
 import { Routes } from "discord-api-types/v10";
 import { REST } from "@discordjs/rest";
 import { Player } from "discord-music-player";
 
 import Command from "./Command";
 import DB from "./DB";
-import BaseEvent from "./Event";
+import type BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import logger from "../functions/general/logger";
 import isUser from "../functions/discord/isUser";
@@ -39,7 +30,8 @@ export default class Client extends DiscordClient {
   readonly player: Player;
 
   /**
-   * @param devMode [default: false] If true, will register developer commands to the discord server corresponding to environment variable `TEST_GUILD_ID`
+   *  @param devMode [default false] If true, will register developer commands to the discord server corresponding to
+   * environment variable `TEST_GUILD_ID`
    */
   constructor(devMode = false) {
     console.log("*** DISCORD.JS BOT: INITIALIZATION ***");

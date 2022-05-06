@@ -1,5 +1,5 @@
-import { CacheType, CommandInteraction } from "discord.js";
-import { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "@discordjs/builders";
+import type { CacheType, CommandInteraction } from "discord.js";
+import type { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "@discordjs/builders";
 
 import Client from "./Client";
 

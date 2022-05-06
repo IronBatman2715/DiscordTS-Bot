@@ -1,8 +1,8 @@
-import { CacheType, CommandInteraction } from "discord.js";
+import type { CacheType, CommandInteraction } from "discord.js";
 
-import Client from "../../structures/Client";
+import type Client from "../../structures/Client";
 import QueueData from "../../structures/QueueData";
-import QueueWithData from "../../interfaces/QueueWithData";
+import type QueueWithData from "../../interfaces/QueueWithData";
 //import logger from "../general/logger";
 
 /**

@@ -1,6 +1,6 @@
-import { Queue } from "discord-music-player";
+import type { Queue } from "discord-music-player";
 
-import QueueData from "../structures/QueueData";
+import type QueueData from "../structures/QueueData";
 
 export default interface QueueWithData extends Queue {
   data: QueueData;

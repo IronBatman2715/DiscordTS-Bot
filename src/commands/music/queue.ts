@@ -1,4 +1,4 @@
-import { EmbedFieldData } from "discord.js";
+import type { EmbedFieldData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { RepeatMode } from "discord-music-player";
 
