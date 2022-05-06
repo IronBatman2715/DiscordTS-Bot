@@ -1,6 +1,7 @@
 import type { Message, CommandInteraction, CacheType } from "discord.js";
 
 import logger from "../../logger";
+import sleep from "../general/sleep";
 
 /**
  * Send a temporary message with content `text` to the channel that `interaction` is in.
@@ -34,16 +35,16 @@ export default async (
         content: newText + durationInSeconds.toString(),
       })) as Message;
 
-      setTimeout(() => {
-        countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
-      }, 1000 * countdownIntervalInSeconds);
+      logger.verbose(durationInSeconds);
+
+      await sleep(1000 * countdownIntervalInSeconds);
+      await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
     } else {
       //No visible countdown to when message will delete itself
       const message = (await interaction.followUp({ content: text })) as Message;
 
-      setTimeout(() => {
-        message.delete();
-      }, 1000 * durationInSeconds);
+      await sleep(1000 * durationInSeconds);
+      await message.delete();
     }
     logger.verbose("Done ticking tempMessage!");
   } catch (error) {
@@ -58,8 +59,11 @@ async function countdown(t: number, countdownIntervalInSeconds: number, tempMess
     await tempMsg.delete();
     return;
   } else {
-    setTimeout(() => {
-      countdown(t - countdownIntervalInSeconds, countdownIntervalInSeconds, tempMsg, newText);
-    }, 1000 * countdownIntervalInSeconds);
+    //Tick the interval
+    const newT = t - countdownIntervalInSeconds;
+    logger.verbose(t);
+
+    await sleep(1000 * countdownIntervalInSeconds);
+    await countdown(newT, countdownIntervalInSeconds, tempMsg, newText);
   }
 }
