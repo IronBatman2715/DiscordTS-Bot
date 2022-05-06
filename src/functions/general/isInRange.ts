@@ -1,3 +1,5 @@
+import logger from "../../logger";
+
 /**
  * Evaluate if `value` is between `min` and `max` (inclusive).
  *
@@ -6,7 +8,7 @@
  */
 export default (value: number, min = 1, max = Number.MAX_SAFE_INTEGER): boolean => {
   if (min > max) {
-    console.error("isInRange function received a min that was larger than max! Outputting false.");
+    logger.error("isInRange function received a min that was larger than max! Outputting false.");
     return false;
   }
 

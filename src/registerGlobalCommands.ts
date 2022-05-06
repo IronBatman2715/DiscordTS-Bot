@@ -1,22 +1,24 @@
 import { config as configDotEnv } from "dotenv";
 
 import Client from "./structures/Client";
-
-console.clear();
+import logger from "./logger";
 
 configDotEnv();
 const client: Client = new Client();
 
+let exitCode = 1;
+
 client
   .registerCommands(true)
   .then(() => {
-    process.stdout.write("Successfully registered");
+    logger.info("Successfully registered global commands!");
+    exitCode = 0;
   })
   .catch((error) => {
-    console.error(error);
-    process.stdout.write("FAILED to register");
+    logger.error(error);
+    logger.info("FAILED to register global commands!");
   })
   .finally(() => {
-    process.stdout.write(" global commands! Closing process in 3 seconds...");
-    setTimeout(process.exit(0), 3000);
+    logger.info("Closing process in 3 seconds...");
+    setTimeout(process.exit(exitCode), 3000);
   });

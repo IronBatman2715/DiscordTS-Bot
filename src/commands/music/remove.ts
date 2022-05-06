@@ -21,9 +21,7 @@ export = new Command(
     if (typeof guildQueue === "undefined") return;
 
     const index = interaction.options.getInteger("queue-number", true); //place in queue (starts at 1)
-    //console.log("Input removal index: ", index);
     const arrayIndex = index - 1; //song array index (starts at 0)
-    //console.log("Array-wise removal index: ", index);
 
     if (!isInRange(index, 1, guildQueue.songs.length)) {
       return interaction.followUp({

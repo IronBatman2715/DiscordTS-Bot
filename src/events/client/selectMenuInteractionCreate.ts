@@ -1,15 +1,16 @@
 import type { EmbedFieldData } from "discord.js";
 
 import { ClientEvent } from "../../structures/Event";
+import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
   if (interaction.isSelectMenu()) {
-    //console.log("SelectMenuInteraction created!");
-    //console.log("values selected: ", interaction.values);
+    logger.verbose("SelectMenuInteraction created!");
+    logger.verbose(`values selected: [${interaction.values}]`);
 
     //Show user that select menu is loading
     await interaction.deferUpdate().catch((error) => {
-      console.error(error);
+      logger.error(error);
     });
 
     switch (interaction.customId) {
@@ -51,7 +52,8 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
       }
 
       default: {
-        return console.error("Could not match customId of select menu to one of this bot's!");
+        logger.error("Could not match customId of select menu to one of this bot's!");
+        return;
       }
     }
   }

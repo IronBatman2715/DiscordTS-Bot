@@ -27,7 +27,8 @@
     "discord-api-types": "^0.32.1",
     "discord-music-player": "^8.3.2",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",

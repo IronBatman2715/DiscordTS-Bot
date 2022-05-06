@@ -2,6 +2,7 @@ import type { CacheType, CommandInteraction, Message, TextBasedChannel } from "d
 import type { Song } from "discord-music-player";
 
 import type Client from "./Client";
+import logger from "../logger";
 
 export default class QueueData {
   latestInteraction: CommandInteraction<CacheType>;
@@ -66,14 +67,15 @@ export default class QueueData {
 
       this.setEmbedMessage(newEmbedMessage as Message<boolean>);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 
   private async setEmbedMessage(newEmbedMessage: Message<boolean>) {
     if (newEmbedMessage.embeds.length != 1) {
       const str = newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!";
-      return console.error(`Error => QueueData.setEmbedMessage: newEmbedMessage has ${str}`);
+      logger.error(`Error => QueueData.setEmbedMessage: newEmbedMessage has ${str}`);
+      return;
     }
 
     await this.deleteEmbedMessage();
@@ -87,10 +89,10 @@ export default class QueueData {
       if (this._embedMessage !== undefined) {
         await this.embedMessage.delete();
       } else {
-        console.log("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");
+        logger.info("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 }

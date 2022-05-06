@@ -1,6 +1,8 @@
+import logger from "../../logger";
+
 export default (num: number) => {
   if (num < 1 || !Number.isInteger(num)) {
-    console.error("getOrdinalSuffix received an invalid number! Returning `th`.");
+    logger.error("getOrdinalSuffix received an invalid number! Returning `th`.");
     return "th";
   }
 

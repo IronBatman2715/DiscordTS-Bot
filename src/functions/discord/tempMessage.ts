@@ -1,5 +1,7 @@
 import type { Message, CommandInteraction, CacheType } from "discord.js";
 
+import logger from "../../logger";
+
 /**
  * Send a temporary message with content `text` to the channel that `interaction` is in.
  *
@@ -24,7 +26,7 @@ export default async (
   }
 
   try {
-    //console.log("Ticking tempMessage");
+    logger.verbose("Ticking tempMessage");
     if (showCountdown) {
       //Show countdown to when message will delete itself
       const newText = text + `...`;
@@ -43,9 +45,9 @@ export default async (
         message.delete();
       }, 1000 * durationInSeconds);
     }
-    //console.log("Done ticking tempMessage!");
+    logger.verbose("Done ticking tempMessage!");
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 };
 

@@ -1,8 +1,9 @@
 import { ClientEvent } from "../../structures/Event";
+import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
   if (interaction.isCommand()) {
-    //console.log("CommandInteraction created!");
+    logger.verbose("CommandInteraction created!");
 
     //Get command
     const command = client.commands.get(interaction.commandName);
@@ -12,7 +13,7 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
 
     //Show user that command is loading
     await interaction.deferReply().catch((error) => {
-      console.error(error);
+      logger.error(error);
     });
 
     client.runCommand(command, interaction);
