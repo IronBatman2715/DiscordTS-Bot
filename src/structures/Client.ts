@@ -32,11 +32,7 @@ export default class Client extends DiscordClient {
   readonly DB: DB = new DB(this);
   readonly player: Player;
 
-  /**
-   *  @param devMode [default false] If true, will register developer commands to the discord server corresponding to
-   * environment variable `TEST_GUILD_ID`
-   */
-  constructor(devMode = false) {
+  constructor() {
     try {
       console.log("*** DISCORD.JS BOT: INITIALIZATION ***");
 
@@ -45,7 +41,7 @@ export default class Client extends DiscordClient {
         allowedMentions: { repliedUser: false },
       });
 
-      this.devMode = devMode;
+      this.devMode = process.env.NODE_ENV === "development";
       this.basePath = this.devMode ? BasePath.DEV : BasePath.DIST;
 
       logger("Verifying environment variables are set... ");
