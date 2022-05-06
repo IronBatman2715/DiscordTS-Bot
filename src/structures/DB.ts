@@ -3,7 +3,7 @@ import type { GuildConfig } from "@prisma/client";
 
 import type Client from "./Client";
 import type { PrismaEvents, PrismaRunFunction } from "./Event";
-import { guildConfigDefaults } from "../resources/data/database/GuildConfig";
+import { guildConfigDefaults } from "../database/GuildConfig";
 
 const prisma = new PrismaClient({
   log: [

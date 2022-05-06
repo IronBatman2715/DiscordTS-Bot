@@ -1,4 +1,5 @@
 import { readdirSync } from "fs";
+import { resolve } from "path";
 import { Client as DiscordClient, Collection, Intents, MessageEmbed, Permissions } from "discord.js";
 import type { CacheType, CommandInteraction, GuildMember, MessageEmbedOptions } from "discord.js";
 import { Routes } from "discord-api-types/v10";
@@ -11,19 +12,11 @@ import type BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import logger from "../functions/general/logger";
 import isUser from "../functions/discord/isUser";
-import botConfig from "../resources/data/botConfig";
-
-enum BasePath {
-  /** Development */
-  DEV = "./src",
-  /** Distribution */
-  DIST = "./dist",
-}
+import botConfig from "../botConfig";
 
 export default class Client extends DiscordClient {
   readonly config = botConfig;
   readonly devMode: boolean;
-  readonly basePath: string;
   /** List of developer discord user Ids */
   private readonly devIds: string[] = [];
 
@@ -42,7 +35,6 @@ export default class Client extends DiscordClient {
       });
 
       this.devMode = process.env.NODE_ENV === "development";
-      this.basePath = this.devMode ? BasePath.DEV : BasePath.DIST;
 
       logger("Verifying environment variables are set... ");
       if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
@@ -100,10 +92,12 @@ export default class Client extends DiscordClient {
   private loadCommands(): void {
     console.log("Commands:");
 
-    readdirSync(`${this.basePath}/commands`).forEach((folder) => {
-      const files = readdirSync(`${this.basePath}/commands/${folder}`).filter(
-        (file) => file.endsWith(".ts") || file.endsWith(".js")
-      );
+    const commandsDir = resolve(__dirname, "../commands");
+
+    readdirSync(commandsDir).forEach((folder) => {
+      const commandsSubDir = resolve(commandsDir, folder);
+
+      const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       //Omit this folder if there are no valid files within it
       //Also omit this folder if it is "dev" and bot is in DISTRIBUTION mode
@@ -111,8 +105,10 @@ export default class Client extends DiscordClient {
         console.log(`\t${camelCase2Display(folder)}`);
 
         files.forEach((file) => {
+          const commandFilePath = resolve(commandsSubDir, file);
+
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const command: Command = require(`../commands/${folder}/${file}`);
+          const command: Command = require(commandFilePath);
 
           //Set and store command categories
           command.category = folder;
@@ -203,20 +199,23 @@ export default class Client extends DiscordClient {
   private loadEvents(): void {
     console.log("Events:");
 
-    readdirSync(`${this.basePath}/events`).forEach((folder) => {
-      const files = readdirSync(`${this.basePath}/events/${folder}`).filter(
-        (file) => file.endsWith(".ts") || file.endsWith(".js")
-      );
+    const eventsDir = resolve(__dirname, "../events");
+
+    readdirSync(eventsDir).forEach((folder) => {
+      const eventsSubDir = resolve(eventsDir, folder);
+
+      const files = readdirSync(eventsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       //Omit this folder if there are no valid files within it
       if (files.length > 1) {
         console.log(`\t${camelCase2Display(folder)}`);
 
         files.forEach((file) => {
+          const eventFilePath = resolve(eventsSubDir, file);
           const eventFileName = file.slice(0, file.length - 3);
 
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const event: BaseEvent = require(`../events/${folder}/${file}`);
+          const event: BaseEvent = require(eventFilePath);
 
           //Bind event to its corresponding event emitter
           event.bindToEventEmitter(this);

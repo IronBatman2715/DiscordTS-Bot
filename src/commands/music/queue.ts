@@ -42,7 +42,7 @@ export = new Command(
 
     return await interaction.followUp({
       embeds: [queueEmbed],
-      files: [`${client.basePath}/resources/assets/icons/music.png`],
+      files: ["assets/icons/music.png"],
     });
   }
 );
