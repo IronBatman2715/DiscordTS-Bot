@@ -24,6 +24,9 @@ export default class Client extends DiscordClient {
   readonly config = botConfig;
   readonly devMode: boolean;
   readonly basePath: string;
+  /** List of developer discord user Ids */
+  private readonly devIds: string[] = [];
+
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
   readonly DB: DB = new DB();
@@ -34,29 +37,51 @@ export default class Client extends DiscordClient {
    * environment variable `TEST_GUILD_ID`
    */
   constructor(devMode = false) {
-    console.log("*** DISCORD.JS BOT: INITIALIZATION ***");
+    try {
+      console.log("*** DISCORD.JS BOT: INITIALIZATION ***");
 
-    super({
-      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
-      allowedMentions: { repliedUser: false },
-    });
+      super({
+        intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+        allowedMentions: { repliedUser: false },
+      });
 
-    this.devMode = devMode;
-    this.basePath = this.devMode ? BasePath.DEV : BasePath.DIST;
+      this.devMode = devMode;
+      this.basePath = this.devMode ? BasePath.DEV : BasePath.DIST;
 
-    this.player = new Player(this, {
-      deafenOnJoin: true,
-    });
+      console.log("Verifying environment variables are set");
+      if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
+      if (process.env.CLIENT_ID === undefined) throw "CLIENT_ID environment variable was not set!";
+      if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
+      if (this.devMode) {
+        if (process.env.TEST_GUILD_ID === undefined) throw "TEST_GUILD_ID environment variable was not set!";
+        if (process.env.DEV_IDS === undefined) {
+          throw "Must set at least one discord userId to DEV_IDS!";
+        } else {
+          //Parse DEV_IDS
+          if (process.env.DEV_IDS.length > 0) {
+            this.devIds = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
+          }
+        }
+      }
 
-    console.log(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
+      this.player = new Player(this, {
+        deafenOnJoin: true,
+      });
 
-    //Load events
-    this.loadEvents();
+      console.log(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
 
-    //Load & Register commands
-    this.loadCommands();
+      //Load events
+      this.loadEvents();
 
-    console.log("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
+      //Load & Register commands
+      this.loadCommands();
+
+      console.log("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
+    } catch (error) {
+      console.error(error);
+      console.log("Could not start the bot!");
+      process.exit(1);
+    }
   }
 
   /** Login to Discord API */
@@ -69,7 +94,7 @@ export default class Client extends DiscordClient {
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
       console.error(error);
-      console.log("Could not start the bot! Make sure your environment variables are set!");
+      console.log("Could not start the bot! Make sure your environment variables are valid!");
       process.exit(1);
     }
   }
@@ -119,20 +144,22 @@ export default class Client extends DiscordClient {
   async registerCommands(doGlobal = false): Promise<void> {
     const commandDataArr = this.commands.map((command) => command.builder.toJSON());
 
-    if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
-    const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
+    //Can cast `DISCORD_TOKEN` to string since it is verified in constructor
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
     if (this.devMode) {
       try {
         console.log("Registering commands with DiscordAPI");
 
-        if (process.env.CLIENT_ID === undefined) throw "CLIENT_ID environment variable was not set!";
-
         if (doGlobal) {
           //Register globally, will take up to one hour to register changes
 
           console.log("\tDISTRIBUTION MODE. Registering to any server this bot is in");
-          const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID);
+
+          //Can cast `CLIENT_ID` to string since it is verified in constructor
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
 
           //Remove all previous commands
           /*await rest.put(fullRoute, {
@@ -147,8 +174,9 @@ export default class Client extends DiscordClient {
           //Instantly register to test guild
           console.log(`\tDEV MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
-          if (process.env.TEST_GUILD_ID === undefined) throw "TEST_GUILD_ID environment variable was not set!";
-          const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.TEST_GUILD_ID);
+          //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
 
           //Remove all previous commands
           /*await rest.put(fullRoute, {
@@ -252,12 +280,7 @@ export default class Client extends DiscordClient {
 
       //Developer only commands
       case "dev": {
-        if (process.env.DEV_IDS === undefined) throw "Must set at least one discord userId to DEV_IDS!";
-
-        // Parse DEV_IDS
-        const userIdList = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
-
-        const userCheckOptions = { userIdList };
+        const userCheckOptions = { userIdList: this.devIds };
         if (!isUser(interaction.member as GuildMember, userCheckOptions)) {
           await interaction.followUp({
             content: `This is a developer only command!`,

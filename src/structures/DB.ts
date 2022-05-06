@@ -18,8 +18,6 @@ export default class DB {
   /** Connects to MongoDB server with `DB_URL` environment variable */
   async connect() {
     try {
-      if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
-
       await DB.prisma.$connect();
     } catch (error) {
       console.error(error);
