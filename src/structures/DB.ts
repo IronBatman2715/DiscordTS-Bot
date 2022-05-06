@@ -4,6 +4,7 @@ import type { GuildConfig } from "@prisma/client";
 import type Client from "./Client";
 import type { PrismaEvents, PrismaRunFunction } from "./Event";
 import { guildConfigDefaults } from "../database/GuildConfig";
+import logger from "../logger";
 
 const prisma = new PrismaClient({
   log: [
@@ -35,7 +36,7 @@ export default class DB {
       await DB.prisma.$connect();
       this.hasDoneInitialConnection = true;
     } else {
-      console.log(
+      logger.warn(
         "Do not need to explicitly connect to the database! Refer to: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect"
       );
     }
@@ -45,9 +46,9 @@ export default class DB {
   async disconnect() {
     try {
       await DB.prisma.$disconnect();
-      console.log("Disconnected from DB!");
+      logger.info("Disconnected from DB!");
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

@@ -1,5 +1,6 @@
 import { MusicPlayerEvent } from "../../structures/Event";
+import logger from "../../logger";
 
 export = new MusicPlayerEvent("error", (client, error, baseQueue) => {
-  console.error(`Error: ${error} in ${baseQueue.guild.name}!`);
+  logger.error(`${error} in ${baseQueue.guild.name}!`);
 });

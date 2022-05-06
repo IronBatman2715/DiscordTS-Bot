@@ -1,5 +1,6 @@
 import { PrismaEvent } from "../../structures/Event";
+import logger from "../../logger";
 
-export = new PrismaEvent("info", async (client, { timestamp, message }) => {
-  console.log(timestamp, "Prisma info: ", message);
+export = new PrismaEvent("info", async (client, { message }) => {
+  logger.info(`Prisma info: ${message}`);
 });

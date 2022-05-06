@@ -10,7 +10,7 @@ import Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
-import logger from "../functions/general/logger";
+import logger from "../logger";
 import isUser from "../functions/discord/isUser";
 import botConfig from "../botConfig";
 
@@ -27,7 +27,7 @@ export default class Client extends DiscordClient {
 
   constructor() {
     try {
-      console.log("*** DISCORD.JS BOT: INITIALIZATION ***");
+      logger.info("*** DISCORD.JS BOT: INITIALIZATION ***");
 
       super({
         intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
@@ -36,7 +36,7 @@ export default class Client extends DiscordClient {
 
       this.devMode = process.env.NODE_ENV === "development";
 
-      logger("Verifying environment variables are set... ");
+      logger.info("Verifying environment variables are set... ");
       if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
       if (process.env.CLIENT_ID === undefined) throw "CLIENT_ID environment variable was not set!";
       if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
@@ -51,13 +51,13 @@ export default class Client extends DiscordClient {
           }
         }
       }
-      logger("OK!\n");
+      logger.info("Successfully verified that environment variables are set!");
 
       this.player = new Player(this, {
         deafenOnJoin: true,
       });
 
-      console.log(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
+      logger.info(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
 
       //Load events
       this.loadEvents();
@@ -65,10 +65,10 @@ export default class Client extends DiscordClient {
       //Load & Register commands
       this.loadCommands();
 
-      console.log("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
+      logger.info("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
     } catch (error) {
-      console.error(error);
-      console.log("Could not start the bot!");
+      logger.error(error);
+      logger.info("Could not start the bot!");
       process.exit(1);
     }
   }
@@ -79,18 +79,18 @@ export default class Client extends DiscordClient {
       await this.registerCommands();
       await this.DB.connect();
 
-      logger("Logging in... ");
+      logger.info("Logging in... ");
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
-      console.error(error);
-      console.log("Could not start the bot! Make sure your environment variables are valid!");
+      logger.error(error);
+      logger.info("Could not start the bot! Make sure your environment variables are valid!");
       process.exit(1);
     }
   }
 
   /** Load slash commands */
   private loadCommands(): void {
-    console.log("Commands:");
+    logger.info("Commands:");
 
     const commandsDir = resolve(__dirname, "../commands");
 
@@ -102,7 +102,7 @@ export default class Client extends DiscordClient {
       //Omit this folder if there are no valid files within it
       //Also omit this folder if it is "dev" and bot is in DISTRIBUTION mode
       if ((folder !== "dev" || this.devMode) && files.length > 0) {
-        console.log(`\t${camelCase2Display(folder)}`);
+        logger.info(`\t${camelCase2Display(folder)}`);
 
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
@@ -123,7 +123,7 @@ export default class Client extends DiscordClient {
 
           this.commands.set(command.builder.name, command);
 
-          console.log(`\t\t${command.builder.name}`);
+          logger.info(`\t\t${command.builder.name}`);
         });
       }
     });
@@ -146,12 +146,12 @@ export default class Client extends DiscordClient {
 
     if (this.devMode) {
       try {
-        console.log("Registering commands with Discord API");
+        logger.info("Registering commands with Discord API");
 
         if (doGlobal) {
           //Register globally, will take up to one hour to register changes
 
-          console.log("\tDISTRIBUTION MODE. Registering to any server this bot is in");
+          logger.info("\tDISTRIBUTION MODE. Registering to any server this bot is in");
 
           //Can cast `CLIENT_ID` to string since it is verified in constructor
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -168,7 +168,7 @@ export default class Client extends DiscordClient {
           });
         } else {
           //Instantly register to test guild
-          console.log(`\tDEV MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
+          logger.info(`\tDEV MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
           //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -185,19 +185,19 @@ export default class Client extends DiscordClient {
           });
         }
 
-        console.log("\tSuccessfully registered commands with Discord API!");
+        logger.info("\tSuccessfully registered commands with Discord API!");
       } catch (error) {
-        console.error(error);
-        console.log("Errored attempting to register commands with Discord API!");
+        logger.error(error);
+        logger.info("Errored attempting to register commands with Discord API!");
       }
     } else {
-      console.log("Skipped registering commands with Discord API (distribution mode)");
+      logger.info("Skipped registering commands with Discord API (distribution mode)");
     }
   }
 
   /** Load events */
   private loadEvents(): void {
-    console.log("Events:");
+    logger.info("Events:");
 
     const eventsDir = resolve(__dirname, "../events");
 
@@ -208,7 +208,7 @@ export default class Client extends DiscordClient {
 
       //Omit this folder if there are no valid files within it
       if (files.length > 1) {
-        console.log(`\t${camelCase2Display(folder)}`);
+        logger.info(`\t${camelCase2Display(folder)}`);
 
         files.forEach((file) => {
           const eventFilePath = resolve(eventsSubDir, file);
@@ -221,9 +221,9 @@ export default class Client extends DiscordClient {
           event.bindToEventEmitter(this);
 
           if (event.event !== eventFileName) {
-            console.log(`\t\t"${eventFileName}" -> ${event.event}`);
+            logger.info(`\t\t"${eventFileName}" -> ${event.event}`);
           } else {
-            console.log(`\t\t${eventFileName}`);
+            logger.info(`\t\t${eventFileName}`);
           }
         });
       }
@@ -236,7 +236,7 @@ export default class Client extends DiscordClient {
     if (data.fields !== undefined) {
       //Cannot have more than 25 fields in one embed
       if (data.fields.length > 25) {
-        console.error("Client.genEmbed() tried to generate an embed with more than 25 fields!");
+        logger.error("Client.genEmbed() tried to generate an embed with more than 25 fields!");
       }
     }
 
@@ -309,11 +309,11 @@ export default class Client extends DiscordClient {
     }
 
     const guildName = interaction.guild?.name || "NO NAME";
+    logger.info(`${guildName}[id: ${interaction.guildId}] ran \`/${command.builder.name}\` command`);
     try {
       await command.run(this, interaction);
-      console.log(`${guildName}[id: ${interaction.guildId}] ran "${command.builder.name}" command\n`);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       await interaction.followUp({
         content: `There was an error while executing the \`${command.builder.name}\` command!`,
       });

@@ -1,13 +1,14 @@
 import { MusicPlayerEvent } from "../../structures/Event";
 import type QueueWithData from "../../interfaces/QueueWithData";
+import logger from "../../logger";
 
 export = new MusicPlayerEvent("songChanged", async (client, baseQueue, newSong, oldSong) => {
   const queue = baseQueue as QueueWithData;
 
   if (oldSong == newSong) {
-    //console.log(`Repeated song:\n\t${oldSong.name}`);
+    logger.verbose(`Repeated song:\n\t${oldSong.name}`);
   } else {
-    //console.log(`Song changed from\n\t${oldSong.name}\n\t\tto\n\t${newSong.name}`);
+    logger.verbose(`Song changed from\n\t${oldSong.name}\n\t\tto\n\t${newSong.name}`);
     queue.data.updateNowPlaying(newSong);
   }
 });

@@ -7,6 +7,7 @@ import Command from "../../structures/Command";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
 import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
+import logger from "../../logger";
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
@@ -208,7 +209,7 @@ async function resetSettings(client: Client, interaction: CommandInteraction<Cac
       content: `Reset guild/server settings to defaults!`,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     return await interaction.followUp({
       content: `FAILED to reset guild/server settings!`,

@@ -1,5 +1,7 @@
 import type { GuildMember, PermissionResolvable } from "discord.js";
 
+import logger from "../../logger";
+
 interface IUserCheckOptions {
   permissions: PermissionResolvable;
   userIdList: string[];
@@ -12,27 +14,26 @@ interface IUserCheckOptions {
  *
  */
 export default (member: GuildMember, options: Partial<IUserCheckOptions>): boolean => {
-  //console.log("member: ", member);
-  //console.log("options: ", options);
+  logger.verbose("Function/isUser", { member, options });
 
   if (Object.keys(options).length > 0) {
     if (options.permissions !== undefined) {
       if (!member.permissions.has(options.permissions, true)) {
-        //console.log("User does not have permission!");
+        logger.verbose("User does not have permission!");
         return false;
       }
     }
 
     if (options.userIdList !== undefined) {
       if (!options.userIdList.includes(member.user.id)) {
-        //console.log("User is not in specified user list!");
+        logger.verbose("User is not in specified user list!");
         return false;
       }
     }
 
-    //console.log("Function/isUser: User passed all checks!");
+    logger.verbose("Function/isUser: User passed all checks!");
     return true;
   }
-  //console.log("Function/isUser: No options specified, returning false!");
+  logger.verbose("Function/isUser: No options specified, returning false!");
   return false;
 };
