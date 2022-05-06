@@ -4,6 +4,9 @@ declare global {
       DISCORD_TOKEN: string; //your discord bot token (https://discord.com/developers/applications)
       CLIENT_ID: string; //your bot's client ID (https://discord.com/developers/applications)
       DB_URL: string; //your database URL (https://pris.ly/d/connection-strings)
+
+      //Development only variables
+      NODE_ENV?: "development" | "production"; //omittance defaults to "production"
       TEST_GUILD_ID?: string; //the guildId of your testing server
       DEV_IDS?: string; //a list of developer discord user Ids separated by ", ". Ex: DEV_IDS = DEV_ID1, DEV_ID2, DEV_ID3
     }
