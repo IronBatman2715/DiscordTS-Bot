@@ -1,7 +1,7 @@
-import { CacheType, CommandInteraction, Message, TextBasedChannel } from "discord.js";
-import { Song } from "discord-music-player";
+import type { CacheType, CommandInteraction, Message, TextBasedChannel } from "discord.js";
+import type { Song } from "discord-music-player";
 
-import Client from "./Client";
+import type Client from "./Client";
 
 export default class QueueData {
   latestInteraction: CommandInteraction<CacheType>;

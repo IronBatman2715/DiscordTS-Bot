@@ -1,8 +1,8 @@
-import { CacheType, CommandInteraction, EmbedFieldData } from "discord.js";
+import type { CacheType, CommandInteraction, EmbedFieldData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { RepeatMode } from "discord-music-player";
 
-import Client from "../../structures/Client";
+import type Client from "../../structures/Client";
 import Command from "../../structures/Command";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";

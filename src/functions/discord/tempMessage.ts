@@ -1,4 +1,4 @@
-import { Message, CommandInteraction, CacheType } from "discord.js";
+import type { Message, CommandInteraction, CacheType } from "discord.js";
 
 /**
  * Send a temporary message with content `text` to the channel that `interaction` is in.

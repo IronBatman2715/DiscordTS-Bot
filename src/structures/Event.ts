@@ -1,8 +1,8 @@
-import { ClientEvents } from "discord.js";
+import type { ClientEvents } from "discord.js";
 import type { Prisma } from "@prisma/client";
-import { PlayerEvents } from "discord-music-player";
+import type { PlayerEvents } from "discord-music-player";
 
-import Client from "./Client";
+import type Client from "./Client";
 import DB from "./DB";
 
 /* --- BaseEvent --- */

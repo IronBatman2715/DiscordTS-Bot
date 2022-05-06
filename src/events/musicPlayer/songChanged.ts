@@ -1,5 +1,5 @@
 import { MusicPlayerEvent } from "../../structures/Event";
-import QueueWithData from "../../interfaces/QueueWithData";
+import type QueueWithData from "../../interfaces/QueueWithData";
 
 export = new MusicPlayerEvent("songChanged", async (client, baseQueue, newSong, oldSong) => {
   const queue = baseQueue as QueueWithData;

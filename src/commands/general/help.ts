@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageSelectOptionData, MessageActionRow, MessageSelectMenu } from "discord.js";
+import { MessageActionRow, MessageSelectMenu } from "discord.js";
+import type { MessageSelectOptionData } from "discord.js";
 
 import Command from "../../structures/Command";
 

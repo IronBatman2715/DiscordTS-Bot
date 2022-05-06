@@ -1,4 +1,4 @@
-import { ExcludeEnum } from "discord.js";
+import type { ExcludeEnum } from "discord.js";
 import { ActivityTypes } from "discord.js/typings/enums";
 
 export type ActivitiesOptions = {

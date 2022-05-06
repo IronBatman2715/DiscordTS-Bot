@@ -1,4 +1,4 @@
-import { GuildMember, PermissionResolvable } from "discord.js";
+import type { GuildMember, PermissionResolvable } from "discord.js";
 
 interface IUserCheckOptions {
   permissions: PermissionResolvable;
