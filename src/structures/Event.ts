@@ -3,7 +3,6 @@ import type { Prisma } from "@prisma/client";
 import type { PlayerEvents } from "discord-music-player";
 
 import type Client from "./Client";
-import DB from "./DB";
 
 /* --- BaseEvent --- */
 export interface IBaseEvent {
@@ -33,11 +32,11 @@ export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
 }
 
 /* --- Prisma --- */
-type PrismaEvents = Prisma.LogLevel;
+export type PrismaEvents = Prisma.LogLevel;
 
 /** Omit params and duration for MongoDB, as they
  *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined} */
-type PrismaRunFunction<Ev extends PrismaEvents> = {
+export type PrismaRunFunction<Ev extends PrismaEvents> = {
   (client: Client, event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent);
 };
 
@@ -51,7 +50,7 @@ export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
   }
 
   bindToEventEmitter(client: Client) {
-    DB.prisma.$on(this.event, this.run.bind(null, client));
+    client.DB.bindEvent<Ev>(this.event, this.run);
   }
 }
 

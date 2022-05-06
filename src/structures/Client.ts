@@ -29,7 +29,7 @@ export default class Client extends DiscordClient {
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
-  readonly DB: DB = new DB();
+  readonly DB: DB = new DB(this);
   readonly player: Player;
 
   /**
@@ -48,7 +48,7 @@ export default class Client extends DiscordClient {
       this.devMode = devMode;
       this.basePath = this.devMode ? BasePath.DEV : BasePath.DIST;
 
-      console.log("Verifying environment variables are set");
+      logger("Verifying environment variables are set... ");
       if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
       if (process.env.CLIENT_ID === undefined) throw "CLIENT_ID environment variable was not set!";
       if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
@@ -63,6 +63,7 @@ export default class Client extends DiscordClient {
           }
         }
       }
+      logger("OK!\n");
 
       this.player = new Player(this, {
         deafenOnJoin: true,
@@ -137,9 +138,12 @@ export default class Client extends DiscordClient {
   }
 
   /**
-   * Register command files with Discord API. MUST have run {@link Client.loadCommands() loadCommands()} first!
+   * Register command files with Discord API.
    *
-   * @param doGlobal [default: false] If true, will register commands globally (to all guilds/servers this bot is in)
+   * MUST have run {@link Client.loadCommands() loadCommands()} first (runs in constructor)!
+   *
+   * @param doGlobal [default: false] If true, will register commands to all guilds/servers this bot is in (
+   * {@link https://discordjs.guide/interactions/slash-commands.html#global-commands may take up to 1 hour to register changes})
    */
   async registerCommands(doGlobal = false): Promise<void> {
     const commandDataArr = this.commands.map((command) => command.builder.toJSON());
@@ -150,7 +154,7 @@ export default class Client extends DiscordClient {
 
     if (this.devMode) {
       try {
-        console.log("Registering commands with DiscordAPI");
+        console.log("Registering commands with Discord API");
 
         if (doGlobal) {
           //Register globally, will take up to one hour to register changes
@@ -195,7 +199,7 @@ export default class Client extends DiscordClient {
         console.log("Errored attempting to register commands with Discord API!");
       }
     } else {
-      console.log("Skipped registering commands with DiscordAPI");
+      console.log("Skipped registering commands with Discord API (distribution mode)");
     }
   }
 
