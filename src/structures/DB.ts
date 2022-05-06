@@ -35,6 +35,7 @@ export default class DB {
     if (!this.hasDoneInitialConnection) {
       await DB.prisma.$connect();
       this.hasDoneInitialConnection = true;
+      logger.info("Successfully completed initial connection to database");
     } else {
       logger.warn(
         "Do not need to explicitly connect to the database! Refer to: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect"
@@ -58,13 +59,15 @@ export default class DB {
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
   async getGuildConfig(guildId: string | null) {
+    logger.verbose("DB.getGuildConfig()", guildId);
+
     if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
     const query = await DB.prisma.guildConfig.findUnique({ where: { guildId } });
 
     if (query) return query;
 
-    //Could not find match, creating a new one
+    logger.verbose("DB.getGuildConfig(): Could not find match, creating a new one");
     return await DB.prisma.guildConfig.create({
       data: {
         guildId,
@@ -78,6 +81,8 @@ export default class DB {
 
   /** Update the guild config document corresponding to guildId with the data in guildConfig. */
   async updateGuildConfig(guildId: string | null, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
+    logger.verbose("DB.updateGuildConfig()", { guildId, guildConfig });
+
     if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
     return await DB.prisma.guildConfig.update({
@@ -88,6 +93,8 @@ export default class DB {
 
   /** Delete the guild config document corresponding to guildId. */
   async deleteGuildConfig(guildId: string | null) {
+    logger.verbose("DB.deleteGuildConfig()", guildId);
+
     if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
 
     return await DB.prisma.guildConfig.delete({ where: { guildId } });
