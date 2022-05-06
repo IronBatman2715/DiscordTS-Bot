@@ -7,17 +7,17 @@
   "repository": "https://github.com/IronBatman2715/DiscordTS-Bot",
   "license": "GNU GPLv3",
   "private": true,
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "postinstall": "prisma generate",
-    "prebuild": "rm -rf dist @types",
-    "build": "tsc -p . && cp -r ./src/resources/assets ./dist/resources/assets",
+    "prebuild": "rm -rf dist src/@types",
+    "build": "tsc -p .",
     "predev": "npm run updateSchema",
     "dev": "nodemon",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "updateSchema": "prisma format && prisma generate",
     "viewDB": "prisma studio",
-    "registerGlobal": "ts-node ./src/registerGlobalCommands.ts --enable-source-maps",
+    "registerGlobal": "ts-node src/registerGlobalCommands.ts --enable-source-maps",
     "start": "node ."
   },
   "dependencies": {
@@ -46,6 +46,6 @@
     "node": ">= 16.6.0"
   },
   "prisma": {
-    "schema": "src/resources/data/database/schema.prisma"
+    "schema": "src/database/schema.prisma"
   }
 }

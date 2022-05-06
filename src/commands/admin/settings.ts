@@ -6,7 +6,7 @@ import type Client from "../../structures/Client";
 import Command from "../../structures/Command";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
-import { guildConfigDefaults, guildConfigDescriptions } from "../../resources/data/database/GuildConfig";
+import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
@@ -192,7 +192,7 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 
   return await interaction.followUp({
     embeds: [currentSettingsEmbed],
-    files: [`${client.basePath}/resources/assets/icons/settings.png`],
+    files: ["assets/icons/settings.png"],
   });
 }
 

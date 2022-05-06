@@ -1,7 +1,7 @@
 import type Client from "../../structures/Client";
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../functions/general/logger";
-import type { ActivitiesOptions } from "../../resources/data/botConfig";
+import type { ActivitiesOptions } from "../../botConfig";
 
 export = new ClientEvent("ready", (client) => {
   let unusedActivities = setRandomBotPresence(client, client.config.activities.slice());
