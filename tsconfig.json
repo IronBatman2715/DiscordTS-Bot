@@ -15,7 +15,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "importHelpers": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
