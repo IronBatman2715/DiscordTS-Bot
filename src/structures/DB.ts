@@ -30,7 +30,10 @@ export default class DB {
     this.hasDoneInitialConnection = false;
   }
 
-  /** Connects to database with `DB_URL` environment variable specified in schema.prisma file */
+  /** Connects to database with `DB_URL` environment variable specified in schema.prisma file.
+   *
+   * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect here})
+   */
   async connect() {
     if (!this.hasDoneInitialConnection) {
       await DB.prisma.$connect();
@@ -43,7 +46,10 @@ export default class DB {
     }
   }
 
-  /** Disconnect from the database until next query/request (to avoid staying connected while there is no activity) */
+  /** Disconnect from the database until next query/request
+   *
+   * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#disconnect here})
+   */
   async disconnect() {
     try {
       await DB.prisma.$disconnect();
