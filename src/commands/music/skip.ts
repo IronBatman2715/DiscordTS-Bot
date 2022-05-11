@@ -14,7 +14,7 @@ export = new Command(
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return interaction.followUp({
-        content: "Cannot set the repeat mode of a queue that has not been started!",
+        content: "No active music queue to skip a song in!",
       });
     }
 

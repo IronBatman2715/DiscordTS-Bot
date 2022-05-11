@@ -18,29 +18,27 @@ export = new Command(
 
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") return;
-
-    const index = interaction.options.getInteger("queue-number", true); //place in queue (starts at 1)
-    const arrayIndex = index - 1; //song array index (starts at 0)
-
-    if (!isInRange(index, 1, guildQueue.songs.length)) {
+    if (typeof guildQueue === "undefined") {
       return interaction.followUp({
-        content: `Must enter the song's place in the queue! (Ex: Remove 3rd song in queue: "/remove 3")`,
+        content: "No active music queue to remove a song from!",
       });
     }
 
-    if (arrayIndex < 0 || arrayIndex > guildQueue.songs.length) {
+    const songNumber = interaction.options.getInteger("queue-number", true); //place in queue (starts at 1)
+    const index = songNumber - 1; //song array index (starts at 0)
+
+    if (!isInRange(songNumber, 1, guildQueue.songs.length)) {
       return interaction.followUp({
-        content: "Song number entered does not exist in this queue!",
+        content: `Song number entered does not exist in this queue! (Ex: Remove 3rd song in queue: "/remove 3")`,
       });
     }
 
-    const removedSong = guildQueue.songs[arrayIndex];
-    guildQueue.remove(arrayIndex);
+    const removedSong = guildQueue.songs[index];
+    guildQueue.remove(index);
 
     await tempMessage(
       interaction,
-      `Removed the ${index}${getOrdinalSuffix(index)} song from the queue! (${removedSong.name})`
+      `Removed the ${songNumber}${getOrdinalSuffix(songNumber)} song from the queue! (${removedSong.name})`
     );
   }
 );

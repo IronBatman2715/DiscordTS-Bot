@@ -10,7 +10,7 @@ export = new Command(
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return interaction.followUp({
-        content: "Cannot stop a queue has not been started!",
+        content: "No active music queue to stop!",
       });
     }
 

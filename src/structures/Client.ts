@@ -292,7 +292,7 @@ export default class Client extends DiscordClient {
       case "music": {
         const { musicChannelId } = await this.DB.getGuildConfig(interaction.guildId);
 
-        if (musicChannelId != "" && interaction.channelId != musicChannelId) {
+        if (musicChannelId !== "" && interaction.channelId !== musicChannelId) {
           const musicChannelObj = await interaction.guild?.channels.fetch(musicChannelId);
           await interaction.followUp({
             content: `Must enter music commands in ${musicChannelObj}!`,
