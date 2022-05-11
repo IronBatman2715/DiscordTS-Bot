@@ -52,7 +52,7 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
       }
 
       default: {
-        logger.error("Could not match customId of select menu to one of this bot's!");
+        logger.error(new ReferenceError("Could not match customId of select menu to one of this bot's!"));
         return;
       }
     }

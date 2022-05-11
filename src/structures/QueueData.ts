@@ -14,7 +14,7 @@ export default class QueueData {
   constructor(client: Client, initialInteraction: CommandInteraction<CacheType>) {
     this.client = client;
 
-    if (initialInteraction.channel === null) throw "Interaction not made in a text channel..?";
+    if (initialInteraction.channel === null) throw new ReferenceError("Interaction not made in a text channel..?");
     this.musicTextChannel = initialInteraction.channel;
 
     this.initialInteraction = initialInteraction;
@@ -23,7 +23,7 @@ export default class QueueData {
 
   get embedMessage() {
     if (this._embedMessage === undefined) {
-      throw "Tried to get an embed message that was not yet set!";
+      throw new ReferenceError("Tried to get an embed message that was not yet set!");
     }
 
     return this._embedMessage;
@@ -68,13 +68,14 @@ export default class QueueData {
       this.setEmbedMessage(newEmbedMessage as Message<boolean>);
     } catch (error) {
       logger.error(error);
+      logger.error(new Error("Errored trying to send/update now playing embed message!"));
     }
   }
 
   private async setEmbedMessage(newEmbedMessage: Message<boolean>) {
     if (newEmbedMessage.embeds.length != 1) {
       const str = newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!";
-      logger.error(`Error => QueueData.setEmbedMessage: newEmbedMessage has ${str}`);
+      logger.error(new ReferenceError(`newEmbedMessage has ${str}`));
       return;
     }
 
@@ -89,10 +90,11 @@ export default class QueueData {
       if (this._embedMessage !== undefined) {
         await this.embedMessage.delete();
       } else {
-        logger.info("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");
+        logger.verbose("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");
       }
     } catch (error) {
       logger.error(error);
+      logger.error(new ReferenceError("Could not delete embed message!"));
     }
   }
 }

@@ -7,7 +7,6 @@ import Command from "../../structures/Command";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
 import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
-import logger from "../../logger";
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
@@ -110,7 +109,7 @@ export = new Command(builder, async (client, interaction) => {
 
       //Could not match
       default: {
-        throw "Could not match subcommand within subcommand group";
+        throw new ReferenceError("Could not match subcommand within subcommand group");
       }
     }
   }
@@ -126,7 +125,7 @@ export = new Command(builder, async (client, interaction) => {
     }
 
     default: {
-      throw "Could not find what the user entered!";
+      throw new ReferenceError("Could not find the command the user entered!");
     }
   }
 });
@@ -198,23 +197,15 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 }
 
 async function resetSettings(client: Client, interaction: CommandInteraction<CacheType>) {
-  try {
-    //Reset
-    await client.DB.deleteGuildConfig(interaction.guildId);
+  //Reset
+  await client.DB.deleteGuildConfig(interaction.guildId);
 
-    //Generate new based on defaults
-    await client.DB.getGuildConfig(interaction.guildId);
+  //Generate new based on defaults
+  await client.DB.getGuildConfig(interaction.guildId);
 
-    return await interaction.followUp({
-      content: `Reset guild/server settings to defaults!`,
-    });
-  } catch (error) {
-    logger.error(error);
-
-    return await interaction.followUp({
-      content: `FAILED to reset guild/server settings!`,
-    });
-  }
+  return await interaction.followUp({
+    content: `Reset guild/server settings to defaults!`,
+  });
 }
 
 async function changeSetting(client: Client, interaction: CommandInteraction<CacheType>, newSettingData: SettingData) {

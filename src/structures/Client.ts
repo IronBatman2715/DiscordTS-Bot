@@ -37,13 +37,16 @@ export default class Client extends DiscordClient {
       this.devMode = process.env.NODE_ENV === "development";
 
       logger.info("Verifying environment variables are set... ");
-      if (process.env.DISCORD_TOKEN === undefined) throw "DISCORD_TOKEN environment variable was not set!";
-      if (process.env.CLIENT_ID === undefined) throw "CLIENT_ID environment variable was not set!";
-      if (process.env.DB_URL === undefined) throw "DB_URL environment variable was not set!";
+      if (process.env.DISCORD_TOKEN === undefined)
+        throw new ReferenceError("DISCORD_TOKEN environment variable was not set!");
+      if (process.env.DB_URL === undefined) throw new ReferenceError("DB_URL environment variable was not set!");
       if (this.devMode) {
-        if (process.env.TEST_GUILD_ID === undefined) throw "TEST_GUILD_ID environment variable was not set!";
+        if (process.env.CLIENT_ID === undefined)
+          throw new ReferenceError("CLIENT_ID environment variable was not set!");
+        if (process.env.TEST_GUILD_ID === undefined)
+          throw new ReferenceError("TEST_GUILD_ID environment variable was not set!");
         if (process.env.DEV_IDS === undefined) {
-          throw "Must set at least one discord userId to DEV_IDS!";
+          throw new ReferenceError("Must set at least one discord userId to DEV_IDS!");
         } else {
           //Parse DEV_IDS
           if (process.env.DEV_IDS.length > 0) {
@@ -68,7 +71,7 @@ export default class Client extends DiscordClient {
       logger.info("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
     } catch (error) {
       logger.error(error);
-      logger.info("Could not start the bot!");
+      logger.error(new Error("Could not start the bot!"));
       process.exit(1);
     }
   }
@@ -83,7 +86,7 @@ export default class Client extends DiscordClient {
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
       logger.error(error);
-      logger.info("Could not start the bot! Make sure your environment variables are valid!");
+      logger.error(new Error("Could not start the bot! Make sure your environment variables are valid!"));
       process.exit(1);
     }
   }
@@ -158,9 +161,9 @@ export default class Client extends DiscordClient {
           const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
 
           //Remove all previous commands
-          /*await rest.put(fullRoute, {
+          await rest.put(fullRoute, {
             body: [],
-          });*/
+          });
 
           //Add all new/updated commands
           await rest.put(fullRoute, {
@@ -188,7 +191,7 @@ export default class Client extends DiscordClient {
         logger.info("\tSuccessfully registered commands with Discord API!");
       } catch (error) {
         logger.error(error);
-        logger.info("Errored attempting to register commands with Discord API!");
+        logger.error(new Error("Errored attempting to register commands with Discord API!"));
       }
     } else {
       logger.info("Skipped registering commands with Discord API (distribution mode)");
@@ -236,7 +239,7 @@ export default class Client extends DiscordClient {
     if (data.fields !== undefined) {
       //Cannot have more than 25 fields in one embed
       if (data.fields.length > 25) {
-        logger.error("Client.genEmbed() tried to generate an embed with more than 25 fields!");
+        throw new RangeError("Client.genEmbed() tried to generate an embed with more than 25 fields!");
       }
     }
 

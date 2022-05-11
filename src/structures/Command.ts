@@ -29,7 +29,7 @@ export default class Command {
 
   set category(category: string) {
     if (this.hasCategory) {
-      throw "Command: category has already been set!";
+      throw new TypeError("Command: category has already been set!");
     } else {
       this._category = category;
       this._hasCategory = true;

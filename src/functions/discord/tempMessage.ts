@@ -1,6 +1,7 @@
 import type { Message, CommandInteraction, CacheType } from "discord.js";
 
 import logger from "../../logger";
+import { isNaturalNumber } from "../general/math";
 import sleep from "../general/sleep";
 
 /**
@@ -19,37 +20,37 @@ export default async (
   durationInSeconds = 10,
   countdownIntervalInSeconds = 2
 ) => {
-  if (durationInSeconds <= 0) {
-    throw "tempMessage called with non-positive duration.";
+  if (!isNaturalNumber(durationInSeconds)) {
+    throw new RangeError(
+      "tempMessage called with an invalid duration. Must be an integer greater than 0. Not sending message."
+    );
   }
-  if (!Number.isInteger(durationInSeconds) || !Number.isInteger(countdownIntervalInSeconds)) {
-    throw "tempMessage called with non-integer duration OR countdown interval, not sending message.";
+  if (!isNaturalNumber(countdownIntervalInSeconds) || countdownIntervalInSeconds >= durationInSeconds) {
+    throw new RangeError(
+      "tempMessage called with an invalid countdown interval. Must be an integer greater than 0 AND smaller than the duration. Not sending message."
+    );
   }
 
-  try {
-    logger.verbose("Ticking tempMessage");
-    if (showCountdown) {
-      //Show countdown to when message will delete itself
-      const newText = text + `...`;
-      const message = (await interaction.followUp({
-        content: newText + durationInSeconds.toString(),
-      })) as Message;
+  logger.verbose("Ticking tempMessage");
+  if (showCountdown) {
+    //Show countdown to when message will delete itself
+    const newText = text + `...`;
+    const message = (await interaction.followUp({
+      content: newText + durationInSeconds.toString(),
+    })) as Message;
 
-      logger.verbose(durationInSeconds);
+    logger.verbose(durationInSeconds);
 
-      await sleep(1000 * countdownIntervalInSeconds);
-      await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
-    } else {
-      //No visible countdown to when message will delete itself
-      const message = (await interaction.followUp({ content: text })) as Message;
+    await sleep(1000 * countdownIntervalInSeconds);
+    await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
+  } else {
+    //No visible countdown to when message will delete itself
+    const message = (await interaction.followUp({ content: text })) as Message;
 
-      await sleep(1000 * durationInSeconds);
-      await message.delete();
-    }
-    logger.verbose("Done ticking tempMessage!");
-  } catch (error) {
-    logger.error(error);
+    await sleep(1000 * durationInSeconds);
+    await message.delete();
   }
+  logger.verbose("Done ticking tempMessage!");
 };
 
 async function countdown(t: number, countdownIntervalInSeconds: number, tempMessage: Message, newText: string) {
