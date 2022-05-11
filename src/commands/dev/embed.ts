@@ -8,7 +8,6 @@ export = new Command(
 
   async (client, interaction) => {
     const channel = await interaction.guild?.channels.fetch(interaction.channelId);
-    await interaction.guild?.channels.fetch(interaction.channelId);
 
     const testEmbed = client.genEmbed({
       title: `Test embed`,

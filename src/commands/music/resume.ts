@@ -9,7 +9,11 @@ export = new Command(
 
   async (client, interaction) => {
     const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") return;
+    if (typeof guildQueue === "undefined") {
+      return interaction.followUp({
+        content: "No active music queue to resume!",
+      });
+    }
 
     if (!guildQueue.paused) {
       await tempMessage(interaction, "Queue is not paused right now.");

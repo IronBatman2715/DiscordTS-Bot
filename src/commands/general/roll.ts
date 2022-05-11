@@ -42,7 +42,7 @@ export = new Command(
     //Array of dice roll(s)
     const results = Array.from({ length: quantity }, () => Math.floor(Math.random() * sides) + 1);
 
-    //Sum of dice roll(s)
+    //Sum of dice roll(s) and modifier
     const total = results.reduce((a, b) => a + b) + modifier;
 
     const modifierStr = isNonZeroModifier ? `${modifier > 0 ? `+` : `-`} *${Math.abs(modifier)}* ` : ``;

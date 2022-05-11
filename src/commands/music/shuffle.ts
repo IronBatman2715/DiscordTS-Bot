@@ -8,7 +8,11 @@ export = new Command(
   async (client, interaction) => {
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") return;
+    if (typeof guildQueue === "undefined") {
+      return interaction.followUp({
+        content: "No active music queue to shuffle!",
+      });
+    }
 
     guildQueue.shuffle();
 

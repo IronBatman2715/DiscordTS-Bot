@@ -23,7 +23,7 @@ export = new Command(
       });
     }
 
-    const options: MessageSelectOptionData[] = Array.from({ length: numOfOptions }, (x, i) => {
+    const options: MessageSelectOptionData[] = Array.from({ length: numOfOptions }, (_, i) => {
       return {
         label: `Option ${i + 1} label`,
         value: `Option ${i + 1} value`,

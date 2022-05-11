@@ -10,10 +10,14 @@ export = new Command(
   async (client, interaction) => {
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") return;
+    if (typeof guildQueue === "undefined") {
+      return interaction.followUp({
+        content: "No active music queue to show!",
+      });
+    }
 
     //Check if queue is empty
-    if (guildQueue.songs.length == 0) {
+    if (guildQueue.songs.length === 0) {
       return interaction.followUp({ content: "No songs in queue!" });
     }
 
@@ -29,7 +33,7 @@ export = new Command(
     const songQuantitySubStr = guildQueue.songs.length > 25 ? `25/${guildQueue.songs.length}` : guildQueue.songs.length;
 
     const queueEmbedTitle = `Music Queue (${songQuantitySubStr} song${
-      guildQueue.songs.length == 1 ? "" : "s"
+      guildQueue.songs.length === 1 ? "" : "s"
     }) [Repeat mode: ${RepeatMode[guildQueue.repeatMode]}]`;
 
     const queueEmbed = client.genEmbed({
