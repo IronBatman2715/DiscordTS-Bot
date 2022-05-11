@@ -2,7 +2,7 @@ import type { TextChannel } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
-import isInRange from "../../functions/general/isInRange";
+import { isInRange } from "../../functions/general/math";
 import tempMessage from "../../functions/discord/tempMessage";
 
 export = new Command(
@@ -10,7 +10,7 @@ export = new Command(
     .setName("clear")
     .setDescription("ADMIN ONLY: Clear messages from the text channel! (Cannot clear older than 2 weeks)")
     .addIntegerOption((option) =>
-      option.setName("quantity").setDescription("Number of messages to delete").setRequired(true)
+      option.setName("quantity").setDescription("Number of messages to delete").setRequired(true).setMinValue(1)
     ),
 
   async (client, interaction) => {
