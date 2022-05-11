@@ -1,16 +1,17 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
-import isInRange from "../../functions/general/isInRange";
 
 export = new Command(
   new SlashCommandBuilder()
     .setName("roll")
     .setDescription("Roll the dice!")
     .addIntegerOption((option) =>
-      option.setName("quantity").setDescription("Number of dice to roll.").setRequired(true)
+      option.setName("quantity").setDescription("Number of dice to roll.").setRequired(true).setMinValue(1)
     )
-    .addIntegerOption((option) => option.setName("sides").setDescription("Dice side quantity.").setRequired(true))
+    .addIntegerOption((option) =>
+      option.setName("sides").setDescription("Dice side quantity.").setRequired(true).setMinValue(2)
+    )
     .addIntegerOption((option) =>
       option
         .setName("modifier")
@@ -26,18 +27,6 @@ export = new Command(
     const modifier =
       interaction.options.getInteger("modifier") === null ? 0 : interaction.options.getInteger("modifier", true);
     const isNonZeroModifier = modifier !== 0;
-
-    //Verify arguments
-    if (!isInRange(quantity)) {
-      return await interaction.followUp({
-        content: `Number of dice must be greater than 0! Entered: ${quantity}`,
-      });
-    }
-    if (!isInRange(sides, 2)) {
-      return await interaction.followUp({
-        content: `Sides of dice must be greater than 1! Entered: ${sides}`,
-      });
-    }
 
     //Array of dice roll(s)
     const results = Array.from({ length: quantity }, () => Math.floor(Math.random() * sides) + 1);

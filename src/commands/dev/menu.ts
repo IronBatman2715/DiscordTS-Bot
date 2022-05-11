@@ -3,14 +3,19 @@ import type { MessageSelectOptionData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
-import isInRange from "../../functions/general/isInRange";
+import { isInRange } from "../../functions/general/math";
 
 export = new Command(
   new SlashCommandBuilder()
     .setName("menu")
     .setDescription("DEV ONLY: Shows a test menu.")
     .addIntegerOption((option) =>
-      option.setName("number-of-options").setDescription("Number of options to generate.").setRequired(true)
+      option
+        .setName("number-of-options")
+        .setDescription("Number of options to generate.")
+        .setRequired(true)
+        .setMinValue(1)
+        .setMaxValue(25)
     ),
 
   async (client, interaction) => {

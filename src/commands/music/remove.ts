@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
-import isInRange from "../../functions/general/isInRange";
+import { isInRange } from "../../functions/general/math";
 import tempMessage from "../../functions/discord/tempMessage";
 import getGuildQueue from "../../functions/music/getGuildQueue";
 import getOrdinalSuffix from "../../functions/general/getOrdinalSuffix";
@@ -11,7 +11,7 @@ export = new Command(
     .setName("remove")
     .setDescription("Remove a song from the music queue.")
     .addIntegerOption((option) =>
-      option.setName("queue-number").setDescription("Number of song in queue.").setRequired(true)
+      option.setName("queue-number").setDescription("Number of song in queue.").setRequired(true).setMinValue(1)
     ),
   async (client, interaction) => {
     //Add ability to remove multiple at a time eventually..?

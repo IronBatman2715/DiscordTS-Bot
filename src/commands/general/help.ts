@@ -3,6 +3,7 @@ import { MessageActionRow, MessageSelectMenu } from "discord.js";
 import type { MessageSelectOptionData } from "discord.js";
 
 import Command from "../../structures/Command";
+import logger from "../../logger";
 
 export = new Command(
   new SlashCommandBuilder().setName("help").setDescription("Show a list of available commands."),
@@ -22,6 +23,15 @@ export = new Command(
           value: category,
         };
       });
+
+    if (commandCategories.length > 25) {
+      logger.error(
+        "`/help` tried to generate a menu with more than 25 options! You have too many command categories to display in a singular help menu."
+      );
+      while (commandCategories.length > 25) {
+        commandCategories.pop();
+      }
+    }
 
     const helpEmbed = client.genEmbed({
       title: "Select a command category below!",
