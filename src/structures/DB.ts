@@ -24,7 +24,7 @@ export default class DB {
   constructor(client: Client) {
     this.client = client;
 
-    if (DB.dbHandlerExists) throw "Should only instantiate DB once, as only one DB handler is required!";
+    if (DB.dbHandlerExists) throw new TypeError("Should only instantiate DB once, as only one DB handler is required!");
     DB.dbHandlerExists = true;
 
     this.hasDoneInitialConnection = false;
@@ -56,6 +56,7 @@ export default class DB {
       logger.info("Disconnected from DB!");
     } catch (error) {
       logger.error(error);
+      logger.error(new Error("Errored trying to disconnect from database!"));
     }
   }
 
@@ -67,7 +68,8 @@ export default class DB {
   async getGuildConfig(guildId: string | null) {
     logger.verbose("DB.getGuildConfig()", guildId);
 
-    if (typeof guildId !== "string") throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
+    if (typeof guildId !== "string")
+      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     const query = await DB.prisma.guildConfig.findUnique({ where: { guildId } });
 
@@ -89,7 +91,8 @@ export default class DB {
   async updateGuildConfig(guildId: string | null, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
     logger.verbose("DB.updateGuildConfig()", { guildId, guildConfig });
 
-    if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
+    if (typeof guildId !== "string")
+      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     return await DB.prisma.guildConfig.update({
       where: { guildId },
@@ -101,7 +104,8 @@ export default class DB {
   async deleteGuildConfig(guildId: string | null) {
     logger.verbose("DB.deleteGuildConfig()", guildId);
 
-    if (guildId === null) throw `Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`;
+    if (typeof guildId !== "string")
+      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     return await DB.prisma.guildConfig.delete({ where: { guildId } });
   }

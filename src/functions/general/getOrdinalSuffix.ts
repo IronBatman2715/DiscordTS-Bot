@@ -1,8 +1,9 @@
 import logger from "../../logger";
+import { isNaturalNumber } from "./math";
 
 export default (num: number) => {
-  if (num < 1 || !Number.isInteger(num)) {
-    logger.error("getOrdinalSuffix received an invalid number! Returning `th`.");
+  if (!isNaturalNumber(num)) {
+    logger.warn(new RangeError("getOrdinalSuffix received an invalid number! Returning `th`."));
     return "th";
   }
 

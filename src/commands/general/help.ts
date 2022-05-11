@@ -26,7 +26,9 @@ export = new Command(
 
     if (commandCategories.length > 25) {
       logger.error(
-        "`/help` tried to generate a menu with more than 25 options! You have too many command categories to display in a singular help menu."
+        new RangeError(
+          "`/help` tried to generate a menu with more than 25 options! You have too many command categories to display in a singular help menu."
+        )
       );
       while (commandCategories.length > 25) {
         commandCategories.pop();

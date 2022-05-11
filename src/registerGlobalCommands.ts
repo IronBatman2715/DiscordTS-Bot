@@ -1,6 +1,7 @@
 import { config as configDotEnv } from "dotenv";
 
 import Client from "./structures/Client";
+import sleep from "./functions/general/sleep";
 import logger from "./logger";
 
 configDotEnv();
@@ -16,9 +17,9 @@ client
   })
   .catch((error) => {
     logger.error(error);
-    logger.info("FAILED to register global commands!");
+    logger.error(new Error("FAILED to register global commands!"));
   })
   .finally(() => {
     logger.info("Closing process in 3 seconds...");
-    setTimeout(process.exit(exitCode), 3000);
+    sleep(3000).then(process.exit(exitCode));
   });

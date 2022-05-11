@@ -8,7 +8,7 @@ import logger from "../../logger";
  */
 export const isInRange = (value: number, min = 1, max = Number.MAX_SAFE_INTEGER): boolean => {
   if (min > max) {
-    logger.error("isInRange function received a min that was larger than max! Outputting false.");
+    logger.error(new RangeError("isInRange function received a min that was larger than max! Outputting false."));
     return false;
   }
 
