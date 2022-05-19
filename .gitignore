@@ -3,6 +3,6 @@ node_modules
 
 .vscode
 
-dist
-@types
+build
+src/@types
 logs

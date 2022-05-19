@@ -7,10 +7,10 @@
   "repository": "https://github.com/IronBatman2715/DiscordTS-Bot",
   "license": "GNU GPLv3",
   "private": true,
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
     "postinstall": "prisma generate",
-    "prebuild": "rm -rf dist src/@types",
+    "prebuild": "rm -rf build src/@types",
     "build": "tsc -p .",
     "predev": "npm run updateSchema",
     "dev": "cross-env NODE_ENV=development nodemon",

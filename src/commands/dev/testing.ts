@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import Command from "../../structures/Command";
 
 export = new Command(
-  new SlashCommandBuilder().setName("testing").setDescription('DEV ONLY: Replies with "1, 2, 3!".'),
+  new SlashCommandBuilder().setName("testing").setDescription('DEVELOPER ONLY: Replies with "1, 2, 3!".'),
 
   async (client, interaction) => {
     return await interaction.followUp({ content: "1, 2, 3!" });

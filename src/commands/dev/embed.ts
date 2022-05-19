@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import Command from "../../structures/Command";
 
 export = new Command(
-  new SlashCommandBuilder().setName("embed").setDescription("DEV ONLY: Shows a test embed."),
+  new SlashCommandBuilder().setName("embed").setDescription("DEVELOPER ONLY: Shows a test embed."),
 
   async (client, interaction) => {
     const channel = await interaction.guild?.channels.fetch(interaction.channelId);

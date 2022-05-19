@@ -16,7 +16,7 @@ declare global {
 
       /** Defines runtime environment type (omittance defaults to "production").
        *
-       * **SHOULD NOT NEED TO MANUALLY SET IN DEV OR PRODUCTION**
+       * **SHOULD NOT NEED TO MANUALLY SET IN DEVELOPMENT OR PRODUCTION**
        */
       NODE_ENV?: "development" | "production";
     }
