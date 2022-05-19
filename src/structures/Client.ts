@@ -60,7 +60,9 @@ export default class Client extends DiscordClient {
         deafenOnJoin: true,
       });
 
-      logger.info(`Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEV" : "DISTRIBUTION"} MODE`);
+      logger.info(
+        `Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`
+      );
 
       //Load events
       this.loadEvents();
@@ -103,7 +105,7 @@ export default class Client extends DiscordClient {
       const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       //Omit this folder if there are no valid files within it
-      //Also omit this folder if it is "dev" and bot is in DISTRIBUTION mode
+      //Also omit this folder if it is "dev" and bot is in PRODUCTION mode
       if ((folder !== "dev" || this.devMode) && files.length > 0) {
         logger.info(`\t${camelCase2Display(folder)}`);
 
@@ -156,7 +158,7 @@ export default class Client extends DiscordClient {
         if (doGlobal) {
           //Register globally, will take up to one hour to register changes
 
-          logger.info("\tDISTRIBUTION MODE. Registering to any server this bot is in");
+          logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
           //Can cast `CLIENT_ID` to string since it is verified in constructor
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -173,7 +175,7 @@ export default class Client extends DiscordClient {
           });
         } else {
           //Instantly register to test guild
-          logger.info(`\tDEV MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
+          logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
           //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -191,7 +193,7 @@ export default class Client extends DiscordClient {
         logger.error(new Error("Errored attempting to register commands with Discord API!"));
       }
     } else {
-      logger.info("Skipped registering commands with Discord API (distribution mode)");
+      logger.info("Skipped registering commands with Discord API (production mode)");
     }
   }
 

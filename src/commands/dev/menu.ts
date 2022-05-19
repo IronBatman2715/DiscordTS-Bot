@@ -8,7 +8,7 @@ import { isInRange } from "../../functions/general/math";
 export = new Command(
   new SlashCommandBuilder()
     .setName("menu")
-    .setDescription("DEV ONLY: Shows a test menu.")
+    .setDescription("DEVELOPER ONLY: Shows a test menu.")
     .addIntegerOption((option) =>
       option
         .setName("number-of-options")
