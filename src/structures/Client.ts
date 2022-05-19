@@ -149,7 +149,9 @@ export default class Client extends DiscordClient {
 
     if (this.devMode) {
       try {
-        logger.info("Registering commands with Discord API");
+        logger.info("Registering commands with Discord API", {
+          commands: { raw: this.commands, json: commandDataArr },
+        });
 
         if (doGlobal) {
           //Register globally, will take up to one hour to register changes
@@ -177,18 +179,13 @@ export default class Client extends DiscordClient {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
 
-          //Remove all previous commands
-          /*await rest.put(fullRoute, {
-            body: [],
-          });*/
-
           //Add all new/updated commands. Does NOT remove no longer used commands!
           await rest.put(fullRoute, {
             body: commandDataArr,
           });
         }
 
-        logger.info("\tSuccessfully registered commands with Discord API!");
+        logger.info(`\tSuccessfully registered ${doGlobal ? "global" : "test guild"} commands with Discord API!`);
       } catch (error) {
         logger.error(error);
         logger.error(new Error("Errored attempting to register commands with Discord API!"));
