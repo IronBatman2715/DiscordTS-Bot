@@ -4,7 +4,13 @@
     "name": "IronBatman2715",
     "url": "https://github.com/IronBatman2715/"
   },
-  "repository": "https://github.com/IronBatman2715/DiscordTS-Bot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IronBatman2715/DiscordTS-Bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IronBatman2715/DiscordTS-Bot/issues"
+  },
   "license": "GNU GPLv3",
   "private": true,
   "main": "build/index.js",
