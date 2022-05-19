@@ -33,7 +33,7 @@ Bring music to your servers with the included [Discord music player](https://dis
       - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a MongoDB URL.
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
    4. `TEST_GUILD_ID` guild ID of the server you want to test this bot in. Slash commands will immediately be updated for this server upon restarting the bot in developer mode.
-   5. `DEV_IDS` A list of developer discord user Ids separated by ", ". Ex: `DEV_IDS = "DEV_ID1, DEV_ID2, DEV_ID3"`.
+   5. `DEV_IDS` A list of developer discord user Ids separated by ", ". Ex: `DEV_IDS = DEV_ID1, DEV_ID2, DEV_ID3`.
 
       - Must set at least one!
 
