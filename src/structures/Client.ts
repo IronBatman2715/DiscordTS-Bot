@@ -10,8 +10,8 @@ import Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
-import logger from "../logger";
 import isUser from "../functions/discord/isUser";
+import logger from "../logger";
 import botConfig from "../botConfig";
 
 export default class Client extends DiscordClient {
@@ -232,14 +232,43 @@ export default class Client extends DiscordClient {
     });
   }
 
-  /** Generate embed with default values and check for valid data */
+  /** Generate embed with default values and check for valid data
+   *
+   * Use this if you KNOW that `data.fields` will not be longer than 25!
+   */
   genEmbed(data: Partial<MessageEmbedOptions> = {}): MessageEmbed {
     //Check for invalid entries
+    if (data.title !== undefined && data.title.length > 256) {
+      logger.warn("Had to shorten an embed title.", data.title);
+      data.title = data.title.substring(0, 256 - 3) + "...";
+    }
+    if (data.description !== undefined && data.description.length > 4096) {
+      logger.warn("Had to shorten an embed description.", data.description);
+      data.description = data.description.substring(0, 4096 - 3) + "...";
+    }
     if (data.fields !== undefined) {
       //Cannot have more than 25 fields in one embed
       if (data.fields.length > 25) {
         throw new RangeError("Client.genEmbed() tried to generate an embed with more than 25 fields!");
       }
+      data.fields.forEach((f) => {
+        if (f.name.length > 256) {
+          logger.warn("Had to shorten an embed field name.", f.name);
+          f.name = f.name.substring(0, 256 - 3) + "...";
+        }
+        if (f.value.length > 1024) {
+          logger.warn("Had to shorten an embed field value.", f.value);
+          f.value = f.value.substring(0, 1024 - 3) + "...";
+        }
+      });
+    }
+    if (data.footer?.text !== undefined && data.footer.text.length > 2048) {
+      logger.warn("Had to shorten an embed footer text.", data.footer.text);
+      data.footer.text = data.footer.text.substring(0, 2048 - 3) + "...";
+    }
+    if (data.author?.name !== undefined && data.author.name.length > 256) {
+      logger.warn("Had to shorten an embed author name.", data.author.name);
+      data.author.name = data.author.name.substring(0, 256 - 3) + "...";
     }
 
     //Generate base embed

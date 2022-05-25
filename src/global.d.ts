@@ -8,7 +8,7 @@ declare global {
 
       //Development only variables
       /** Discord bot's client ID (found {@link https://discord.com/developers/applications here}) */
-      CLIENT_ID: string;
+      CLIENT_ID?: string;
       /** The guildId of your testing server */
       TEST_GUILD_ID?: string;
       /** A list of developer discord user Ids separated by ", ". Ex: DEV_IDS = DEV_ID1, DEV_ID2, DEV_ID3 */
