@@ -182,17 +182,15 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
     };
   });
 
-  const currentSettingsEmbed = client.genEmbed({
-    title: `${interaction.guild?.name} [id: \`${interaction.guildId}\`] Server-wide Settings`,
-    fields: settingsFieldArr,
-    thumbnail: {
-      url: "attachment://settings.png",
+  await client.sendMultiPageEmbed(interaction, settingsFieldArr, {
+    maxFieldsPerEmbed: 15,
+    otherEmbedData: {
+      title: `${interaction.guild?.name} [id: \`${interaction.guildId}\`] Server-wide Settings`,
+      thumbnail: {
+        url: "attachment://settings.png",
+      },
     },
-  });
-
-  return await interaction.followUp({
-    embeds: [currentSettingsEmbed],
-    files: ["assets/icons/settings.png"],
+    otherReplyOptions: { files: ["assets/icons/settings.png"] },
   });
 }
 

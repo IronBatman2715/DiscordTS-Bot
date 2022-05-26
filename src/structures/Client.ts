@@ -1,6 +1,18 @@
 import { readdirSync } from "fs";
 import { resolve } from "path";
-import { Client as DiscordClient, Collection, Intents, MessageEmbed, Permissions } from "discord.js";
+import {
+  Client as DiscordClient,
+  Collection,
+  EmbedFieldData,
+  Intents,
+  InteractionReplyOptions,
+  InteractionUpdateOptions,
+  Message,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
+  Permissions,
+} from "discord.js";
 import type { CacheType, CommandInteraction, GuildMember, MessageEmbedOptions } from "discord.js";
 import { Routes } from "discord-api-types/v10";
 import { REST } from "@discordjs/rest";
@@ -13,6 +25,12 @@ import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
 import logger from "../logger";
 import botConfig from "../botConfig";
+
+type SendMultiPageEmbedOptions = {
+  maxFieldsPerEmbed: number;
+  otherEmbedData: Partial<Omit<MessageEmbedOptions, "fields">>;
+  otherReplyOptions: Partial<Omit<InteractionReplyOptions & InteractionUpdateOptions, "embeds" | "components">>;
+};
 
 export default class Client extends DiscordClient {
   readonly config = botConfig;
@@ -288,6 +306,122 @@ export default class Client extends DiscordClient {
     }
 
     return embed;
+  }
+
+  async sendMultiPageEmbed(
+    interaction: CommandInteraction<CacheType>,
+    embedFields: EmbedFieldData[],
+    options: Partial<SendMultiPageEmbedOptions> = {}
+  ) {
+    logger.verbose("Called Client.sendMultiPageEmbed().", interaction, embedFields, options);
+
+    //Constants
+    const backId = `${this.config.name}-back-button`;
+    const forwardId = `${this.config.name}-forward-button`;
+    const backButton = new MessageButton({
+      style: "SECONDARY",
+      label: "Back",
+      emoji: "⬅️",
+      customId: backId,
+    });
+    const forwardButton = new MessageButton({
+      style: "SECONDARY",
+      label: "Forward",
+      emoji: "➡️",
+      customId: forwardId,
+    });
+
+    //Set defaults if needed
+    const maxFieldsPerEmbed = options.maxFieldsPerEmbed || 5;
+    const otherEmbedData = options.otherEmbedData || {};
+    const otherReplyOptions = options.otherReplyOptions || {};
+
+    const canFitOnOnePage = embedFields.length <= maxFieldsPerEmbed;
+    logger.verbose(
+      canFitOnOnePage
+        ? "Did not need multiple pages"
+        : `Using ${Math.ceil(embedFields.length / maxFieldsPerEmbed)} pages`
+    );
+
+    const originalTitle = (() => {
+      if (otherEmbedData.title !== undefined) {
+        if (otherEmbedData.title.length > 256) {
+          logger.warn("Had to shorten an embed title.", otherEmbedData.title);
+          return otherEmbedData.title.substring(0, 256 - 3) + "...";
+        }
+
+        return otherEmbedData.title;
+      }
+
+      return "";
+    })();
+
+    const genReplyOptions = (startIndex: number) => {
+      //Generate embed data
+
+      const limitedEmbedFields = embedFields.slice(startIndex, startIndex + maxFieldsPerEmbed);
+
+      const fullEmbedData = otherEmbedData as Partial<MessageEmbedOptions>;
+      fullEmbedData.fields = limitedEmbedFields;
+
+      const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${
+        embedFields.length
+      }`;
+      if (originalTitle.length > 0) {
+        fullEmbedData.title = `${originalTitle} (${titlePageSubstr})`;
+      } else {
+        fullEmbedData.title = titlePageSubstr;
+      }
+
+      //Generate reply options
+
+      const fullReplyOptions = otherReplyOptions as Partial<InteractionReplyOptions & InteractionUpdateOptions>;
+      fullReplyOptions.embeds = [this.genEmbed(fullEmbedData)];
+
+      if (startIndex === 0) {
+        fullReplyOptions.components = canFitOnOnePage ? [] : [new MessageActionRow({ components: [forwardButton] })];
+      } else {
+        fullReplyOptions.components = [
+          new MessageActionRow({
+            components: [
+              //back button if it isn't the start
+              ...(startIndex ? [backButton] : []),
+              //forward button if it isn't the end
+              ...(startIndex + maxFieldsPerEmbed < embedFields.length ? [forwardButton] : []),
+            ],
+          }),
+        ];
+      }
+
+      return fullReplyOptions;
+    };
+
+    //Send the embed with the first `maxFieldsPerEmbed` fields
+    const embedMessage = (await interaction.followUp(genReplyOptions(0))) as Message<boolean>;
+
+    //Ignore if there is only one page of fields (no need for all of this)
+    if (!canFitOnOnePage) {
+      //Collect button interactions (when a user clicks a button)
+      const collector = embedMessage.createMessageComponentCollector();
+
+      let i = 0;
+      collector.on("collect", async (componentInteraction) => {
+        //Increase/decrease index
+        if (componentInteraction.customId === forwardId) {
+          logger.verbose("Someone clicked forward on multi-page embed", embedMessage, collector);
+          i += maxFieldsPerEmbed;
+        }
+        if (componentInteraction.customId === backId) {
+          logger.verbose("Someone clicked back on multi-page embed", embedMessage, collector);
+          i -= maxFieldsPerEmbed;
+        }
+
+        //Respond to component interaction by updating message with new embed
+        await componentInteraction.update(genReplyOptions(i));
+      });
+    }
+
+    return embedMessage;
   }
 
   async runCommand(command: Command, interaction: CommandInteraction<CacheType>): Promise<void> {
