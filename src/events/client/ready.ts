@@ -10,7 +10,7 @@ export = new ClientEvent("ready", (client) => {
 
   setInterval(() => {
     unusedActivities = setRandomBotPresence(client, unusedActivities);
-  }, 3600000); // set random presence every 3600000 ms = 1 hour
+  }, 3600000); //set random presence every 3600000 ms = 1 hour
 });
 
 function setRandomBotPresence(client: Client, unusedActivities: ActivitiesOptions[]) {

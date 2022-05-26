@@ -3,7 +3,6 @@ import type { MessageSelectOptionData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
-import { isInRange } from "../../functions/general/math";
 
 export = new Command(
   new SlashCommandBuilder()
@@ -20,13 +19,6 @@ export = new Command(
 
   async (client, interaction) => {
     const numOfOptions = interaction.options.getInteger("number-of-options", true);
-
-    //Check if is in allowed range
-    if (!isInRange(numOfOptions)) {
-      return await interaction.followUp({
-        content: `Entered value is out of allowed range: [1, ${Number.MAX_SAFE_INTEGER}]!`,
-      });
-    }
 
     const options: MessageSelectOptionData[] = Array.from({ length: numOfOptions }, (_, i) => {
       return {

@@ -130,7 +130,7 @@ export default class Client extends DiscordClient {
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
 
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          //eslint-disable-next-line @typescript-eslint/no-var-requires
           const command: Command = require(commandFilePath);
 
           //Set and store command categories
@@ -164,7 +164,7 @@ export default class Client extends DiscordClient {
     const commandDataArr = this.commands.map((command) => command.builder.toJSON());
 
     //Can cast `DISCORD_TOKEN` to string since it is verified in constructor
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
     if (this.devMode) {
@@ -179,7 +179,7 @@ export default class Client extends DiscordClient {
           logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
           //Can cast `CLIENT_ID` to string since it is verified in constructor
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
 
           //Remove all previous commands
@@ -196,7 +196,7 @@ export default class Client extends DiscordClient {
           logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
           //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
 
           //Add all new/updated commands. Does NOT remove no longer used commands!
@@ -234,7 +234,7 @@ export default class Client extends DiscordClient {
           const eventFilePath = resolve(eventsSubDir, file);
           const eventFileName = file.slice(0, file.length - 3);
 
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          //eslint-disable-next-line @typescript-eslint/no-var-requires
           const event: BaseEvent = require(eventFilePath);
 
           //Bind event to its corresponding event emitter
