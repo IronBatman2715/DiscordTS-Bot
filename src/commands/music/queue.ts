@@ -29,24 +29,14 @@ export = new Command(
       };
     });
 
-    //25 embed fields is max allowed by discord
-    const songQuantitySubStr = guildQueue.songs.length > 25 ? `25/${guildQueue.songs.length}` : guildQueue.songs.length;
-
-    const queueEmbedTitle = `Music Queue (${songQuantitySubStr} song${
-      guildQueue.songs.length === 1 ? "" : "s"
-    }) [Repeat mode: ${RepeatMode[guildQueue.repeatMode]}]`;
-
-    const queueEmbed = client.genEmbed({
-      title: queueEmbedTitle,
-      fields: queueFieldArr,
-      thumbnail: {
-        url: "attachment://music.png",
+    await client.sendMultiPageEmbed(interaction, queueFieldArr, {
+      otherEmbedData: {
+        title: `Music Queue [Repeat mode: ${RepeatMode[guildQueue.repeatMode]}]`,
+        thumbnail: {
+          url: "attachment://music.png",
+        },
       },
-    });
-
-    return await interaction.followUp({
-      embeds: [queueEmbed],
-      files: ["assets/icons/music.png"],
+      otherReplyOptions: { files: ["assets/icons/music.png"] },
     });
   }
 );
