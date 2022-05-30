@@ -58,7 +58,6 @@ async function countdown(t: number, countdownIntervalInSeconds: number, tempMess
 
   if (t <= 0) {
     await tempMsg.delete();
-    return;
   } else {
     //Tick the interval
     const newT = t - countdownIntervalInSeconds;

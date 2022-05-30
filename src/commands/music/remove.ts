@@ -19,7 +19,7 @@ export = new Command(
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
-      return interaction.followUp({
+      return await interaction.followUp({
         content: "No active music queue to remove a song from!",
       });
     }
@@ -28,7 +28,7 @@ export = new Command(
     const index = songNumber - 1; //song array index (starts at 0)
 
     if (!isInRange(songNumber, 1, guildQueue.songs.length)) {
-      return interaction.followUp({
+      return await interaction.followUp({
         content: `Song number entered does not exist in this queue! (Ex: Remove 3rd song in queue: "/remove 3")`,
       });
     }

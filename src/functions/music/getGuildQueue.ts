@@ -40,8 +40,6 @@ export default async (client: Client, interaction: CommandInteraction<CacheType>
       await interaction.followUp({
         content: "A queue has not been started yet! Use `/play` or `/playlist` to queue a song.",
       });
-
-      return;
     }
   }
 };

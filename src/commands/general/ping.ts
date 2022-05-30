@@ -23,7 +23,7 @@ export = new Command(
     const rtLatency = pingMessage.createdTimestamp - interaction.createdTimestamp;
     const rtLatencyStr = `Roundtrip latency: **${rtLatency} ms**.${verbose ? rtLatencyVerbose : ""}`;
 
-    return await pingMessage.edit({
+    await pingMessage.edit({
       content: `${pingStr}\n${rtLatencyStr}`,
     });
   }

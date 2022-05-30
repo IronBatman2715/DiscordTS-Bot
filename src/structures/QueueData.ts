@@ -73,16 +73,15 @@ export default class QueueData {
   }
 
   private async setEmbedMessage(newEmbedMessage: Message<boolean>) {
-    if (newEmbedMessage.embeds.length != 1) {
-      const str = newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!";
-      logger.error(new ReferenceError(`newEmbedMessage has ${str}`));
-      return;
+    if (newEmbedMessage.embeds.length !== 1) {
+      throw new ReferenceError(
+        `newEmbedMessage has ${newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!"}`
+      );
     }
 
     await this.deleteEmbedMessage();
 
     this.embedMessage = newEmbedMessage;
-    return;
   }
 
   async deleteEmbedMessage() {

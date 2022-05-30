@@ -155,7 +155,7 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 
       for (let i = 0; i < array.length; i++) {
         currentValue = currentValue + array[i];
-        if (i != array.length - 1) {
+        if (i !== array.length - 1) {
           currentValue = currentValue + ", ";
         }
       }
