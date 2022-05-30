@@ -1,6 +1,5 @@
 import { MusicPlayerEvent } from "../../structures/Event";
 import type QueueWithData from "../../interfaces/QueueWithData";
-import tempMessage from "../../functions/discord/tempMessage";
 import logger from "../../logger";
 
 export = new MusicPlayerEvent("songAdd", async (client, baseQueue, song) => {
@@ -10,6 +9,6 @@ export = new MusicPlayerEvent("songAdd", async (client, baseQueue, song) => {
 
   if (queue.isPlaying) {
     //Confirmation message
-    tempMessage(queue.data.latestInteraction, `Queued \`${song.name}\`!`);
+    await queue.data.latestInteraction.followUp({ content: `Queued \`${song.name}\`!` });
   }
 });

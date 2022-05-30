@@ -15,7 +15,8 @@ export = new Command(
     }
 
     guildQueue.setPaused(true);
-
-    await interaction.deleteReply();
+    await interaction.followUp({
+      content: "Paused the music queue!",
+    });
   }
 );

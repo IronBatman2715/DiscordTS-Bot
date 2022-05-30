@@ -15,7 +15,8 @@ export = new Command(
     }
 
     guildQueue.stop();
-
-    await interaction.deleteReply();
+    await interaction.followUp({
+      content: "Stopped the music queue!",
+    });
   }
 );

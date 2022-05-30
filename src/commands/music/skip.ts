@@ -28,7 +28,8 @@ export = new Command(
     }
 
     guildQueue.skip(quantity - 1); //quantity - 1 = song index to skip
-
-    await interaction.deleteReply();
+    await interaction.followUp({
+      content: `Skipped ${quantity} song${quantity === 1 ? "" : "s"}.`,
+    });
   }
 );
