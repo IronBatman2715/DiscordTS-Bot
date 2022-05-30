@@ -337,11 +337,7 @@ export default class Client extends DiscordClient {
     const otherReplyOptions = options.otherReplyOptions || {};
 
     const canFitOnOnePage = embedFields.length <= maxFieldsPerEmbed;
-    logger.verbose(
-      canFitOnOnePage
-        ? "Did not need multiple pages"
-        : `Using ${Math.ceil(embedFields.length / maxFieldsPerEmbed)} pages`
-    );
+    logger.verbose(`Using ${Math.ceil(embedFields.length / maxFieldsPerEmbed)} page${canFitOnOnePage ? "" : "s"}.`);
 
     const originalTitle = (() => {
       if (otherEmbedData.title !== undefined) {
@@ -364,13 +360,17 @@ export default class Client extends DiscordClient {
       const fullEmbedData = otherEmbedData as Partial<MessageEmbedOptions>;
       fullEmbedData.fields = limitedEmbedFields;
 
-      const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${
-        embedFields.length
-      }`;
-      if (originalTitle.length > 0) {
-        fullEmbedData.title = `${originalTitle} (${titlePageSubstr})`;
+      if (canFitOnOnePage) {
+        fullEmbedData.title = originalTitle;
       } else {
-        fullEmbedData.title = titlePageSubstr;
+        const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${
+          embedFields.length
+        }`;
+        if (originalTitle.length > 0) {
+          fullEmbedData.title = `${originalTitle} (${titlePageSubstr})`;
+        } else {
+          fullEmbedData.title = titlePageSubstr;
+        }
       }
 
       //Generate reply options
