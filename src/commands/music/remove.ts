@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
 import { isInRange } from "../../functions/general/math";
-import tempMessage from "../../functions/discord/tempMessage";
 import getGuildQueue from "../../functions/music/getGuildQueue";
 import getOrdinalSuffix from "../../functions/general/getOrdinalSuffix";
 
@@ -36,9 +35,8 @@ export = new Command(
     const removedSong = guildQueue.songs[index];
     guildQueue.remove(index);
 
-    await tempMessage(
-      interaction,
-      `Removed the ${songNumber}${getOrdinalSuffix(songNumber)} song from the queue! (${removedSong.name})`
-    );
+    await interaction.followUp({
+      content: `Removed the ${songNumber}${getOrdinalSuffix(songNumber)} song from the queue! (${removedSong.name})`,
+    });
   }
 );

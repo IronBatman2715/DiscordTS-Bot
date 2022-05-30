@@ -15,6 +15,8 @@ export = new Command(
     }
 
     guildQueue.shuffle();
-    await interaction.deleteReply();
+    await interaction.followUp({
+      content: "Shuffled the music queue!",
+    });
   }
 );
