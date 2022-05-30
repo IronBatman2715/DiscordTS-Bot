@@ -10,7 +10,7 @@ export = new Command(
     if (typeof guildConfig === "undefined") return;
     const { greetings } = guildConfig;
 
-    return await interaction.followUp({
+    await interaction.followUp({
       content: greetings[Math.floor(Math.random() * greetings.length)],
     });
   }

@@ -13,7 +13,7 @@ export = new Command(
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
-      return interaction.followUp({
+      return await interaction.followUp({
         content: "No active music queue to skip a song in!",
       });
     }

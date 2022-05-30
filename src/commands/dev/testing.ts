@@ -6,6 +6,6 @@ export = new Command(
   new SlashCommandBuilder().setName("testing").setDescription('DEVELOPER ONLY: Replies with "1, 2, 3!".'),
 
   async (client, interaction) => {
-    return await interaction.followUp({ content: "1, 2, 3!" });
+    await interaction.followUp({ content: "1, 2, 3!" });
   }
 );

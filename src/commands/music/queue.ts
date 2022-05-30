@@ -11,14 +11,14 @@ export = new Command(
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
-      return interaction.followUp({
+      return await interaction.followUp({
         content: "No active music queue to show!",
       });
     }
 
     //Check if queue is empty
     if (guildQueue.songs.length === 0) {
-      return interaction.followUp({ content: "No songs in queue!" });
+      return await interaction.followUp({ content: "No songs in queue!" });
     }
 
     const queueFieldArr: EmbedFieldData[] = guildQueue.songs.map((song, i) => {

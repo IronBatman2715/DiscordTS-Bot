@@ -11,6 +11,6 @@ export = new Command(
   async (client, interaction) => {
     const message = interaction.options.getString("message", true);
 
-    return await interaction.followUp({ content: message });
+    await interaction.followUp({ content: message });
   }
 );

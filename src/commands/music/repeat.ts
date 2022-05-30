@@ -24,7 +24,7 @@ export = new Command(
     //Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
-      return interaction.followUp({
+      return await interaction.followUp({
         content: "No active music queue!",
       });
     }
@@ -34,13 +34,14 @@ export = new Command(
 
     //Change the repeat behavior of the queue
     if (guildQueue.repeatMode === repeatMode) {
-      return interaction.followUp({
+      await interaction.followUp({
         content: `Already set to that repeat mode (${repeatModeStr})!`,
       });
+    } else {
+      guildQueue.setRepeatMode(repeatMode);
+      await interaction.followUp({
+        content: `Set music queue repeat mode to: ${repeatModeStr}!`,
+      });
     }
-    guildQueue.setRepeatMode(repeatMode);
-    return interaction.followUp({
-      content: `Set music queue repeat mode to: ${repeatModeStr}!`,
-    });
   }
 );

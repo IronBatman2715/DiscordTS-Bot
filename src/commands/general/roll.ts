@@ -38,7 +38,7 @@ export = new Command(
 
     const resultStr = isNonZeroModifier || results.length > 1 ? ` [${results}] ${modifierStr} ➡️` : ``;
 
-    return await interaction.followUp({
+    await interaction.followUp({
       content: `${quantity}d${sides} ${modifierStr}➡️${resultStr} **${total}**`,
     });
   }

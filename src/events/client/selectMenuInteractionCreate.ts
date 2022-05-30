@@ -22,7 +22,7 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
           description: `You selected: ${choice}`,
         });
 
-        return await interaction.editReply({
+        await interaction.editReply({
           embeds: [testMenuEmbed],
         });
       }
@@ -46,14 +46,13 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
           fields: commandObjArr,
         });
 
-        return await interaction.editReply({
+        await interaction.editReply({
           embeds: [helpMenuEmbed],
         });
       }
 
       default: {
         logger.error(new ReferenceError("Could not match customId of select menu to one of this bot's!"));
-        return;
       }
     }
   }

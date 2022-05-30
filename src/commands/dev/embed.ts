@@ -46,7 +46,7 @@ export = new Command(
       },
     });
 
-    return await interaction.followUp({
+    await interaction.followUp({
       embeds: [testEmbed],
     });
   }
