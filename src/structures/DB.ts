@@ -66,7 +66,7 @@ export default class DB {
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
   async getGuildConfig(guildId: string | null) {
-    logger.verbose("DB.getGuildConfig()", guildId);
+    logger.verbose("DB.getGuildConfig()", { guildId });
 
     if (typeof guildId !== "string")
       throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
@@ -102,7 +102,7 @@ export default class DB {
 
   /** Delete the guild config document corresponding to guildId. */
   async deleteGuildConfig(guildId: string | null) {
-    logger.verbose("DB.deleteGuildConfig()", guildId);
+    logger.verbose("DB.deleteGuildConfig()", { guildId });
 
     if (typeof guildId !== "string")
       throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);

@@ -257,11 +257,11 @@ export default class Client extends DiscordClient {
   genEmbed(data: Partial<MessageEmbedOptions> = {}): MessageEmbed {
     //Check for invalid entries
     if (data.title !== undefined && data.title.length > 256) {
-      logger.warn("Had to shorten an embed title.", data.title);
+      logger.warn("Had to shorten an embed title.", { embedTitle: data.title });
       data.title = data.title.substring(0, 256 - 3) + "...";
     }
     if (data.description !== undefined && data.description.length > 4096) {
-      logger.warn("Had to shorten an embed description.", data.description);
+      logger.warn("Had to shorten an embed description.", { embedDescription: data.description });
       data.description = data.description.substring(0, 4096 - 3) + "...";
     }
     if (data.fields !== undefined) {
@@ -271,21 +271,21 @@ export default class Client extends DiscordClient {
       }
       data.fields.forEach((f) => {
         if (f.name.length > 256) {
-          logger.warn("Had to shorten an embed field name.", f.name);
+          logger.warn("Had to shorten an embed field name.", { embedFieldName: f.name });
           f.name = f.name.substring(0, 256 - 3) + "...";
         }
         if (f.value.length > 1024) {
-          logger.warn("Had to shorten an embed field value.", f.value);
+          logger.warn("Had to shorten an embed field value.", { embedFieldValue: f.value });
           f.value = f.value.substring(0, 1024 - 3) + "...";
         }
       });
     }
     if (data.footer?.text !== undefined && data.footer.text.length > 2048) {
-      logger.warn("Had to shorten an embed footer text.", data.footer.text);
+      logger.warn("Had to shorten an embed footer text.", { embedFooterText: data.footer.text });
       data.footer.text = data.footer.text.substring(0, 2048 - 3) + "...";
     }
     if (data.author?.name !== undefined && data.author.name.length > 256) {
-      logger.warn("Had to shorten an embed author name.", data.author.name);
+      logger.warn("Had to shorten an embed author name.", { embedAuthorName: data.author.name });
       data.author.name = data.author.name.substring(0, 256 - 3) + "...";
     }
 
@@ -313,7 +313,7 @@ export default class Client extends DiscordClient {
     embedFields: EmbedFieldData[],
     options: Partial<SendMultiPageEmbedOptions> = {}
   ) {
-    logger.verbose("Called Client.sendMultiPageEmbed().", interaction, embedFields, options);
+    logger.verbose("Called Client.sendMultiPageEmbed().", { interaction, embedFields, options });
 
     //Constants
     const backId = `${this.config.name}-back-button`;
@@ -342,7 +342,7 @@ export default class Client extends DiscordClient {
     const originalTitle = (() => {
       if (otherEmbedData.title !== undefined) {
         if (otherEmbedData.title.length > 256) {
-          logger.warn("Had to shorten an embed title.", otherEmbedData.title);
+          logger.warn("Had to shorten an embed title.", { embedTitle: otherEmbedData.title });
           return otherEmbedData.title.substring(0, 256 - 3) + "...";
         }
 
@@ -408,11 +408,11 @@ export default class Client extends DiscordClient {
       collector.on("collect", async (componentInteraction) => {
         //Increase/decrease index
         if (componentInteraction.customId === forwardId) {
-          logger.verbose("Someone clicked forward on multi-page embed", embedMessage, collector);
+          logger.verbose("Someone clicked forward on multi-page embed", { embedMessage, collector });
           i += maxFieldsPerEmbed;
         }
         if (componentInteraction.customId === backId) {
-          logger.verbose("Someone clicked back on multi-page embed", embedMessage, collector);
+          logger.verbose("Someone clicked back on multi-page embed", { embedMessage, collector });
           i -= maxFieldsPerEmbed;
         }
 

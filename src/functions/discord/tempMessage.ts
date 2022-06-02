@@ -31,7 +31,7 @@ export default async (
     );
   }
 
-  logger.verbose("Ticking tempMessage", interaction, text);
+  logger.verbose("Ticking tempMessage", { interaction, text });
   if (showCountdown) {
     //Show countdown to when message will delete itself
     const newText = text + `...`;
