@@ -1,8 +1,8 @@
 # DiscordTS-Bot
 
-A customizable Discord bot based on [discord.js v13](https://discord.js.org) with Typescript!
+A customizable Discord bot based on [discord.js v13](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
 
-It utilizes the [Prisma ORM/ODM](https://www.prisma.io) to manage your MongoDB (can easily be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
+It utilizes the [Prisma ORM/ODM](https://www.prisma.io) to manage your [MongoDB](https://www.mongodb.com/) (can easily be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
 
 Bring music to your servers with the included [Discord music player](https://discord-music-player.js.org) library!
 
@@ -34,7 +34,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
    1. `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
    2. `DB_URL` Database URL
-      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a MongoDB URL.
+      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
    4. `TEST_GUILD_ID` guild ID of the server you will use to test this bot.
       - Slash commands will *immediately* be updated for this server and this server only upon restarting the bot in *developer mode*.
@@ -61,7 +61,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
    2. `DB_URL` Database URL
 
-      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a MongoDB URL.
+      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
