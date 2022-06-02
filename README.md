@@ -18,7 +18,10 @@ Bring music to your servers with the included [Discord music player](https://dis
 
    - Refer to the [discord.js guide](https://discordjs.guide) for directions. Specifically: [setting up your bot application](https://discordjs.guide/preparations/setting-up-a-bot-application) and then [adding it to server(s)](https://discordjs.guide/preparations/adding-your-bot-to-servers).
 
+   > It is recommended to use separate discord bot applications for development and production. Otherwise, it will be difficult to differentiate global commands from in development commands.
+
 2. Setup your database of choice.
+
    - MongoDB is the default. You can easily set up a free instance with [MongoDB Atlas](https://www.mongodb.com/atlas).
 
    - MongoDB is supported out of the box but [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases) can be used with some changes to [src/database/schema.prisma](src/database/schema.prisma).
@@ -69,6 +72,9 @@ Bring music to your servers with the included [Discord music player](https://dis
 5. **If this is the first time you have run the bot** or **you are updating the source code**, run `npm run registerGlobal` to register all your commands to any and all servers this bot is in.
 
 6. Run `npm run build` to compile the source code for production.
+
    - If you are tight on storage space, delete the `node_modules` folder after running the above command. Then, run `npm install --production` to install only the dependencies needed for production.
 
 7. Run `npm start` to run the bot!
+
+   > Add [PM2](https://www.npmjs.com/package/pm2) or containerize with [Docker](https://docs.docker.com/). Then, deploy to a cloud service ([Heroku](https://www.heroku.com/), [Linode](https://www.linode.com/), etc.) or on your own hardware.
