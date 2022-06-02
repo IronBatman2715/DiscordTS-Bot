@@ -10,15 +10,27 @@ if (process.env.NODE_ENV === "development") {
   //Development logger
 
   logger = createLogger({
-    format: combine(
-      colorize(),
-      timestamp({ format: "HH:mm:ss:SS" }),
-      errors({ stack: true }),
-      printf(({ level, message, timestamp, stack }) => {
-        return `[${timestamp}] ${level}: ${stack || message}`;
-      })
-    ),
-    transports: [new transports.Console({ level: "debug" })],
+    defaultMeta: {
+      service: `${botConfig.name}@${botConfig.version}-dev`,
+    },
+    transports: [
+      new transports.Console({
+        level: "debug",
+        format: combine(
+          colorize(),
+          timestamp({ format: "HH:mm:ss:SS" }),
+          errors({ stack: true }),
+          printf(({ level, message, timestamp, stack }) => {
+            return `[${timestamp}] ${level}: ${stack || message}`;
+          })
+        ),
+      }),
+      new transports.File({
+        filename: "logs/complete-dev.log",
+        level: "debug",
+        format: combine(timestamp({ format: "HH:mm:ss:SS" }), errors({ stack: true }), json()),
+      }),
+    ],
   });
 } else {
   //Production logger
@@ -27,6 +39,7 @@ if (process.env.NODE_ENV === "development") {
     format: combine(timestamp(), errors({ stack: true }), json()),
     defaultMeta: { service: `${botConfig.name}@${botConfig.version}` },
     transports: [
+      new transports.Console({ level: "debug" }),
       new transports.File({ filename: "logs/error.log", level: "error" }),
       new transports.File({ filename: "logs/warn.log", level: "warn" }),
       new transports.File({ filename: "logs/info.log", level: "info" }),
