@@ -5,7 +5,7 @@ import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
   if (interaction.isSelectMenu()) {
-    logger.verbose("SelectMenuInteraction created!");
+    logger.verbose("SelectMenuInteraction created!", { interaction });
     logger.verbose(`values selected: [${interaction.values}]`);
 
     //Show user that select menu is loading
@@ -25,6 +25,8 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
         await interaction.editReply({
           embeds: [testMenuEmbed],
         });
+
+        break;
       }
       case `${client.config.name}-help-select-menu`: {
         const [dir] = interaction.values;
@@ -49,6 +51,8 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
         await interaction.editReply({
           embeds: [helpMenuEmbed],
         });
+
+        break;
       }
 
       default: {

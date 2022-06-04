@@ -3,7 +3,7 @@ import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
   if (interaction.isCommand()) {
-    logger.verbose("CommandInteraction created!");
+    logger.verbose("CommandInteraction created!", { interaction });
 
     //Get command
     const command = client.commands.get(interaction.commandName);
