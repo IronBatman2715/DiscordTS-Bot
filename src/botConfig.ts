@@ -15,7 +15,7 @@ export type BotConfig = {
 
 export const botConfig: BotConfig = {
   name: "Z-Bot",
-  version: "1.0.0",
+  version: `1.0.0${process.env.NODE_ENV === "development" ? "-dev" : ""}`,
   activities: [
     {
       type: ActivityTypes.PLAYING,
