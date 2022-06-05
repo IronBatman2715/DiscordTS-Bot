@@ -1,8 +1,8 @@
-import { config as configDotEnv } from "dotenv";
+import loadEnv from "./loadEnv";
 
 import Client from "./structures/Client";
 
-configDotEnv();
+loadEnv();
 const client: Client = new Client();
 
 client.start();

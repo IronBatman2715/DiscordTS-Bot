@@ -22,8 +22,7 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "updateSchema": "prisma format && prisma generate",
-    "viewDB": "prisma studio",
-    "registerGlobal": "cross-env NODE_ENV=development ts-node src/registerGlobalCommands.ts --enable-source-maps",
+    "registerGlobal": "node build/registerGlobalCommands.js",
     "start": "node ."
   },
   "dependencies": {

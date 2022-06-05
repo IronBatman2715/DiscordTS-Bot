@@ -1,8 +1,10 @@
-import { config as configDotEnv } from "dotenv";
+import loadEnv from "./loadEnv";
 
 import Client from "./structures/Client";
 
-configDotEnv();
+loadEnv();
 const client: Client = new Client();
 
-client.registerCommands(true);
+if (client.devMode) throw new Error("Must register global commands in production environment!");
+
+client.registerCommands();

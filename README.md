@@ -28,7 +28,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 3. Clone/fork this repository.
 
-4. Rename `sample.env` to `.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+4. Rename `sample-development.env` to `development.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
@@ -53,7 +53,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 2. Download or clone this repository.
 
-3. Rename `sample.env` to `.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+3. Rename `sample-production.env` to `production.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
@@ -65,15 +65,13 @@ Bring music to your servers with the included [Discord music player](https://dis
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
-      - Only required if you need to do step 5.
-
 4. Run `npm ci` to do a clean install of dependencies and generate Prisma client files.
 
-5. **If this is the first time you have run the bot** or **you are updating the source code**, run `npm run registerGlobal` to register all your commands to any and all servers this bot is in.
+5. Run `npm run build` to compile the source code for production.
 
-6. Run `npm run build` to compile the source code for production.
+   - If you are tight on storage space, delete the `node_modules` folder after running the above command. Then, run `npm ci --production` to install only the dependencies needed for production.
 
-   - If you are tight on storage space, delete the `node_modules` folder after running the above command. Then, run `npm install --production` to install only the dependencies needed for production.
+6. **If this is the first time you have run the bot** or **you are updating the source code**, run `npm run registerGlobal` to register all your commands to any and all servers this bot is in.
 
 7. Run `npm start` to run the bot!
 
