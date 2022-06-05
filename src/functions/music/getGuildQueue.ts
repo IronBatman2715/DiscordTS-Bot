@@ -12,7 +12,7 @@ export default async (client: Client, interaction: CommandInteraction<CacheType>
   const guildId = interaction.guildId;
   if (typeof guildId !== "string") return;
 
-  //If this server has a music queue already, get it. If not, create with new QueueData
+  // If this server has a music queue already, get it. If not, create with new QueueData
   let guildQueue: QueueWithData;
   if (client.player.hasQueue(guildId)) {
     logger.verbose("Queue already exists!");
@@ -24,7 +24,7 @@ export default async (client: Client, interaction: CommandInteraction<CacheType>
   } else {
     logger.verbose("Queue does not exist!");
 
-    //Create new queue ONLY if input interaction is set to be the latest interaction
+    // Create new queue ONLY if input interaction is set to be the latest interaction
     if (updateLatestInteraction) {
       logger.verbose("Making a new queue now!");
 

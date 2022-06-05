@@ -8,7 +8,7 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
     logger.verbose("SelectMenuInteraction created!", { interaction });
     logger.verbose(`values selected: [${interaction.values}]`);
 
-    //Show user that select menu is loading
+    // Show user that select menu is loading
     await interaction.deferUpdate().catch((error) => {
       logger.error(error);
     });

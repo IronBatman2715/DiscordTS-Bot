@@ -33,7 +33,7 @@ export default async (
 
   logger.verbose("Ticking tempMessage", { interaction, text });
   if (showCountdown) {
-    //Show countdown to when message will delete itself
+    // Show countdown to when message will delete itself
     const newText = text + `...`;
     const message = (await interaction.followUp({
       content: newText + durationInSeconds.toString(),
@@ -44,7 +44,7 @@ export default async (
     await sleep(1000 * countdownIntervalInSeconds);
     await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
   } else {
-    //No visible countdown to when message will delete itself
+    // No visible countdown to when message will delete itself
     const message = (await interaction.followUp({ content: text })) as Message;
 
     await sleep(1000 * durationInSeconds);
@@ -59,7 +59,7 @@ async function countdown(t: number, countdownIntervalInSeconds: number, tempMess
   if (t <= 0) {
     await tempMsg.delete();
   } else {
-    //Tick the interval
+    // Tick the interval
     const newT = t - countdownIntervalInSeconds;
     logger.verbose(t);
 

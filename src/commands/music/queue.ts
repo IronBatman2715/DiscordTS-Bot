@@ -8,7 +8,7 @@ import getGuildQueue from "../../functions/music/getGuildQueue";
 export = new Command(
   new SlashCommandBuilder().setName("queue").setDescription("Display music queue."),
   async (client, interaction) => {
-    //Get queue
+    // Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return await interaction.followUp({
@@ -16,7 +16,7 @@ export = new Command(
       });
     }
 
-    //Check if queue is empty
+    // Check if queue is empty
     if (guildQueue.songs.length === 0) {
       return await interaction.followUp({ content: "No songs in queue!" });
     }

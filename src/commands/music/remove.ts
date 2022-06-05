@@ -13,9 +13,9 @@ export = new Command(
       option.setName("queue-number").setDescription("Number of song in queue.").setRequired(true).setMinValue(1)
     ),
   async (client, interaction) => {
-    //Add ability to remove multiple at a time eventually..?
+    // Add ability to remove multiple at a time eventually..?
 
-    //Get queue
+    // Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return await interaction.followUp({

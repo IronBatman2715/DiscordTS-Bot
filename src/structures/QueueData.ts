@@ -34,7 +34,7 @@ export default class QueueData {
   }
 
   async updateNowPlaying(song: Song) {
-    //Create now playing embed
+    // Create now playing embed
     const nowPlayingEmbed = this.client.genEmbed({
       title: song.name,
       url: song.url,
@@ -60,7 +60,7 @@ export default class QueueData {
     });
 
     try {
-      //Send/update and save embed as message
+      // Send/update and save embed as message
       const newEmbedMessage = await this.latestInteraction.followUp({
         embeds: [nowPlayingEmbed],
       });

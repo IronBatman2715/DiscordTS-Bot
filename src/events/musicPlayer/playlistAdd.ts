@@ -9,6 +9,6 @@ export = new MusicPlayerEvent("playlistAdd", async (client, baseQueue, playlist)
 
   logger.verbose(`${requestedBy} added this playlist to the queue:\n\t${playlist.name}`);
 
-  //Confirmation message
+  // Confirmation message
   await queue.data.latestInteraction.followUp({ content: `Queued playlist \`${playlist.name}\`!` });
 });

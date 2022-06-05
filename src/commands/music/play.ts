@@ -17,7 +17,7 @@ export = new Command(
   async (client, interaction) => {
     const voiceChannel = (interaction.member as GuildMember).voice.channel;
 
-    //Check if user is currently in a voice channel
+    // Check if user is currently in a voice channel
     if (!voiceChannel) {
       return await interaction.followUp({
         content: "Join a voice channel first!",

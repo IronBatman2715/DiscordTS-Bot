@@ -7,7 +7,7 @@ import type Client from "./Client";
 /* --- BaseEvent --- */
 export interface IBaseEvent {
   event: string;
-  //eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   run: Function;
   bindToEventEmitter(client: Client): void;
 }

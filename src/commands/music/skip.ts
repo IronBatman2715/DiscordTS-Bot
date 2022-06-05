@@ -10,7 +10,7 @@ export = new Command(
     .setDescription("Skip a number of song(s) [default: 1].")
     .addIntegerOption((option) => option.setName("quantity").setDescription("Number of songs to skip.").setMinValue(1)),
   async (client, interaction) => {
-    //Get queue
+    // Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return await interaction.followUp({
