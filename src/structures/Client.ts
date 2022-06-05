@@ -34,6 +34,7 @@ type SendMultiPageEmbedOptions = {
 
 export default class Client extends DiscordClient {
   readonly config = botConfig;
+  /** True in development environment, otherwise false */
   readonly devMode: boolean;
   /** List of developer discord user Ids */
   private readonly devIds: string[] = [];
@@ -55,12 +56,15 @@ export default class Client extends DiscordClient {
       this.devMode = process.env.NODE_ENV === "development";
 
       logger.info("Verifying environment variables are set... ");
+
+      //Always required environment variables
       if (process.env.DISCORD_TOKEN === undefined)
         throw new ReferenceError("DISCORD_TOKEN environment variable was not set!");
       if (process.env.DB_URL === undefined) throw new ReferenceError("DB_URL environment variable was not set!");
+      if (process.env.CLIENT_ID === undefined) throw new ReferenceError("CLIENT_ID environment variable was not set!");
+
+      //Development environment variables
       if (this.devMode) {
-        if (process.env.CLIENT_ID === undefined)
-          throw new ReferenceError("CLIENT_ID environment variable was not set!");
         if (process.env.TEST_GUILD_ID === undefined)
           throw new ReferenceError("TEST_GUILD_ID environment variable was not set!");
         if (process.env.DEV_IDS === undefined) {
@@ -91,7 +95,7 @@ export default class Client extends DiscordClient {
       logger.info("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
     } catch (error) {
       logger.error(error);
-      logger.error(new Error("Could not start the bot!"));
+      logger.error(new Error("Could not initialize the bot!"));
       process.exit(1);
     }
   }
@@ -99,7 +103,8 @@ export default class Client extends DiscordClient {
   /** Login to Discord API */
   async start(): Promise<void> {
     try {
-      await this.registerCommands();
+      if (this.devMode) await this.registerCommands();
+
       await this.DB.connect();
 
       logger.info("Logging in... ");
@@ -157,61 +162,55 @@ export default class Client extends DiscordClient {
    *
    * MUST have run {@link Client.loadCommands() loadCommands()} first (runs in constructor)!
    *
-   * @param doGlobal [default: false] If true, will register commands to all guilds/servers this bot is in (
+   * If `devMode` property is true, will register commands to all guilds/servers this bot is in (
    * {@link https://discordjs.guide/interactions/slash-commands.html#global-commands may take up to 1 hour to register changes})
    */
-  async registerCommands(doGlobal = false): Promise<void> {
+  async registerCommands(): Promise<void> {
     const commandDataArr = this.commands.map((command) => command.builder.toJSON());
+
+    logger.info("Registering commands with Discord API", {
+      commands: { raw: this.commands, json: commandDataArr },
+    });
 
     //Can cast `DISCORD_TOKEN` to string since it is verified in constructor
     //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
-    if (this.devMode) {
-      try {
-        logger.info("Registering commands with Discord API", {
-          commands: { raw: this.commands, json: commandDataArr },
+    try {
+      if (this.devMode) {
+        //Instantly register to test guild
+        logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
+
+        //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
+        //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
+
+        //Add all new/updated commands. Does NOT remove no longer used commands!
+        await rest.put(fullRoute, {
+          body: commandDataArr,
         });
+      } else {
+        //Register globally, will take up to one hour to register changes
+        logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
-        if (doGlobal) {
-          //Register globally, will take up to one hour to register changes
+        //Can cast `CLIENT_ID` to string since it is verified in constructor
+        //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
 
-          logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
-
-          //Can cast `CLIENT_ID` to string since it is verified in constructor
-          //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
-
-          //Remove all previous commands
-          await rest.put(fullRoute, {
-            body: [],
-          });
-
-          //Add all new/updated commands
-          await rest.put(fullRoute, {
-            body: commandDataArr,
-          });
-        } else {
-          //Instantly register to test guild
-          logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
-
-          //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
-          //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
-
-          //Add all new/updated commands. Does NOT remove no longer used commands!
-          await rest.put(fullRoute, {
-            body: commandDataArr,
-          });
-        }
-
-        logger.info(`\tSuccessfully registered ${doGlobal ? "global" : "test guild"} commands with Discord API!`);
-      } catch (error) {
-        logger.error(error);
-        logger.error(new Error("Errored attempting to register commands with Discord API!"));
+        //Add all new/updated commands
+        await rest.put(fullRoute, {
+          body: commandDataArr,
+        });
       }
-    } else {
-      logger.info("Skipped registering commands with Discord API (production mode)");
+
+      logger.info(
+        `\tSuccessfully registered ${
+          this.devMode ? "test guild development" : "global production"
+        } commands with Discord API!`
+      );
+    } catch (error) {
+      logger.error(error);
+      logger.error(new Error("Errored attempting to register commands with Discord API!"));
     }
   }
 
