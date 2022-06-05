@@ -23,15 +23,15 @@ export = new Command(
     const quantity = interaction.options.getInteger("quantity", true);
     const sides = interaction.options.getInteger("sides", true);
 
-    //Set modifier to 0 unless value is entered
+    // Set modifier to 0 unless value is entered
     const modifier =
       interaction.options.getInteger("modifier") === null ? 0 : interaction.options.getInteger("modifier", true);
     const isNonZeroModifier = modifier !== 0;
 
-    //Array of dice roll(s)
+    // Array of dice roll(s)
     const results = Array.from({ length: quantity }, () => Math.floor(Math.random() * sides) + 1);
 
-    //Sum of dice roll(s) and modifier
+    // Sum of dice roll(s) and modifier
     const total = results.reduce((a, b) => a + b) + modifier;
 
     const modifierStr = isNonZeroModifier ? `${modifier > 0 ? `+` : `-`} *${Math.abs(modifier)}* ` : ``;

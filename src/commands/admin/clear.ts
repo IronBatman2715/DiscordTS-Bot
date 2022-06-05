@@ -20,7 +20,7 @@ export = new Command(
     if (typeof guildConfig === "undefined") return;
     const { maxMessagesCleared } = guildConfig;
 
-    //Check if desired number is within allowed range
+    // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {
       return await interaction.followUp({
         content: `You can not clear ${quantity} messages! Allowed range is from 1 to ${maxMessagesCleared}.`,
@@ -34,10 +34,10 @@ export = new Command(
       before: interaction.id,
     });
 
-    //Note: 2nd argument in bulkDelete filters out messages >=2 weeks old, as they cannot be deleted via bulkDelete
+    // Note: 2nd argument in bulkDelete filters out messages >=2 weeks old, as they cannot be deleted via bulkDelete
     await channel.bulkDelete(messagesToDelete, true);
 
-    //Confirmation message
+    // Confirmation message
     await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, true, 3, 1);
   }
 );

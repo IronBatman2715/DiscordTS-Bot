@@ -7,7 +7,7 @@ const { timestamp, combine, printf, errors, colorize, json } = format;
 
 let logger: Logger;
 if (process.env.NODE_ENV === "development") {
-  //Development logger
+  // Development logger
 
   logger = createLogger({
     defaultMeta: { service: `${botConfig.name}@${botConfig.version}` },
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === "development") {
     ],
   });
 } else {
-  //Production logger
+  // Production logger
 
   logger = createLogger({
     defaultMeta: { service: `${botConfig.name}@${botConfig.version}` },

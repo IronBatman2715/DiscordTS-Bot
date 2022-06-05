@@ -15,7 +15,7 @@ export = new Command(
   async (client, interaction) => {
     const voiceChannel = (interaction.member as GuildMember).voice.channel;
 
-    //Check user is in a voice channel
+    // Check user is in a voice channel
     if (!voiceChannel) {
       return await interaction.followUp({
         content: "Join a voice channel first!",
@@ -24,7 +24,7 @@ export = new Command(
 
     const playlistQuery = interaction.options.getString("playlist-url", true);
 
-    //Check that user entered a URL as search queries are not supported
+    // Check that user entered a URL as search queries are not supported
     if (
       !(
         Utils.regexList.YouTubePlaylist.test(playlistQuery) ||

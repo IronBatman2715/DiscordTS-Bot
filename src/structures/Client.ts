@@ -57,20 +57,20 @@ export default class Client extends DiscordClient {
 
       logger.info("Verifying environment variables are set... ");
 
-      //Always required environment variables
+      // Always required environment variables
       if (process.env.DISCORD_TOKEN === undefined)
         throw new ReferenceError("DISCORD_TOKEN environment variable was not set!");
       if (process.env.DB_URL === undefined) throw new ReferenceError("DB_URL environment variable was not set!");
       if (process.env.CLIENT_ID === undefined) throw new ReferenceError("CLIENT_ID environment variable was not set!");
 
-      //Development environment variables
+      // Development environment variables
       if (this.devMode) {
         if (process.env.TEST_GUILD_ID === undefined)
           throw new ReferenceError("TEST_GUILD_ID environment variable was not set!");
         if (process.env.DEV_IDS === undefined) {
           throw new ReferenceError("Must set at least one discord userId to DEV_IDS!");
         } else {
-          //Parse DEV_IDS
+          // Parse DEV_IDS
           if (process.env.DEV_IDS.length > 0) {
             this.devIds = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
           }
@@ -86,10 +86,10 @@ export default class Client extends DiscordClient {
         `Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`
       );
 
-      //Load events
+      // Load events
       this.loadEvents();
 
-      //Load & Register commands
+      // Load & Register commands
       this.loadCommands();
 
       logger.info("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
@@ -127,26 +127,26 @@ export default class Client extends DiscordClient {
 
       const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-      //Omit this folder if there are no valid files within it
-      //Also omit this folder if it is "dev" and bot is in PRODUCTION mode
+      // Omit this folder if there are no valid files within it
+      // Also omit this folder if it is "dev" and bot is in PRODUCTION mode
       if ((folder !== "dev" || this.devMode) && files.length > 0) {
         logger.info(`\t${camelCase2Display(folder)}`);
 
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
 
-          //eslint-disable-next-line @typescript-eslint/no-var-requires
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           const command: Command = require(commandFilePath);
 
-          //Set and store command categories
+          // Set and store command categories
           command.category = folder;
           if (!this.commandCategories.includes(folder)) {
             this.commandCategories.push(folder);
           }
 
-          //Set admin command permissions default to false
+          // Set admin command permissions default to false
           if (command.category === "admin") {
-            //command.builder.setDefaultPermission(false);
+            // command.builder.setDefaultPermission(false);
           }
 
           this.commands.set(command.builder.name, command);
@@ -172,32 +172,32 @@ export default class Client extends DiscordClient {
       commands: { raw: this.commands, json: commandDataArr },
     });
 
-    //Can cast `DISCORD_TOKEN` to string since it is verified in constructor
-    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // Can cast `DISCORD_TOKEN` to string since it is verified in constructor
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
     try {
       if (this.devMode) {
-        //Instantly register to test guild
+        // Instantly register to test guild
         logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
-        //Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
-        //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        // Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
 
-        //Add all new/updated commands. Does NOT remove no longer used commands!
+        // Add all new/updated commands. Does NOT remove no longer used commands!
         await rest.put(fullRoute, {
           body: commandDataArr,
         });
       } else {
-        //Register globally, will take up to one hour to register changes
+        // Register globally, will take up to one hour to register changes
         logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
-        //Can cast `CLIENT_ID` to string since it is verified in constructor
-        //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        // Can cast `CLIENT_ID` to string since it is verified in constructor
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
 
-        //Add all new/updated commands
+        // Add all new/updated commands
         await rest.put(fullRoute, {
           body: commandDataArr,
         });
@@ -225,7 +225,7 @@ export default class Client extends DiscordClient {
 
       const files = readdirSync(eventsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-      //Omit this folder if there are no valid files within it
+      // Omit this folder if there are no valid files within it
       if (files.length > 1) {
         logger.info(`\t${camelCase2Display(folder)}`);
 
@@ -233,10 +233,10 @@ export default class Client extends DiscordClient {
           const eventFilePath = resolve(eventsSubDir, file);
           const eventFileName = file.slice(0, file.length - 3);
 
-          //eslint-disable-next-line @typescript-eslint/no-var-requires
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           const event: BaseEvent = require(eventFilePath);
 
-          //Bind event to its corresponding event emitter
+          // Bind event to its corresponding event emitter
           event.bindToEventEmitter(this);
 
           if (event.event !== eventFileName) {
@@ -254,7 +254,7 @@ export default class Client extends DiscordClient {
    * Use this if you KNOW that `data.fields` will not be longer than 25!
    */
   genEmbed(data: Partial<MessageEmbedOptions> = {}): MessageEmbed {
-    //Check for invalid entries
+    // Check for invalid entries
     if (data.title !== undefined && data.title.length > 256) {
       logger.warn("Had to shorten an embed title.", { embedTitle: data.title });
       data.title = data.title.substring(0, 256 - 3) + "...";
@@ -264,7 +264,7 @@ export default class Client extends DiscordClient {
       data.description = data.description.substring(0, 4096 - 3) + "...";
     }
     if (data.fields !== undefined) {
-      //Cannot have more than 25 fields in one embed
+      // Cannot have more than 25 fields in one embed
       if (data.fields.length > 25) {
         throw new RangeError("Client.genEmbed() tried to generate an embed with more than 25 fields!");
       }
@@ -288,10 +288,10 @@ export default class Client extends DiscordClient {
       data.author.name = data.author.name.substring(0, 256 - 3) + "...";
     }
 
-    //Generate base embed
+    // Generate base embed
     const embed = new MessageEmbed(data);
 
-    //Add in default values
+    // Add in default values
     if (data.timestamp === undefined) {
       embed.setTimestamp(new Date());
     }
@@ -314,7 +314,7 @@ export default class Client extends DiscordClient {
   ) {
     logger.verbose("Called Client.sendMultiPageEmbed().", { interaction, embedFields, options });
 
-    //Constants
+    // Constants
     const backId = `${this.config.name}-back-button`;
     const forwardId = `${this.config.name}-forward-button`;
     const backButton = new MessageButton({
@@ -330,7 +330,7 @@ export default class Client extends DiscordClient {
       customId: forwardId,
     });
 
-    //Set defaults if needed
+    // Set defaults if needed
     const maxFieldsPerEmbed = options.maxFieldsPerEmbed || 5;
     const otherEmbedData = options.otherEmbedData || {};
     const otherReplyOptions = options.otherReplyOptions || {};
@@ -352,7 +352,7 @@ export default class Client extends DiscordClient {
     })();
 
     const genReplyOptions = (startIndex: number) => {
-      //Generate embed data
+      // Generate embed data
 
       const limitedEmbedFields = embedFields.slice(startIndex, startIndex + maxFieldsPerEmbed);
 
@@ -372,7 +372,7 @@ export default class Client extends DiscordClient {
         }
       }
 
-      //Generate reply options
+      // Generate reply options
 
       const fullReplyOptions = otherReplyOptions as Partial<InteractionReplyOptions & InteractionUpdateOptions>;
       fullReplyOptions.embeds = [this.genEmbed(fullEmbedData)];
@@ -383,9 +383,9 @@ export default class Client extends DiscordClient {
         fullReplyOptions.components = [
           new MessageActionRow({
             components: [
-              //back button if it isn't the start
+              // back button if it isn't the start
               ...(startIndex ? [backButton] : []),
-              //forward button if it isn't the end
+              // forward button if it isn't the end
               ...(startIndex + maxFieldsPerEmbed < embedFields.length ? [forwardButton] : []),
             ],
           }),
@@ -395,17 +395,17 @@ export default class Client extends DiscordClient {
       return fullReplyOptions;
     };
 
-    //Send the embed with the first `maxFieldsPerEmbed` fields
+    // Send the embed with the first `maxFieldsPerEmbed` fields
     const embedMessage = (await interaction.followUp(genReplyOptions(0))) as Message<boolean>;
 
-    //Ignore if there is only one page of fields (no need for all of this)
+    // Ignore if there is only one page of fields (no need for all of this)
     if (!canFitOnOnePage) {
-      //Collect button interactions (when a user clicks a button)
+      // Collect button interactions (when a user clicks a button)
       const collector = embedMessage.createMessageComponentCollector();
 
       let i = 0;
       collector.on("collect", async (componentInteraction) => {
-        //Increase/decrease index
+        // Increase/decrease index
         if (componentInteraction.customId === forwardId) {
           logger.verbose("Someone clicked forward on multi-page embed", { embedMessage, collector });
           i += maxFieldsPerEmbed;
@@ -415,7 +415,7 @@ export default class Client extends DiscordClient {
           i -= maxFieldsPerEmbed;
         }
 
-        //Respond to component interaction by updating message with new embed
+        // Respond to component interaction by updating message with new embed
         await componentInteraction.update(genReplyOptions(i));
       });
     }
@@ -424,9 +424,9 @@ export default class Client extends DiscordClient {
   }
 
   async runCommand(command: Command, interaction: CommandInteraction<CacheType>): Promise<void> {
-    //Validate this user can use this command
+    // Validate this user can use this command
     switch (command.category) {
-      //Admin only commands
+      // Admin only commands
       case "admin": {
         if (
           !isUser(interaction.member as GuildMember, {
@@ -441,7 +441,7 @@ export default class Client extends DiscordClient {
         break;
       }
 
-      //Developer only commands
+      // Developer only commands
       case "dev": {
         const userCheckOptions = { userIdList: this.devIds };
         if (!isUser(interaction.member as GuildMember, userCheckOptions)) {

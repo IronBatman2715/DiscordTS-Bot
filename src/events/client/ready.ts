@@ -14,12 +14,12 @@ export = new ClientEvent("ready", (client) => {
 });
 
 function setRandomBotPresence(client: Client, unusedActivities: ActivitiesOptions[]) {
-  //If used all of them, regenerate array to restart
+  // If used all of them, regenerate array to restart
   if (unusedActivities.length < 1) {
     unusedActivities = client.config.activities.slice();
   }
 
-  //Get random unused activity index
+  // Get random unused activity index
   const randomIndex = Math.floor(Math.random() * unusedActivities.length);
 
   client.user?.setPresence({

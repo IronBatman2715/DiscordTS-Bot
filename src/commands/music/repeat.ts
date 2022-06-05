@@ -21,7 +21,7 @@ export = new Command(
     ),
 
   async (client, interaction) => {
-    //Get queue
+    // Get queue
     const guildQueue = await getGuildQueue(client, interaction);
     if (typeof guildQueue === "undefined") {
       return await interaction.followUp({
@@ -32,7 +32,7 @@ export = new Command(
     const repeatMode = interaction.options.getInteger("option", true);
     const repeatModeStr = RepeatMode[repeatMode].toLowerCase();
 
-    //Change the repeat behavior of the queue
+    // Change the repeat behavior of the queue
     if (guildQueue.repeatMode === repeatMode) {
       await interaction.followUp({
         content: `Already set to that repeat mode (${repeatModeStr})!`,

@@ -1,4 +1,4 @@
-//snake_case => Snake case
+/** snake_case => Snake case */
 export default (str: string): string => {
   return str
     .split("") //split into character array

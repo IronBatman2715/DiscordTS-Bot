@@ -11,7 +11,7 @@ import { guildConfigDefaults, guildConfigDescriptions } from "../../database/Gui
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
 
-//Base slash command builder
+// Base slash command builder
 const builder = new SlashCommandBuilder()
   .setName("settings")
   .setDescription("ADMIN ONLY: Change/view guild settings.")
@@ -20,9 +20,9 @@ const builder = new SlashCommandBuilder()
     option.setName("reset").setDescription("Resets this guild/server's settings to the default values!")
   );
 
-//Add settings
+// Add settings
 builder
-  //maxMessagesCleared
+  // maxMessagesCleared
   .addSubcommand((option) =>
     option
       .setName(camelCase2KebabCase(guildConfigSettings[0]))
@@ -36,7 +36,7 @@ builder
           .setRequired(true)
       )
   )
-  //musicChannelId
+  // musicChannelId
   .addSubcommandGroup((groupOption) =>
     groupOption
       .setName(camelCase2KebabCase(guildConfigSettings[1]))
@@ -53,7 +53,7 @@ builder
         option.setName("disable").setDescription("Disable this setting (set to an empty value).")
       )
   )
-  //defaultRepeatMode
+  // defaultRepeatMode
   .addSubcommand((option) =>
     option
       .setName(camelCase2KebabCase(guildConfigSettings[2]))
@@ -72,27 +72,27 @@ builder
   );
 
 export = new Command(builder, async (client, interaction) => {
-  //Check for no user input subcommands
+  // Check for no user input subcommands
   switch (interaction.options.getSubcommand()) {
-    //User wants to see current settings
+    // User wants to see current settings
     case "display": {
       return await displayCurrentSettings(client, interaction);
     }
 
-    //User wants to reset settings
+    // User wants to reset settings
     case "reset": {
-      //Add in user confirmation..?
+      // Add in user confirmation..?
       return await resetSettings(client, interaction);
     }
   }
 
-  //User must have entered a change to a setting, proceed to find which one
+  // User must have entered a change to a setting, proceed to find which one
   const newSettingData: SettingData = {
     name: "",
     value: "",
   };
 
-  //Check subcommand groups (For now, this can only be music-channel-id)
+  // Check subcommand groups (For now, this can only be music-channel-id)
   if (interaction.options.getSubcommandGroup(false) === "music-channel-id") {
     newSettingData.name = kebabCase2CamelCase(interaction.options.getSubcommandGroup());
 
@@ -107,14 +107,14 @@ export = new Command(builder, async (client, interaction) => {
         return await changeSetting(client, interaction, newSettingData);
       }
 
-      //Could not match
+      // Could not match
       default: {
         throw new ReferenceError("Could not match subcommand within subcommand group");
       }
     }
   }
 
-  //Interaction did not have a subcommand group, must be a single subcommand
+  // Interaction did not have a subcommand group, must be a single subcommand
   switch (interaction.options.getSubcommand()) {
     case "max-messages-cleared":
     case "default-repeat-mode": {
@@ -195,10 +195,10 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 }
 
 async function resetSettings(client: Client, interaction: CommandInteraction<CacheType>) {
-  //Reset
+  // Reset
   await client.DB.deleteGuildConfig(interaction.guildId);
 
-  //Generate new based on defaults
+  // Generate new based on defaults
   await client.DB.getGuildConfig(interaction.guildId);
 
   return await interaction.followUp({
