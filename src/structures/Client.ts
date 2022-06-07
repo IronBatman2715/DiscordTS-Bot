@@ -24,7 +24,8 @@ import type BaseEvent from "./Event";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
 import logger from "../logger";
-import botConfig from "../botConfig";
+import { botConfig, getConfigFile } from "../botConfig";
+import type { BotConfig } from "../botConfig";
 
 type SendMultiPageEmbedOptions = {
   maxFieldsPerEmbed: number;
@@ -32,8 +33,11 @@ type SendMultiPageEmbedOptions = {
   otherReplyOptions: Partial<Omit<InteractionReplyOptions & InteractionUpdateOptions, "embeds" | "components">>;
 };
 
+export const version = `1.0.0${process.env.NODE_ENV === "development" ? "-dev" : ""}`;
+
 export default class Client extends DiscordClient {
-  readonly config = botConfig;
+  readonly config: BotConfig;
+  readonly version = version;
   /** True in development environment, otherwise false */
   readonly devMode: boolean;
   /** List of developer discord user Ids */
@@ -82,9 +86,10 @@ export default class Client extends DiscordClient {
         deafenOnJoin: true,
       });
 
-      logger.info(
-        `Loading ${this.config.name}/v${this.config.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`
-      );
+      // Load config
+      this.config = this.devMode ? botConfig : getConfigFile();
+
+      logger.info(`Loading ${this.config.name}@${this.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`);
 
       // Load events
       this.loadEvents();

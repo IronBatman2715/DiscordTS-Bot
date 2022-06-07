@@ -6,4 +6,5 @@ node_modules
 
 build
 src/@types
+config.json
 logs
