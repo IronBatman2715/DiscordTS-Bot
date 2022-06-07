@@ -33,11 +33,9 @@ type SendMultiPageEmbedOptions = {
   otherReplyOptions: Partial<Omit<InteractionReplyOptions & InteractionUpdateOptions, "embeds" | "components">>;
 };
 
-export const version = `1.0.0${process.env.NODE_ENV === "development" ? "-dev" : ""}`;
-
 export default class Client extends DiscordClient {
   readonly config: BotConfig;
-  readonly version = version;
+  readonly version: string;
   /** True in development environment, otherwise false */
   readonly devMode: boolean;
   /** List of developer discord user Ids */
@@ -58,6 +56,7 @@ export default class Client extends DiscordClient {
       });
 
       this.devMode = process.env.NODE_ENV === "development";
+      this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
 
       logger.info("Verifying environment variables are set... ");
 
