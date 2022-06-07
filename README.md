@@ -28,7 +28,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 3. Clone/fork this repository.
 
-4. Rename `sample-development.env` to `development.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+4. Rename `sample.development.env` to `development.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
@@ -60,7 +60,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 2. Download or clone this repository.
 
-3. Rename `sample-production.env` to `production.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+3. Rename `sample.production.env` to `production.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
