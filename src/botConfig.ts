@@ -1,21 +1,115 @@
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import type { ExcludeEnum } from "discord.js";
 import { ActivityTypes } from "discord.js/typings/enums";
+import Ajv from "ajv";
+import type { JSONSchemaType } from "ajv";
+import addFormats from "ajv-formats";
+import addErrors from "ajv-errors";
 
 export type ActivitiesOptions = {
   name: string;
-  type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">;
+  type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">; //0 | 1 | 2 | 3 | 5
   url?: string;
 };
 
 export type BotConfig = {
   name: string;
-  version: string;
   activities: ActivitiesOptions[];
 };
 
+const ajv = new Ajv({ allErrors: true });
+addErrors(addFormats(ajv));
+
+const schema: JSONSchemaType<BotConfig> = {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    activities: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          type: {
+            type: "integer",
+            enum: [0, 1, 2, 3, 5], //ExcludeEnum<typeof ActivityTypes, "CUSTOM">
+            errorMessage: {
+              enum: "must equal one of the allowed values: 0, 1, 2, 3, or 5",
+            },
+          },
+          url: {
+            type: "string",
+            format: "uri",
+            nullable: true,
+            errorMessage: {
+              format: "must be a valid uri/url",
+            },
+          },
+        },
+        additionalProperties: false,
+        required: ["name", "type"],
+        errorMessage: {
+          additionalProperties: `should not have properties other than "name", "type", and (optionally) "url"`,
+          required: {
+            name: `should have a string property "name"`,
+            type: `should have a integer property "type"`,
+          },
+        },
+      },
+      minItems: 1,
+      errorMessage: {
+        minItems: "should have at least one entry",
+      },
+    },
+  },
+  additionalProperties: false,
+  required: ["name", "activities"],
+  errorMessage: {
+    additionalProperties: `should not have properties other than "name", and "activities"`,
+    required: {
+      name: `should have a string property "name"`,
+      activities: `should have a object property "activities"`,
+    },
+  },
+};
+const validate = ajv.compile(schema);
+
+/** Load config.json from filesystem or generate it.
+ *
+ * Can not use logger inside this function as the logger requires the config file!
+ */
+export function getConfigFile(): BotConfig {
+  try {
+    if (!existsSync("config.json")) {
+      console.info(`Generating "config.json"`);
+
+      try {
+        writeFileSync("config.json", JSON.stringify(botConfig, null, "  "));
+      } catch (error) {
+        throw Error(`Could not generate "config.json"`);
+      }
+
+      console.info(`Successfully generated "config.json"\n`);
+    }
+
+    const parsedConfigJson = JSON.parse(readFileSync("config.json", "utf-8"));
+
+    if (!validate(parsedConfigJson)) {
+      console.error("Error messages for config.json");
+      validate.errors?.forEach(({ instancePath, message }) => console.error(`${instancePath} ${message}.`));
+      console.log();
+      throw new Error("Invalid config file!");
+    }
+
+    return parsedConfigJson;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Errored getting config file!");
+  }
+}
+
 export const botConfig: BotConfig = {
   name: "Z-Bot",
-  version: `1.0.0${process.env.NODE_ENV === "development" ? "-dev" : ""}`,
   activities: [
     {
       type: ActivityTypes.PLAYING,
