@@ -94,18 +94,18 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 - `activities`: list of activities the bot will randomly cycle through as its current activity (Exs: "Watching The Fellowship of the Ring", "Listening to Never Gonna Give you Up", etc.).
 
-  - `type`
+  - `type`: integer that can *only* be one of the following values.
 
-    0. PLAYING
+    `0` = PLAYING
 
-    1. STREAMING
+    `1` = STREAMING
 
-    2. LISTENING
+    `2` = LISTENING
 
-    3. WATCHING
+    `3` = WATCHING
 
-    4. **NOT VALID, DO NOT USE**
+    `4` = **\*\*NOT VALID, DO NOT USE\*\***
 
-    5. COMPETING
+    `5` = COMPETING
 
-  - `name`: string after the `type`
+  - `name`: string after the `type`.
