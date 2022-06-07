@@ -10,7 +10,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 ## Setup
 
-***Requires [Node.js](https://nodejs.org/) 16.6.0 or higher***
+***Requires [Node.js](https://nodejs.org/) 16.9.0 or higher***
 
 ### Development environment
 
