@@ -68,8 +68,7 @@ export default class DB {
   async getGuildConfig(guildId: string | null) {
     logger.verbose("DB.getGuildConfig()", { guildId });
 
-    if (typeof guildId !== "string")
-      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
+    if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     const query = await DB.prisma.guildConfig.findUnique({ where: { guildId } });
 
@@ -91,8 +90,7 @@ export default class DB {
   async updateGuildConfig(guildId: string | null, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
     logger.verbose("DB.updateGuildConfig()", { guildId, guildConfig });
 
-    if (typeof guildId !== "string")
-      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
+    if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     return await DB.prisma.guildConfig.update({
       where: { guildId },
@@ -104,8 +102,7 @@ export default class DB {
   async deleteGuildConfig(guildId: string | null) {
     logger.verbose("DB.deleteGuildConfig()", { guildId });
 
-    if (typeof guildId !== "string")
-      throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
+    if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     return await DB.prisma.guildConfig.delete({ where: { guildId } });
   }
