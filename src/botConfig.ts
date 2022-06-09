@@ -7,8 +7,11 @@ import addFormats from "ajv-formats";
 import addErrors from "ajv-errors";
 
 export type ActivitiesOptions = {
+  /** String after type string */
   name: string;
-  type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">; //0 | 1 | 2 | 3 | 5
+  /** `0 | 1 | 2 | 3 | 5` */
+  type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">;
+  /** Only add if `type` is `1 | ActivityTypes.STREAMING` */
   url?: string;
 };
 
@@ -113,79 +116,104 @@ export const botConfig: BotConfig = {
   activities: [
     {
       type: ActivityTypes.PLAYING,
-      name: " Squid Game",
+      name: "Squid Game",
+    },
+    {
+      type: ActivityTypes.STREAMING,
+      name: "the best",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     {
       type: ActivityTypes.LISTENING,
-      name: " Never Gonna Give you Up",
+      name: "Never Gonna Give you Up",
     },
     {
       type: ActivityTypes.WATCHING,
-      name: " Dota 2 Reporter",
+      name: "Dota 2 Reporter",
     },
     {
       type: ActivityTypes.COMPETING,
-      name: " TI",
+      name: "TI",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " Tech Expansion",
+      name: "Tech Expansion",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " Tekkit",
+      name: "Tekkit",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " Pudge",
+      name: "Pudge",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " MEEPOOO",
+      name: "MEEPOOO",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " carry Wisp mid",
+      name: "carry Wisp mid",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " in vault 666",
+      name: "in vault 666",
     },
     {
       type: ActivityTypes.WATCHING,
-      name: " Gandhi nuke everyone",
+      name: "Gandhi nuke everyone",
     },
     {
       type: ActivityTypes.WATCHING,
-      name: " The Fellowship of the Ring",
+      name: "The Fellowship of the Ring",
     },
     {
       type: ActivityTypes.WATCHING,
-      name: " Two Towers",
+      name: "Two Towers",
     },
     {
       type: ActivityTypes.WATCHING,
-      name: " Return of the King",
+      name: "Return of the King",
     },
     {
       type: ActivityTypes.LISTENING,
-      name: " The Longest Johns",
+      name: "The Longest Johns",
     },
     {
       type: ActivityTypes.LISTENING,
-      name: " Stan Rogers",
+      name: "Stan Rogers",
     },
     {
       type: ActivityTypes.LISTENING,
-      name: " T-Swizzle",
+      name: "T-Swizzle",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " Connect Four",
+      name: "Connect Four",
     },
     {
       type: ActivityTypes.PLAYING,
-      name: " Monopoly City",
+      name: "Monopoly City",
+    },
+    {
+      type: ActivityTypes.WATCHING,
+      name: "🐱",
+    },
+    {
+      type: ActivityTypes.PLAYING,
+      name: "🎸",
+    },
+    {
+      type: ActivityTypes.WATCHING,
+      name: "🌄",
+    },
+    {
+      type: ActivityTypes.PLAYING,
+      name: "Skyrim Ultimate Special Legendary VR Anniversary Edition (Switch)",
+    },
+    {
+      type: ActivityTypes.WATCHING,
+      name: "Lydia block the doorway",
     },
   ],
 };
