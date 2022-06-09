@@ -1,6 +1,7 @@
 {
   "name": "discordts-bot",
   "version": "1.0.0",
+  "description": "A customizable Discord bot based on discord.js v13 with Typescript!",
   "author": {
     "name": "IronBatman2715",
     "url": "https://github.com/IronBatman2715/"
