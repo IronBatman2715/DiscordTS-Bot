@@ -9,6 +9,7 @@ export = new ClientEvent("ready", (client) => {
   logger.info("Online and ready!");
 
   setInterval(() => {
+    logger.verbose("Updating bot presence/activities.");
     unusedActivities = setRandomBotPresence(client, unusedActivities);
   }, 3600000); //set random presence every 3600000 ms = 1 hour
 });
