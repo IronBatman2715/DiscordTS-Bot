@@ -42,10 +42,6 @@ export = new Command(
       };
     });
 
-    client.config.activities.forEach(() => {
-      fields;
-    });
-
     const infoEmbed = client.genEmbed({
       title: `${client.config.name}@${client.version}`,
       description:

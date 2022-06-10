@@ -16,9 +16,7 @@ export = new Command(
   async (client, interaction) => {
     const quantity = interaction.options.getInteger("quantity", true);
 
-    const guildConfig = await client.DB.getGuildConfig(interaction.guildId);
-    if (typeof guildConfig === "undefined") return;
-    const { maxMessagesCleared } = guildConfig;
+    const { maxMessagesCleared } = await client.DB.getGuildConfig(interaction.guildId);
 
     // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {
