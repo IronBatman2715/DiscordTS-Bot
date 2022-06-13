@@ -1,10 +1,10 @@
-node_modules
+node_modules/
 *.env
 !sample*.env
 
-.vscode
+.vscode/
 
-build
-src/@types
+build/
+src/@types/
 config.json
-logs
+logs/
