@@ -1,5 +1,7 @@
 # DiscordTS-Bot
 
+[![](https://img.shields.io/github/license/IronBatman2715/DiscordTS-Bot.svg?branch=main)](https://github.com/IronBatman2715/DiscordTS-Bot/blob/main/LICENSE)
+
 A customizable Discord bot based on [discord.js v13](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
 
 It utilizes the [Prisma ORM/ODM](https://www.prisma.io) to manage your [MongoDB](https://www.mongodb.com/) (can easily be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
@@ -10,7 +12,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 ## Setup
 
-***Requires [Node.js](https://nodejs.org/) 16.9.0 or higher***
+**_Requires [Node.js](https://nodejs.org/) 16.9.0 or higher_**
 
 ### Development environment
 
@@ -42,9 +44,9 @@ Bring music to your servers with the included [Discord music player](https://dis
 
    4. `TEST_GUILD_ID` guild ID of the server you will use to test this bot.
 
-      - Slash commands will *immediately* be updated for this server and this server only upon restarting the bot in *developer mode*.
+      - Slash commands will _immediately_ be updated for this server and this server only upon restarting the bot in _developer mode_.
 
-   5. `DEV_IDS` A list of developer discord user IDs (must set *at least* one)
+   5. `DEV_IDS` A list of developer discord user IDs (must set _at least_ one)
 
       - IDs should be separated by `", "`. Ex: `DEV_IDS = DEV_ID1, DEV_ID2, DEV_ID3`.
 
@@ -52,7 +54,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 6. Run `npm run dev` to start a developer environment instance!
 
-   - Edit *and* save any of the files in the `src` directory (with the exception of [src/database/schema.prisma](src/database/schema.prisma)) and the program will automatically restart to reflect the changes!
+   - Edit _and_ save any of the files in the `src` directory (with the exception of [src/database/schema.prisma](src/database/schema.prisma)) and the program will automatically restart to reflect the changes!
 
 ### Production environment
 
@@ -76,7 +78,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 5. Run `npm run build` to compile the source code for production.
 
-   - If you are tight on storage space, delete the `node_modules` folder *after* running the above command. Then, run `npm ci --production` to install only the dependencies needed for production.
+   - If you are tight on storage space, delete the `node_modules` folder _after_ running the above command. Then, run `npm ci --production` to install only the dependencies needed for production.
 
 6. Change the `config.json` file to your liking. See information about how you can change it [here](#configuration-file-properties).
 
@@ -94,7 +96,7 @@ Bring music to your servers with the included [Discord music player](https://dis
 
 - `activities`: list of activities the bot will randomly cycle through as its current activity (Exs: "Watching The Fellowship of the Ring", "Listening to Never Gonna Give you Up", etc.).
 
-  - `type`: integer that can *only* be one of the following values.
+  - `type`: integer that can _only_ be one of the following values.
 
     `0` = PLAYING
 
