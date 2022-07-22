@@ -1,8 +1,8 @@
 import type { CacheType, CommandInteraction } from "discord.js";
 
+import assertQueueData from "./assertQueueData";
 import type Client from "../../structures/Client";
 import QueueData from "../../structures/QueueData";
-import type QueueWithData from "../../interfaces/QueueWithData";
 import logger from "../../logger";
 
 /**
@@ -13,10 +13,11 @@ export default async (client: Client, interaction: CommandInteraction<CacheType>
   if (typeof guildId !== "string") return;
 
   // If this server has a music queue already, get it. If not, create with new QueueData
-  let guildQueue: QueueWithData;
   if (client.player.hasQueue(guildId)) {
     logger.verbose("Queue already exists!");
-    guildQueue = client.player.getQueue(guildId) as QueueWithData;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const guildQueue = client.player.getQueue(guildId)!;
+    assertQueueData(guildQueue);
 
     if (updateLatestInteraction) guildQueue.data.latestInteraction = interaction;
 
@@ -28,9 +29,10 @@ export default async (client: Client, interaction: CommandInteraction<CacheType>
     if (updateLatestInteraction) {
       logger.verbose("Making a new queue now!");
 
-      guildQueue = client.player.createQueue(guildId, {
+      const guildQueue = client.player.createQueue(guildId, {
         data: new QueueData(client, interaction),
-      }) as QueueWithData;
+      });
+      assertQueueData(guildQueue);
 
       const { defaultRepeatMode } = await client.DB.getGuildConfig(guildId);
       guildQueue.setRepeatMode(defaultRepeatMode);

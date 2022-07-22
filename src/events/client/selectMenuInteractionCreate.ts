@@ -1,4 +1,4 @@
-import type { EmbedFieldData } from "discord.js";
+import type { EmbedField } from "discord.js";
 
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
@@ -33,7 +33,7 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
 
         const dirName = dir[0].toUpperCase() + dir.slice(1);
 
-        const commandObjArr: EmbedFieldData[] = client.commands
+        const commandObjArr: EmbedField[] = client.commands
           .filter((command) => command.category === dir)
           .map((command) => {
             return {

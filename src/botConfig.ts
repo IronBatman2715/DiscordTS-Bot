@@ -1,6 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import type { ExcludeEnum } from "discord.js";
-import { ActivityTypes } from "discord.js/typings/enums";
+import { ActivityType } from "discord.js";
 import Ajv from "ajv";
 import type { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
@@ -10,8 +9,8 @@ export type ActivitiesOptions = {
   /** String after type string */
   name: string;
   /** `0 | 1 | 2 | 3 | 5` */
-  type: ExcludeEnum<typeof ActivityTypes, "CUSTOM">;
-  /** Only add if `type` is `1 | ActivityTypes.STREAMING` */
+  type: Exclude<ActivityType, ActivityType.Custom>;
+  /** Only add if `type` is `1 | ActivityType.Streaming` */
   url?: string;
 };
 
@@ -35,7 +34,7 @@ const schema: JSONSchemaType<BotConfig> = {
           name: { type: "string" },
           type: {
             type: "integer",
-            enum: [0, 1, 2, 3, 5], //ExcludeEnum<typeof ActivityTypes, "CUSTOM">
+            enum: [0, 1, 2, 3, 5], //Exclude<ActivityType, ActivityType.Custom>
             errorMessage: {
               enum: "must equal one of the allowed values: 0, 1, 2, 3, or 5",
             },
@@ -115,104 +114,104 @@ export const botConfig: BotConfig = {
   name: "Z-Bot",
   activities: [
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Squid Game",
     },
     {
-      type: ActivityTypes.STREAMING,
+      type: ActivityType.Streaming,
       name: "the best",
       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     {
-      type: ActivityTypes.LISTENING,
+      type: ActivityType.Listening,
       name: "Never Gonna Give you Up",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "Dota 2 Reporter",
     },
     {
-      type: ActivityTypes.COMPETING,
+      type: ActivityType.Competing,
       name: "TI",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Tech Expansion",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Tekkit",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Pudge",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "MEEPOOO",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "carry Wisp mid",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "in vault 666",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "Gandhi nuke everyone",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "The Fellowship of the Ring",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "Two Towers",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "Return of the King",
     },
     {
-      type: ActivityTypes.LISTENING,
+      type: ActivityType.Listening,
       name: "The Longest Johns",
     },
     {
-      type: ActivityTypes.LISTENING,
+      type: ActivityType.Listening,
       name: "Stan Rogers",
     },
     {
-      type: ActivityTypes.LISTENING,
+      type: ActivityType.Listening,
       name: "T-Swizzle",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Connect Four",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Monopoly City",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "🐱",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "🎸",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "🌄",
     },
     {
-      type: ActivityTypes.PLAYING,
+      type: ActivityType.Playing,
       name: "Skyrim Ultimate Special Legendary VR Anniversary Edition (Switch)",
     },
     {
-      type: ActivityTypes.WATCHING,
+      type: ActivityType.Watching,
       name: "Lydia block the doorway",
     },
   ],

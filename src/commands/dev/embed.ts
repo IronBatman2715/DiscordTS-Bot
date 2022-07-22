@@ -1,3 +1,4 @@
+import { Colors } from "discord.js";
 import type { GuildMember } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
@@ -14,7 +15,7 @@ export = new Command(
       description: `Title link points to information about embeds!`,
       url: "https://discordjs.guide/popular-topics/embeds.html",
       timestamp: interaction.createdTimestamp,
-      color: "DARK_BLUE",
+      color: Colors.DarkBlue,
       fields: [
         {
           name: "Test field name",
@@ -31,9 +32,9 @@ export = new Command(
         },
       ],
       author: {
-        name: interaction.member?.user.username,
+        name: interaction.member?.user.username || "USERNAME HERE",
         url: "https://ironbatman2715.github.io/",
-        iconURL: (interaction.member as GuildMember).avatarURL({ dynamic: true }) || "",
+        iconURL: (interaction.member as GuildMember).avatarURL() || "",
       },
       thumbnail: {
         url: "https://www.seoptimer.com/blog/wp-content/uploads/2018/09/image22.png", //youtube icon

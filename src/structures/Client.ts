@@ -3,24 +3,32 @@ import { resolve } from "path";
 import {
   Client as DiscordClient,
   Collection,
-  EmbedFieldData,
-  Intents,
+  GatewayIntentBits,
+  Colors,
+  ButtonStyle,
+  ActionRowBuilder,
+  ButtonBuilder,
+  EmbedBuilder,
+  PermissionsBitField,
+} from "discord.js";
+import type {
+  CacheType,
+  CommandInteraction,
+  GuildMember,
+  EmbedData,
+  EmbedField,
   InteractionReplyOptions,
   InteractionUpdateOptions,
-  Message,
-  MessageActionRow,
-  MessageButton,
-  MessageEmbed,
-  Permissions,
+  ChatInputCommandInteraction,
 } from "discord.js";
-import type { CacheType, CommandInteraction, GuildMember, MessageEmbedOptions } from "discord.js";
 import { Routes } from "discord-api-types/v10";
 import { REST } from "@discordjs/rest";
 import { Player } from "discord-music-player";
 
-import Command from "./Command";
+import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
+import type QueueData from "./QueueData";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
 import logger from "../logger";
@@ -29,7 +37,7 @@ import type { BotConfig } from "../botConfig";
 
 type SendMultiPageEmbedOptions = {
   maxFieldsPerEmbed: number;
-  otherEmbedData: Partial<Omit<MessageEmbedOptions, "fields">>;
+  otherEmbedData: Partial<Omit<EmbedData, "fields">>;
   otherReplyOptions: Partial<Omit<InteractionReplyOptions & InteractionUpdateOptions, "embeds" | "components">>;
 };
 
@@ -44,14 +52,14 @@ export default class Client extends DiscordClient {
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
   readonly DB: DB = new DB(this);
-  readonly player: Player;
+  readonly player: Player<QueueData>;
 
   constructor() {
     try {
       logger.info("*** DISCORD.JS BOT: INITIALIZATION ***");
 
       super({
-        intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
         allowedMentions: { repliedUser: false },
       });
 
@@ -81,7 +89,7 @@ export default class Client extends DiscordClient {
       }
       logger.info("Successfully verified that environment variables are set!");
 
-      this.player = new Player(this, {
+      this.player = new Player<QueueData>(this, {
         deafenOnJoin: true,
       });
 
@@ -257,7 +265,7 @@ export default class Client extends DiscordClient {
    *
    * Use this if you KNOW that `data.fields` will not be longer than 25!
    */
-  genEmbed(data: Partial<MessageEmbedOptions> = {}): MessageEmbed {
+  genEmbed(data: Partial<EmbedData> = {}): EmbedBuilder {
     // Check for invalid entries
     if (data.title !== undefined && data.title.length > 256) {
       logger.warn("Had to shorten an embed title.", { embedTitle: data.title });
@@ -293,11 +301,11 @@ export default class Client extends DiscordClient {
     }
 
     // Generate base embed
-    const embed = new MessageEmbed(data);
+    const embed = new EmbedBuilder(data);
 
     // Add in default values
     if (data.timestamp === undefined) embed.setTimestamp(new Date());
-    if (data.color === undefined) embed.setColor("DARK_BLUE");
+    if (data.color === undefined) embed.setColor(Colors.DarkBlue);
     if (data.footer === undefined) embed.setFooter({ text: `${this.config.name}@${this.version}` });
 
     return embed;
@@ -305,7 +313,7 @@ export default class Client extends DiscordClient {
 
   async sendMultiPageEmbed(
     interaction: CommandInteraction<CacheType>,
-    embedFields: EmbedFieldData[],
+    embedFields: EmbedField[],
     options: Partial<SendMultiPageEmbedOptions> = {}
   ) {
     logger.verbose("Called Client.sendMultiPageEmbed().", { interaction, embedFields, options });
@@ -313,14 +321,14 @@ export default class Client extends DiscordClient {
     // Constants
     const backId = `${this.config.name}-back-button`;
     const forwardId = `${this.config.name}-forward-button`;
-    const backButton = new MessageButton({
-      style: "SECONDARY",
+    const backButton = new ButtonBuilder({
+      style: ButtonStyle.Secondary,
       label: "Back",
       emoji: "⬅️",
       customId: backId,
     });
-    const forwardButton = new MessageButton({
-      style: "SECONDARY",
+    const forwardButton = new ButtonBuilder({
+      style: ButtonStyle.Secondary,
       label: "Forward",
       emoji: "➡️",
       customId: forwardId,
@@ -352,7 +360,7 @@ export default class Client extends DiscordClient {
 
       const limitedEmbedFields = embedFields.slice(startIndex, startIndex + maxFieldsPerEmbed);
 
-      const fullEmbedData = otherEmbedData as Partial<MessageEmbedOptions>;
+      const fullEmbedData = otherEmbedData as Partial<EmbedData>;
       fullEmbedData.fields = limitedEmbedFields;
 
       if (canFitOnOnePage) {
@@ -374,10 +382,12 @@ export default class Client extends DiscordClient {
       fullReplyOptions.embeds = [this.genEmbed(fullEmbedData)];
 
       if (startIndex === 0) {
-        fullReplyOptions.components = canFitOnOnePage ? [] : [new MessageActionRow({ components: [forwardButton] })];
+        fullReplyOptions.components = canFitOnOnePage
+          ? []
+          : [new ActionRowBuilder<ButtonBuilder>({ components: [forwardButton] })];
       } else {
         fullReplyOptions.components = [
-          new MessageActionRow({
+          new ActionRowBuilder<ButtonBuilder>({
             components: [
               // back button if it isn't the start
               ...(startIndex ? [backButton] : []),
@@ -392,7 +402,7 @@ export default class Client extends DiscordClient {
     };
 
     // Send the embed with the first `maxFieldsPerEmbed` fields
-    const embedMessage = (await interaction.followUp(genReplyOptions(0))) as Message<boolean>;
+    const embedMessage = await interaction.followUp(genReplyOptions(0));
 
     // Ignore if there is only one page of fields (no need for all of this)
     if (!canFitOnOnePage) {
@@ -419,14 +429,14 @@ export default class Client extends DiscordClient {
     return embedMessage;
   }
 
-  async runCommand(command: Command, interaction: CommandInteraction<CacheType>): Promise<void> {
+  async runCommand(command: Command, interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     // Validate this user can use this command
     switch (command.category) {
       // Admin only commands
       case "admin": {
         if (
           !isUser(interaction.member as GuildMember, {
-            permissions: Permissions.FLAGS.ADMINISTRATOR,
+            permissions: PermissionsBitField.Flags.Administrator,
           })
         ) {
           await interaction.followUp({

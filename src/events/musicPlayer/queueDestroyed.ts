@@ -1,9 +1,9 @@
+import assertQueueData from "../../functions/music/assertQueueData";
 import { MusicPlayerEvent } from "../../structures/Event";
-import type QueueWithData from "../../interfaces/QueueWithData";
 import logger from "../../logger";
 
-export = new MusicPlayerEvent("queueDestroyed", async (client, baseQueue) => {
-  const queue = baseQueue as QueueWithData;
+export = new MusicPlayerEvent("queueDestroyed", async (client, queue) => {
+  assertQueueData(queue);
 
   logger.verbose("DMP.PlayerEvents:queueDestroyed => Queue destroyed!");
 

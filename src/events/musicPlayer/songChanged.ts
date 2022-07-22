@@ -1,9 +1,9 @@
+import assertQueueData from "../../functions/music/assertQueueData";
 import { MusicPlayerEvent } from "../../structures/Event";
-import type QueueWithData from "../../interfaces/QueueWithData";
 import logger from "../../logger";
 
-export = new MusicPlayerEvent("songChanged", async (client, baseQueue, newSong, oldSong) => {
-  const queue = baseQueue as QueueWithData;
+export = new MusicPlayerEvent("songChanged", async (client, queue, newSong, oldSong) => {
+  assertQueueData(queue);
 
   if (oldSong === newSong) {
     logger.verbose(`Repeated song:\n\t${oldSong.name}`);
