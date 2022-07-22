@@ -1,4 +1,4 @@
-import type { CacheType, CommandInteraction, EmbedFieldData } from "discord.js";
+import type { CacheType, CommandInteraction, EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { RepeatMode } from "discord-music-player";
 
@@ -94,7 +94,7 @@ export = new Command(builder, async (client, interaction) => {
 
   // Check subcommand groups (For now, this can only be music-channel-id)
   if (interaction.options.getSubcommandGroup(false) === "music-channel-id") {
-    newSettingData.name = kebabCase2CamelCase(interaction.options.getSubcommandGroup());
+    newSettingData.name = kebabCase2CamelCase(interaction.options.getSubcommandGroup(true));
 
     switch (interaction.options.getSubcommand(true)) {
       case "overwrite": {
@@ -146,7 +146,7 @@ type SettingDisplay = {
 async function displayCurrentSettings(client: Client, interaction: CommandInteraction<CacheType>) {
   const currentGuildConfig = await client.DB.getGuildConfig(interaction.guildId);
 
-  const settingsFieldArr: EmbedFieldData[] = guildConfigSettings.map((setting) => {
+  const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
     let currentValue: number | string;
 
     if (Array.isArray(currentGuildConfig[setting])) {

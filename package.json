@@ -1,7 +1,7 @@
 {
   "name": "discordts-bot",
   "version": "1.0.0",
-  "description": "A customizable Discord bot based on discord.js v13 with Typescript!",
+  "description": "A customizable Discord bot based on discord.js v14 with Typescript!",
   "author": {
     "name": "IronBatman2715",
     "url": "https://github.com/IronBatman2715/"
@@ -30,31 +30,30 @@
     "start": "node ."
   },
   "dependencies": {
-    "@discordjs/builders": "^0.15.0",
-    "@discordjs/rest": "^0.5.0",
-    "@prisma/client": "^4.0.0",
+    "@discordjs/rest": "^1.0.0",
+    "@prisma/client": "^4.1.0",
     "ajv": "^8.11.0",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
-    "discord-api-types": "^0.36.1",
-    "discord-music-player": "^8.3.2",
-    "discord.js": "^13.8.1",
+    "discord-api-types": "^0.36.3",
+    "discord-music-player": "^9.0.2",
+    "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
     "winston": "^3.8.1"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@types/node": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
     "cross-env": "^7.0.3",
-    "eslint": "^8.19.0",
+    "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
-    "prisma": "^4.0.0",
+    "prisma": "^4.1.0",
     "run-func": "^3.0.0",
-    "ts-node": "^10.8.2",
+    "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4"
   },

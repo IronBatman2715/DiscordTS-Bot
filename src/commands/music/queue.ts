@@ -1,4 +1,4 @@
-import type { EmbedFieldData } from "discord.js";
+import type { EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { RepeatMode } from "discord-music-player";
 
@@ -21,7 +21,7 @@ export = new Command(
       return await interaction.followUp({ content: "No songs in queue!" });
     }
 
-    const queueFieldArr: EmbedFieldData[] = guildQueue.songs.map((song, i) => {
+    const queueFieldArr: EmbedField[] = guildQueue.songs.map((song, i) => {
       return {
         name: `${i + 1}: [${song.name}] (${song.url})`,
         value: `by: ${song.author}\nrequested by: ${song.requestedBy}\n`,

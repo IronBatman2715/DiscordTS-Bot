@@ -40,7 +40,7 @@ export default class QueueData {
       url: song.url,
       author: {
         name: song.requestedBy?.username || "unassigned",
-        iconURL: song.requestedBy?.avatarURL({ dynamic: true }) || "",
+        iconURL: song.requestedBy?.avatarURL() || "",
       },
       fields: [
         {
@@ -65,7 +65,7 @@ export default class QueueData {
         embeds: [nowPlayingEmbed],
       });
 
-      this.setEmbedMessage(newEmbedMessage as Message<boolean>);
+      this.setEmbedMessage(newEmbedMessage);
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Errored trying to send/update now playing embed message!"));

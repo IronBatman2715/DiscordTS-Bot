@@ -35,9 +35,9 @@ export default async (
   if (showCountdown) {
     // Show countdown to when message will delete itself
     const newText = text + `...`;
-    const message = (await interaction.followUp({
+    const message = await interaction.followUp({
       content: newText + durationInSeconds.toString(),
-    })) as Message;
+    });
 
     logger.verbose(durationInSeconds);
 
@@ -45,7 +45,7 @@ export default async (
     await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
   } else {
     // No visible countdown to when message will delete itself
-    const message = (await interaction.followUp({ content: text })) as Message;
+    const message = await interaction.followUp({ content: text });
 
     await sleep(1000 * durationInSeconds);
     await message.delete();

@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/github/license/IronBatman2715/DiscordTS-Bot.svg?branch=main)](https://github.com/IronBatman2715/DiscordTS-Bot/blob/main/LICENSE)
 
-A customizable Discord bot based on [discord.js v13](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
+A customizable Discord bot based on [discord.js v14](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
 
 It utilizes the [Prisma ORM/ODM](https://www.prisma.io) to manage your [MongoDB](https://www.mongodb.com/) (can easily be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
 

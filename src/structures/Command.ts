@@ -1,10 +1,10 @@
-import type { CacheType, CommandInteraction } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import type { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "@discordjs/builders";
 
 import Client from "./Client";
 
 type RunFunction = {
-  (client: Client, interaction: CommandInteraction<CacheType>);
+  (client: Client, interaction: ChatInputCommandInteraction<CacheType>);
 };
 
 type Builder = Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand"> | SlashCommandSubcommandsOnlyBuilder;

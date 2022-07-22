@@ -1,5 +1,5 @@
-import { MessageActionRow, MessageSelectMenu } from "discord.js";
-import type { MessageSelectOptionData } from "discord.js";
+import { ActionRowBuilder, SelectMenuBuilder } from "discord.js";
+import type { SelectMenuComponentOptionData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
@@ -20,7 +20,7 @@ export = new Command(
   async (client, interaction) => {
     const numOfOptions = interaction.options.getInteger("number-of-options", true);
 
-    const options: MessageSelectOptionData[] = Array.from({ length: numOfOptions }, (_, i) => {
+    const options: SelectMenuComponentOptionData[] = Array.from({ length: numOfOptions }, (_, i) => {
       return {
         label: `Option ${i + 1} label`,
         value: `Option ${i + 1} value`,
@@ -32,8 +32,8 @@ export = new Command(
     await interaction.followUp({
       content: "Select something below!",
       components: [
-        new MessageActionRow().setComponents(
-          new MessageSelectMenu()
+        new ActionRowBuilder<SelectMenuBuilder>().setComponents(
+          new SelectMenuBuilder()
             .setCustomId("test-select-menu-id")
             .setPlaceholder("Choose something")
             .setMinValues(1)

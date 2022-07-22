@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { EmbedFieldData } from "discord.js";
-import { ActivityTypes } from "discord.js/typings/enums";
+import type { EmbedField } from "discord.js";
+import { ActivityType } from "discord.js/typings";
 
 import Command from "../../structures/Command";
 import camelCase2Display from "../../functions/general/camelCase2Display";
 import { ActivitiesOptions } from "../../botConfig";
 
-type ActivityTypesMap = { [key in ActivityTypes]: string };
+type ActivityTypesMap = { [key in ActivityType]: string };
 
 const activityTypesMap: ActivityTypesMap = {
   "0": "Playing",
@@ -21,7 +21,7 @@ export = new Command(
   new SlashCommandBuilder().setName("info").setDescription("Shows information about this bot."),
 
   async (client, interaction) => {
-    const fields: EmbedFieldData[] = Object.entries(client.config).map(([key, value]) => {
+    const fields: EmbedField[] = Object.entries(client.config).map(([key, value]) => {
       let formattedValue = "";
       switch (key) {
         case "activities": {
@@ -39,13 +39,14 @@ export = new Command(
       return {
         name: camelCase2Display(key),
         value: formattedValue,
+        inline: false,
       };
     });
 
     const infoEmbed = client.genEmbed({
       title: `${client.config.name}@${client.version}`,
       description:
-        "A customizable Discord bot based on [discord.js v13](https://discord.js.org/) with " +
+        "A customizable Discord bot based on [discord.js v14](https://discord.js.org/) with " +
         "[Typescript](https://www.typescriptlang.org/)!\n" +
         "Source code on [Github](https://github.com/IronBatman2715/DiscordTS-Bot).\n\n" +
         "Bot Configuration:",

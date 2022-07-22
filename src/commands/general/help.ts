@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageActionRow, MessageSelectMenu } from "discord.js";
-import type { MessageSelectOptionData } from "discord.js";
+import { ActionRowBuilder, SelectMenuBuilder } from "discord.js";
+import type { SelectMenuComponentOptionData } from "discord.js";
 
 import Command from "../../structures/Command";
 import logger from "../../logger";
@@ -15,7 +15,7 @@ export = new Command(
       });
     }
 
-    const commandCategories: MessageSelectOptionData[] = client.commandCategories
+    const commandCategories: SelectMenuComponentOptionData[] = client.commandCategories
       .filter((category) => category !== "dev")
       .map((category) => {
         return {
@@ -42,14 +42,14 @@ export = new Command(
     await interaction.followUp({
       embeds: [helpEmbed],
       components: [
-        new MessageActionRow().addComponents([
-          new MessageSelectMenu()
+        new ActionRowBuilder<SelectMenuBuilder>().setComponents(
+          new SelectMenuBuilder()
             .setCustomId(`${client.config.name}-help-select-menu`)
             .setPlaceholder("Select a Command category")
             .setMinValues(1)
             .setMaxValues(1)
-            .setOptions(commandCategories),
-        ]),
+            .setOptions(commandCategories)
+        ),
       ],
     });
   }
