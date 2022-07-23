@@ -80,10 +80,11 @@ const validate = ajv.compile(schema);
  *
  * Can not use logger inside this function as the logger requires the config file!
  */
-export function getConfigFile(): BotConfig {
+export function getConfigFile(overwrite = false): BotConfig {
   try {
-    if (!existsSync("config.json")) {
+    if (!existsSync("config.json") || overwrite) {
       console.info(`Generating "config.json"`);
+      if (overwrite) console.warn(`Overwriting existing "config.json" if it exists!`);
 
       try {
         writeFileSync("config.json", JSON.stringify(botConfig, null, "  "));
