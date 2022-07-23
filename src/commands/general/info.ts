@@ -46,9 +46,9 @@ export = new Command(
     const infoEmbed = client.genEmbed({
       title: `${client.config.name}@${client.version}`,
       description:
-        "A customizable Discord bot based on [discord.js v14](https://discord.js.org/) with " +
-        "[Typescript](https://www.typescriptlang.org/)!\n" +
-        "Source code on [Github](https://github.com/IronBatman2715/DiscordTS-Bot).\n\n" +
+        "A customizable Discord bot based on [discord.js v14](https://discord.js.org/ 'https://discord.js.org/') with " +
+        "[Typescript](https://www.typescriptlang.org/ 'https://www.typescriptlang.org/')!\n" +
+        "Source code on [Github](https://github.com/IronBatman2715/DiscordTS-Bot 'https://github.com/IronBatman2715/DiscordTS-Bot').\n\n" +
         "Bot Configuration:",
       fields,
     });
