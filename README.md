@@ -4,9 +4,13 @@
 
 A customizable Discord bot based on [discord.js v14](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
 
-It utilizes the [Prisma ORM/ODM](https://www.prisma.io) to manage your [MongoDB](https://www.mongodb.com/) (can easily be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
+- Bring music to your servers with the included [Discord music player](https://discord-music-player.js.org) library!
 
-Bring music to your servers with the included [Discord music player](https://discord-music-player.js.org) library!
+- Persist settings for each discord server/guild with [MongoDB](https://www.mongodb.com/), managed by [Prisma](https://www.prisma.io) (code can be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
+
+- Easy troubleshooting with [Winston](https://github.com/winstonjs/winston) logging.
+
+- Configure the bot with the `config.json` file. Real-time validation with [AJV](https://ajv.js.org/)
 
 ---
 
