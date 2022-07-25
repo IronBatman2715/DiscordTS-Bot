@@ -30,11 +30,11 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    - MongoDB is the default. You can easily set up a free instance with [MongoDB Atlas](https://www.mongodb.com/atlas).
 
-   - MongoDB is supported out of the box but [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases) can be used with some changes to [src/database/schema.prisma](src/database/schema.prisma).
+   - If you want to use a different database, see [here](https://www.prisma.io/docs/reference/database-reference/supported-databases) for databases supported by Prisma. This will also require some changes to [`src/database/schema.prisma`](src/database/schema.prisma).
 
 3. Clone/fork this repository.
 
-4. Rename `sample.development.env` to `development.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+4. Rename `sample.development.env` to `development.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
@@ -42,7 +42,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    2. `DB_URL` Database URL
 
-      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
+      - Unless you modified [`src/database/schema.prisma`](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
@@ -58,7 +58,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 6. Run `npm run dev` to start a developer environment instance!
 
-   - Edit _and_ save any of the files in the `src` directory (with the exception of [src/database/schema.prisma](src/database/schema.prisma)) and the program will automatically restart to reflect the changes!
+   - Edit _and_ save any of the files in the `src` directory (with the exception of [`src/database/schema.prisma`](src/database/schema.prisma)) and the program will automatically restart to reflect the changes!
 
 ### Production environment
 
@@ -66,7 +66,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 2. Download or clone this repository.
 
-3. Rename `sample.production.env` to `production.env` and set the environment variables as defined in [src/global.d.ts](src/global.d.ts)
+3. Rename `sample.production.env` to `production.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 
@@ -74,7 +74,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    2. `DB_URL` Database URL
 
-      - Unless you modified [src/database/schema.prisma](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
+      - Unless you modified [`src/database/schema.prisma`](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
@@ -82,7 +82,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 5. Run `npm run build` to compile the source code for production.
 
-   - If you are tight on storage space, delete the `node_modules` folder _after_ running the above command. Then, run `npm ci --production` to install only the dependencies needed for production.
+   - If you are tight on storage space, delete the `node_modules` folder _after_ running `npm run build`. Then, run `npm ci --production` to install only the dependencies needed for production.
 
 6. Change the `config.json` file to your liking. See information about how you can change it [here](#configuration-file-properties).
 
@@ -92,7 +92,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 8. Run `npm start` to run the bot!
 
-   > Add [PM2](https://www.npmjs.com/package/pm2) or containerize with [Docker](https://docs.docker.com/). Then, deploy to a cloud service ([Heroku](https://www.heroku.com/), [Linode](https://www.linode.com/), etc.) or on your own hardware.
+   > Add [PM2](https://www.npmjs.com/package/pm2) or containerize with [Docker](https://docs.docker.com/). Then, deploy to a cloud service ([Heroku](https://www.heroku.com/), [Linode](https://www.linode.com/), [Vultr](https://www.vultr.com/), etc.) or on your own hardware.
 
 ## Configuration file properties
 
