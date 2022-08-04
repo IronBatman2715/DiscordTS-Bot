@@ -83,8 +83,7 @@ const validate = ajv.compile(schema);
 export function getConfigFile(overwrite = false): BotConfig {
   try {
     if (!existsSync("config.json") || overwrite) {
-      console.info(`Generating "config.json"`);
-      if (overwrite) console.warn(`Overwriting existing "config.json" if it exists!`);
+      console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
 
       try {
         writeFileSync("config.json", JSON.stringify(botConfig, null, "  "));
