@@ -173,7 +173,7 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 
     const settingDisplay: SettingDisplay = {
       name: camelCase2KebabCase(settingData.name),
-      value: getSettingDisplayValue(interaction, settingData),
+      value: getSettingDisplayValue(settingData),
     };
 
     return {
@@ -214,7 +214,7 @@ async function changeSetting(client: Client, interaction: CommandInteraction<Cac
 
   const newSettingDisplay: SettingDisplay = {
     name: camelCase2KebabCase(newSettingData.name),
-    value: getSettingDisplayValue(interaction, newSettingData),
+    value: getSettingDisplayValue(newSettingData),
   };
 
   return await interaction.followUp({
@@ -222,7 +222,7 @@ async function changeSetting(client: Client, interaction: CommandInteraction<Cac
   });
 }
 
-function getSettingDisplayValue(interaction: CommandInteraction<CacheType>, settingData: SettingData): string {
+function getSettingDisplayValue(settingData: SettingData): string {
   switch (settingData.name) {
     case "defaultRepeatMode": {
       if (typeof settingData.value !== "number") throw new TypeError("settingData.value must be of type 'number'");
