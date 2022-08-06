@@ -10,7 +10,7 @@ import logger from "../../logger";
  */
 export default async (client: Client, interaction: CommandInteraction<CacheType>, updateLatestInteraction = false) => {
   const guildId = interaction.guildId;
-  if (typeof guildId !== "string") return;
+  if (typeof guildId !== "string") throw new TypeError("interaction.guildId has invalid type");
 
   // If this server has a music queue already, get it. If not, create with new QueueData
   if (client.player.hasQueue(guildId)) {

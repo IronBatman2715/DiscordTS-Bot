@@ -27,7 +27,9 @@ export = new Command(
     const songQuery = interaction.options.getString("song-query", true);
 
     const guildQueue = await getGuildQueue(client, interaction, true);
-    if (typeof guildQueue === "undefined") return;
+    if (typeof guildQueue === "undefined") {
+      throw new ReferenceError("Could not get guildQueue");
+    }
 
     await guildQueue.join(voiceChannel);
 
