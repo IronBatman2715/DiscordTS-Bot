@@ -148,9 +148,10 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
     let currentValue: number | string;
+    const value = currentGuildConfig[setting as keyof typeof guildConfigDefaults];
 
-    if (Array.isArray(currentGuildConfig[setting])) {
-      const array = currentGuildConfig[setting];
+    if (Array.isArray(value)) {
+      const array = value;
       currentValue = "[ ";
 
       for (let i = 0; i < array.length; i++) {
@@ -162,7 +163,7 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
 
       currentValue = currentValue + " ]";
     } else {
-      currentValue = currentGuildConfig[setting];
+      currentValue = value;
     }
 
     const settingData: SettingData = {
@@ -224,6 +225,7 @@ async function changeSetting(client: Client, interaction: CommandInteraction<Cac
 function getSettingDisplayValue(interaction: CommandInteraction<CacheType>, settingData: SettingData): string {
   switch (settingData.name) {
     case "defaultRepeatMode": {
+      if (typeof settingData.value !== "number") throw new TypeError("settingData.value must be of type 'number'");
       return `\`${RepeatMode[settingData.value]}\``;
     }
 

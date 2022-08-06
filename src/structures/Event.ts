@@ -1,4 +1,4 @@
-import type { ClientEvents } from "discord.js";
+import type { Awaitable, ClientEvents } from "discord.js";
 import type { Prisma } from "@prisma/client";
 import type { PlayerEvents } from "discord-music-player";
 
@@ -14,7 +14,7 @@ export interface IBaseEvent {
 
 /* --- Client --- */
 type ClientRunFunction<Ev extends keyof ClientEvents> = {
-  (client: Client, ...args: ClientEvents[Ev]);
+  (client: Client, ...args: ClientEvents[Ev]): Awaitable<void>;
 };
 
 export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
@@ -35,9 +35,13 @@ export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
 export type PrismaEvents = Prisma.LogLevel;
 
 /** Omit params and duration for MongoDB, as they
- *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined} */
+ *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined}
+ */
 export type PrismaRunFunction<Ev extends PrismaEvents> = {
-  (client: Client, event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent);
+  (
+    client: Client,
+    event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent
+  ): Awaitable<void>;
 };
 
 export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
@@ -56,7 +60,7 @@ export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
 
 /* --- Music Player --- */
 type MusicPlayerRunFunction<Ev extends keyof PlayerEvents> = {
-  (client: Client, ...args: PlayerEvents[Ev]);
+  (client: Client, ...args: PlayerEvents[Ev]): Awaitable<void>;
 };
 
 export class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEvent {

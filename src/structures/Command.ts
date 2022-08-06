@@ -1,10 +1,10 @@
-import type { CacheType, ChatInputCommandInteraction } from "discord.js";
+import type { Awaitable, CacheType, ChatInputCommandInteraction } from "discord.js";
 import type { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "@discordjs/builders";
 
 import Client from "./Client";
 
 type RunFunction = {
-  (client: Client, interaction: ChatInputCommandInteraction<CacheType>);
+  (client: Client, interaction: ChatInputCommandInteraction<CacheType>): Awaitable<unknown>;
 };
 
 type Builder = Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand"> | SlashCommandSubcommandsOnlyBuilder;

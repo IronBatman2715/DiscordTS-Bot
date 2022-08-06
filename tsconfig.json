@@ -12,8 +12,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false,
     "importHelpers": true
   },
   "include": ["src/**/*"],

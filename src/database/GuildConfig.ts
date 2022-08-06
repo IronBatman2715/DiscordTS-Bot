@@ -19,7 +19,7 @@ export const guildConfigDefaults: Omit<GuildConfig, "guildId" | "id"> = {
   defaultRepeatMode: RepeatMode.DISABLED,
 };
 
-export const guildConfigDescriptions = {
+export const guildConfigDescriptions: Record<string, string> = {
   greetings: "List of greetings that the bot can send.",
   maxMessagesCleared: "Maximum number of messages `/clear` can delete in one command call.",
   musicChannelId: "If specified, ALL music commands MUST be entered in this text channel!",
