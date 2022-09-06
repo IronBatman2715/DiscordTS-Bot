@@ -86,7 +86,7 @@ export function getConfigFile(overwrite = false): BotConfig {
       console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
 
       try {
-        writeFileSync("config.json", JSON.stringify(botConfig, null, "  "));
+        writeFileSync("config.json", `${JSON.stringify(botConfig, null, "  ")}\n`);
       } catch (error) {
         throw Error(`Could not generate "config.json"`);
       }
