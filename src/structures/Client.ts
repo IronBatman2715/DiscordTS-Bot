@@ -134,15 +134,15 @@ export default class Client extends DiscordClient {
 
     const commandsDir = resolve(__dirname, "../commands");
 
-    readdirSync(commandsDir).forEach((folder) => {
-      const commandsSubDir = resolve(commandsDir, folder);
+    readdirSync(commandsDir).forEach((subDir) => {
+      const commandsSubDir = resolve(commandsDir, subDir);
 
       const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-      // Omit this folder if there are no valid files within it
-      // Also omit this folder if it is "dev" and bot is in PRODUCTION mode
-      if ((folder !== "dev" || this.devMode) && files.length > 0) {
-        logger.info(`\t${camelCase2Display(folder)}`);
+      // Omit this subDir if there are no valid files within it
+      // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
+      if ((subDir !== "dev" || this.devMode) && files.length > 0) {
+        logger.info(`\t${camelCase2Display(subDir)}`);
 
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
@@ -151,9 +151,9 @@ export default class Client extends DiscordClient {
           const command: Command = require(commandFilePath);
 
           // Set and store command categories
-          command.category = folder;
-          if (!this.commandCategories.includes(folder)) {
-            this.commandCategories.push(folder);
+          command.category = subDir;
+          if (!this.commandCategories.includes(subDir)) {
+            this.commandCategories.push(subDir);
           }
 
           // Set admin command permissions default to false
@@ -232,14 +232,14 @@ export default class Client extends DiscordClient {
 
     const eventsDir = resolve(__dirname, "../events");
 
-    readdirSync(eventsDir).forEach((folder) => {
-      const eventsSubDir = resolve(eventsDir, folder);
+    readdirSync(eventsDir).forEach((subDir) => {
+      const eventsSubDir = resolve(eventsDir, subDir);
 
       const files = readdirSync(eventsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-      // Omit this folder if there are no valid files within it
-      if (files.length > 1) {
-        logger.info(`\t${camelCase2Display(folder)}`);
+      // Omit this subDir if there are no valid files within it
+      if (files.length > 0) {
+        logger.info(`\t${camelCase2Display(subDir)}`);
 
         files.forEach((file) => {
           const eventFilePath = resolve(eventsSubDir, file);
