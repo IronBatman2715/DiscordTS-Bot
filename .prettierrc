@@ -4,5 +4,6 @@
   "trailingComma": "es5",
   "endOfLine": "auto",
   "printWidth": 120,
-  "useTabs": false
+  "useTabs": false,
+  "pluginSearchDirs": ["."]
 }

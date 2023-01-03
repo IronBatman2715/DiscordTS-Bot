@@ -4,12 +4,14 @@
   "parserOptions": {
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "deprecation"],
   "extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
   "rules": {
     "no-fallthrough": "off",
 
     "@typescript-eslint/no-var-requires": "warn",
+
+    "deprecation/deprecation": "warn",
 
     "prettier/prettier": [
       "warn",
