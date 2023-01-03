@@ -1,4 +1,4 @@
-import { ActionRowBuilder, SelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 import type { SelectMenuComponentOptionData } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
@@ -32,8 +32,8 @@ export = new Command(
     await interaction.followUp({
       content: "Select something below!",
       components: [
-        new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-          new SelectMenuBuilder()
+        new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(
+          new StringSelectMenuBuilder()
             .setCustomId("test-select-menu-id")
             .setPlaceholder("Choose something")
             .setMinValues(1)

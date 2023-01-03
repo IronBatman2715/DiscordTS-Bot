@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, SelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 import type { SelectMenuComponentOptionData } from "discord.js";
 
 import Command from "../../structures/Command";
@@ -42,8 +42,8 @@ export = new Command(
     await interaction.followUp({
       embeds: [helpEmbed],
       components: [
-        new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-          new SelectMenuBuilder()
+        new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(
+          new StringSelectMenuBuilder()
             .setCustomId(`${client.config.name}-help-select-menu`)
             .setPlaceholder("Select a Command category")
             .setMinValues(1)

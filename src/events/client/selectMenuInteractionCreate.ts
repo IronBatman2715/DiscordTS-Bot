@@ -4,7 +4,7 @@ import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
-  if (interaction.isSelectMenu()) {
+  if (interaction.isStringSelectMenu()) {
     logger.verbose("SelectMenuInteraction created!", { interaction });
     logger.verbose(`values selected: [${interaction.values}]`);
 
