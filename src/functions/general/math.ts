@@ -15,7 +15,7 @@ export const isInRange = (value: number, min = 1, max = Number.MAX_SAFE_INTEGER)
   return min <= value && value <= max;
 };
 
-/** Evaluate is `value` is a natural number (1, 2, 3, 4...) */
+/** Evaluate if `value` is a natural number (1, 2, 3, 4...) */
 export const isNaturalNumber = (value: number): boolean => {
   return Number.isInteger(value) && isInRange(value);
 };

@@ -34,7 +34,7 @@ export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
 /* --- Prisma --- */
 export type PrismaEvents = Prisma.LogLevel;
 
-/** Omit params and duration for MongoDB, as they
+/** Omit `params` and `duration` for MongoDB, as they
  *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined}
  */
 export type PrismaRunFunction<Ev extends PrismaEvents> = {
