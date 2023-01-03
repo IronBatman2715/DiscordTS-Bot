@@ -115,3 +115,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
     `5` = COMPETING
 
   - `name`: string after the `type`.
+
+## References
+
+I did not create the icons used. They are sourced from [here](https://pixabay.com/illustrations/icons-web-development-website-design-2188729/) under [their license](https://pixabay.com/service/license/).
