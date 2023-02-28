@@ -1,7 +1,7 @@
 import { format, createLogger, transports } from "winston";
 import type { Logger } from "winston";
 
-import { botConfig, getConfigFile } from "./botConfig";
+import { defaultBotConfig, getConfigFile } from "./botConfig";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
 
@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
   // Development logger
 
   logger = createLogger({
-    defaultMeta: { service: `${botConfig.name}@${version}` },
+    defaultMeta: { service: `${defaultBotConfig.name}@${version}-dev` },
     format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
     level: "debug",
     transports: [

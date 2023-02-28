@@ -19,8 +19,7 @@ export type BotConfig = {
   activities: ActivitiesOptions[];
 };
 
-const ajv = new Ajv({ allErrors: true });
-addErrors(addFormats(ajv));
+const ajv = addErrors(addFormats(new Ajv({ allErrors: true })));
 
 const schema: JSONSchemaType<BotConfig> = {
   type: "object",
@@ -76,9 +75,9 @@ const schema: JSONSchemaType<BotConfig> = {
 };
 const validate = ajv.compile(schema);
 
-/** Load config.json from filesystem or generate it.
+/** Load config.json from filesystem or generate it from defaults.
  *
- * Can not use logger inside this function as the logger requires the config file!
+ * Can NOT use logger inside this function as the logger requires the config file!
  */
 export function getConfigFile(overwrite = false): BotConfig {
   try {
@@ -86,7 +85,7 @@ export function getConfigFile(overwrite = false): BotConfig {
       console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
 
       try {
-        writeFileSync("config.json", `${JSON.stringify(botConfig, null, "  ")}\n`);
+        writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
       } catch (error) {
         throw Error(`Could not generate "config.json"`);
       }
@@ -110,7 +109,8 @@ export function getConfigFile(overwrite = false): BotConfig {
   }
 }
 
-export const botConfig: BotConfig = {
+/** Default bot configuration. Also used in development environment */
+export const defaultBotConfig: BotConfig = {
   name: "Z-Bot",
   activities: [
     {
@@ -217,4 +217,4 @@ export const botConfig: BotConfig = {
   ],
 };
 
-export default botConfig;
+export default defaultBotConfig;

@@ -6,9 +6,7 @@ import Command from "../../structures/Command";
 import camelCase2Display from "../../functions/general/camelCase2Display";
 import { ActivitiesOptions } from "../../botConfig";
 
-type ActivityTypesMap = { [key in ActivityType]: string };
-
-const activityTypesMap: ActivityTypesMap = {
+const activityTypesMap: { [key in ActivityType]: string } = {
   "0": "Playing",
   "1": "Streaming",
   "2": "Listening to",

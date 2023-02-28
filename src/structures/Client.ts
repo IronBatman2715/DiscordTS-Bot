@@ -32,7 +32,7 @@ import type QueueData from "./QueueData";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
 import logger from "../logger";
-import { botConfig, getConfigFile } from "../botConfig";
+import { defaultBotConfig, getConfigFile } from "../botConfig";
 import type { BotConfig } from "../botConfig";
 
 type SendMultiPageEmbedOptions = {
@@ -94,7 +94,7 @@ export default class Client extends DiscordClient {
       });
 
       // Load config
-      this.config = this.devMode ? botConfig : getConfigFile();
+      this.config = this.devMode ? defaultBotConfig : getConfigFile();
 
       logger.info(`Loading ${this.config.name}@${this.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`);
 
