@@ -24,8 +24,7 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-    "prisma:format": "prisma format",
-    "prisma:generate": "prisma generate",
+    "prisma": "prisma",
     "registerGlobal": "node build/registerGlobalCommands.js",
     "start": "node ."
   },
@@ -43,11 +42,11 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "@types/node": "^18.14.0",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
+    "@types/node": "^18.14.2",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-deprecation": "^1.3.3",
     "eslint-plugin-prettier": "^4.2.1",
@@ -60,8 +59,7 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "node": ">=16.9.0",
-    "npm": ">=8.0.0"
+    "node": ">=16.9.0"
   },
   "prisma": {
     "schema": "src/database/schema.prisma"
