@@ -5,7 +5,14 @@
     "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint", "deprecation"],
-  "extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
   "rules": {
     "no-fallthrough": "off",
 

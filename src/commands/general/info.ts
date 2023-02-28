@@ -1,19 +1,10 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { ActivityType } from "discord.js";
 import type { EmbedField } from "discord.js";
-import { ActivityType } from "discord.js/typings";
 
 import Command from "../../structures/Command";
 import camelCase2Display from "../../functions/general/camelCase2Display";
-import { ActivitiesOptions } from "../../botConfig";
-
-const activityTypesMap: { [key in ActivityType]: string } = {
-  "0": "Playing",
-  "1": "Streaming",
-  "2": "Listening to",
-  "3": "Watching",
-  "4": "Custom",
-  "5": "Competing in",
-};
+import type { ActivitiesOptions } from "../../botConfig";
 
 export = new Command(
   new SlashCommandBuilder().setName("info").setDescription("Shows information about this bot."),
@@ -24,7 +15,7 @@ export = new Command(
       switch (key) {
         case "activities": {
           (value as ActivitiesOptions[]).forEach(({ name, type, url }) => {
-            formattedValue += `[${activityTypesMap[type]} ${name}](${url ?? ""})\n`;
+            formattedValue += `[${ActivityType[type]} ${name}](${url ?? ""})\n`;
           });
           break;
         }
