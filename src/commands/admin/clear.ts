@@ -1,5 +1,5 @@
+import { SlashCommandBuilder } from "discord.js";
 import type { TextChannel } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 
 import Command from "../../structures/Command";
 import { isInRange } from "../../functions/general/math";

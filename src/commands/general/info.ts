@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { ActivityType } from "discord.js";
+import { ActivityType, SlashCommandBuilder } from "discord.js";
 import type { EmbedField } from "discord.js";
 
 import Command from "../../structures/Command";

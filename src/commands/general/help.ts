@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
 import type { SelectMenuComponentOptionData } from "discord.js";
 
 import Command from "../../structures/Command";

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command";
 import getGuildQueue from "../../functions/music/getGuildQueue";

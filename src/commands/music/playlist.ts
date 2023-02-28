@@ -1,5 +1,5 @@
+import { SlashCommandBuilder } from "discord.js";
 import type { GuildMember } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { Utils } from "discord-music-player";
 
 import Command from "../../structures/Command";

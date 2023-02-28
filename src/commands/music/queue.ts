@@ -1,5 +1,5 @@
+import { SlashCommandBuilder } from "discord.js";
 import type { EmbedField } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { RepeatMode } from "discord-music-player";
 
 import Command from "../../structures/Command";

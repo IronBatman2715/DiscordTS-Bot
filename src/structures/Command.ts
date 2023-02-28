@@ -1,5 +1,10 @@
-import type { Awaitable, CacheType, ChatInputCommandInteraction } from "discord.js";
-import type { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "@discordjs/builders";
+import type {
+  Awaitable,
+  CacheType,
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
+} from "discord.js";
 
 import Client from "./Client";
 

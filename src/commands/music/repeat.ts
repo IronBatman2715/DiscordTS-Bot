@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { RepeatMode } from "discord-music-player";
 
 import Command from "../../structures/Command";
