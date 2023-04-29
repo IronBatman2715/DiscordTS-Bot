@@ -14,11 +14,7 @@ export = new Command(
       switch (key) {
         case "activities": {
           (value as ActivitiesOptions[]).forEach(({ name, type, url }) => {
-            if (url) {
-              formattedValue += `[${ActivityType[type]} ${name}](${url})\n`;
-            } else {
-              formattedValue += `${ActivityType[type]} ${name}\n`;
-            }
+            formattedValue += url ? `[${ActivityType[type]} ${name}](${url})\n` : `${ActivityType[type]} ${name}\n`;
           });
           break;
         }
