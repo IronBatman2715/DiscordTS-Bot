@@ -66,7 +66,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 2. Download or clone this repository.
 
-3. Rename `sample.production.env` to `production.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
+3. Rename `sample.env` to `.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    > Note that **all** the environment variables are strings.
 

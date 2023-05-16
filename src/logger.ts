@@ -1,3 +1,4 @@
+import { config } from "dotenv";
 import { format, createLogger, transports } from "winston";
 import type { Logger } from "winston";
 
@@ -5,12 +6,16 @@ import { defaultBotConfig, getConfigFile } from "./botConfig";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
 
+/* The following top-level code will execute BEFORE anything else */
+
 const version = process.env.npm_package_version;
 
 let logger: Logger;
 if (process.env.NODE_ENV === "development") {
-  // Development logger
+  // Load "development.env"
+  config({ path: "development.env" });
 
+  // Initialize development logger
   logger = createLogger({
     defaultMeta: { service: `${defaultBotConfig.name}@${version}-dev` },
     format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
@@ -29,10 +34,11 @@ if (process.env.NODE_ENV === "development") {
     ],
   });
 } else {
-  // Production logger
+  // Load ".env"
+  config({ path: ".env" });
 
+  // Initialize production logger
   const { name } = getConfigFile();
-
   logger = createLogger({
     defaultMeta: { service: `${name}@${version}` },
     format: combine(timestamp(), errors({ stack: true }), json()),
