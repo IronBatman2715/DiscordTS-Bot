@@ -184,18 +184,16 @@ export default class Client extends DiscordClient {
       commands: { raw: this.commands, json: commandDataArr },
     });
 
-    // Can cast `DISCORD_TOKEN` to string since it is verified in constructor
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
+    const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
     try {
       if (this.devMode) {
         // Instantly register to test guild
         logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
 
-        // Can cast `CLIENT_ID` and `TEST_GUILD_ID` to string since it is verified in constructor
+        // Can cast `TEST_GUILD_ID` to string since it is verified in constructor
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.TEST_GUILD_ID!);
+        const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.TEST_GUILD_ID!);
 
         // Add all new/updated commands. Does NOT remove no longer used commands!
         await rest.put(fullRoute, {
@@ -205,9 +203,7 @@ export default class Client extends DiscordClient {
         // Register globally, will take up to one hour to register changes
         logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
-        // Can cast `CLIENT_ID` to string since it is verified in constructor
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID!);
+        const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID);
 
         // Add all new/updated commands
         await rest.put(fullRoute, {
