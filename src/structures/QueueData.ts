@@ -1,17 +1,17 @@
-import type { CacheType, CommandInteraction, Message, TextBasedChannel } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
 import type { Song } from "discord-music-player";
 
 import type Client from "./Client";
 import logger from "../logger";
 
 export default class QueueData {
-  latestInteraction: CommandInteraction<CacheType>;
+  latestInteraction: ChatInputCommandInteraction<CacheType>;
   private _embedMessage?: Message<boolean>;
   readonly client: Client;
-  readonly initialInteraction: CommandInteraction<CacheType>;
+  readonly initialInteraction: ChatInputCommandInteraction<CacheType>;
   readonly musicTextChannel: TextBasedChannel;
 
-  constructor(client: Client, initialInteraction: CommandInteraction<CacheType>) {
+  constructor(client: Client, initialInteraction: ChatInputCommandInteraction<CacheType>) {
     this.client = client;
 
     if (initialInteraction.channel === null) throw new ReferenceError("Interaction not made in a text channel..?");

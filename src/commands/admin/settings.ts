@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import type { CacheType, CommandInteraction, EmbedField } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
 import { RepeatMode } from "discord-music-player";
 
 import type Client from "../../structures/Client";
@@ -86,7 +86,7 @@ export = new Command(builder, async (client, interaction) => {
     }
   }
 
-  // User must have entered a change to a setting, proceed to find which one
+  // User must have entered a change to a setting, proceed to determine which setting is to be changed
   const newSettingData: SettingData = {
     name: "",
     value: "",
@@ -143,7 +143,7 @@ type SettingDisplay = {
   value: string;
 };
 
-async function displayCurrentSettings(client: Client, interaction: CommandInteraction<CacheType>) {
+async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction<CacheType>) {
   const currentGuildConfig = await client.DB.getGuildConfig(interaction.guildId);
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
@@ -195,7 +195,7 @@ async function displayCurrentSettings(client: Client, interaction: CommandIntera
   });
 }
 
-async function resetSettings(client: Client, interaction: CommandInteraction<CacheType>) {
+async function resetSettings(client: Client, interaction: ChatInputCommandInteraction<CacheType>) {
   // Reset
   await client.DB.deleteGuildConfig(interaction.guildId);
 
@@ -207,7 +207,11 @@ async function resetSettings(client: Client, interaction: CommandInteraction<Cac
   });
 }
 
-async function changeSetting(client: Client, interaction: CommandInteraction<CacheType>, newSettingData: SettingData) {
+async function changeSetting(
+  client: Client,
+  interaction: ChatInputCommandInteraction<CacheType>,
+  newSettingData: SettingData
+) {
   await client.DB.updateGuildConfig(interaction.guildId, {
     [newSettingData.name]: newSettingData.value,
   });

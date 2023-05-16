@@ -1,13 +1,8 @@
-import { InteractionType, ApplicationCommandType } from "discord.js";
-
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
 
 export = new ClientEvent("interactionCreate", async (client, interaction) => {
-  if (
-    interaction.type === InteractionType.ApplicationCommand &&
-    interaction.commandType === ApplicationCommandType.ChatInput
-  ) {
+  if (interaction.isChatInputCommand()) {
     logger.verbose("ChatInputCommandInteraction created!", { interaction });
 
     // Get command
