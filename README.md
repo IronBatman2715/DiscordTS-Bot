@@ -30,7 +30,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    - MongoDB is the default. You can easily set up a free instance with [MongoDB Atlas](https://www.mongodb.com/atlas).
 
-   - If you want to use a different database, see [here](https://www.prisma.io/docs/reference/database-reference/supported-databases) for databases supported by Prisma. This will also require some changes to [`src/database/schema.prisma`](src/database/schema.prisma).
+   - If you want to use a different database, see [here](https://www.prisma.io/docs/reference/database-reference/supported-databases) for databases supported by Prisma. This will also require some changes to [`prisma/schema.prisma`](prisma/schema.prisma).
 
 3. Clone/fork this repository.
 
@@ -42,7 +42,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    2. `DB_URL` Database URL
 
-      - Unless you modified [`src/database/schema.prisma`](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
+      - Unless you modified [`prisma/schema.prisma`](prisma/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
@@ -58,7 +58,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 6. Run `npm run dev` to start a developer environment instance!
 
-   - Edit _and_ save any of the files in the `src` directory (with the exception of [`src/database/schema.prisma`](src/database/schema.prisma)) and the program will automatically restart to reflect the changes!
+   - Edit _and_ save any of the files in the `src` directory (with the exception of [`prisma/schema.prisma`](prisma/schema.prisma)) and the program will automatically restart to reflect the changes!
 
 ### Production environment
 
@@ -74,7 +74,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    2. `DB_URL` Database URL
 
-      - Unless you modified [`src/database/schema.prisma`](src/database/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
+      - Unless you modified [`prisma/schema.prisma`](prisma/schema.prisma) to use a different type of database, this should be a [MongoDB URL](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
    3. `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
