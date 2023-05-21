@@ -21,7 +21,7 @@
     "build": "tsc",
     "postbuild": "run-func build/botConfig.js getConfigFile true",
     "predev": "prisma format && prisma generate",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "nodemon",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
     "registerGlobal": "node build/registerGlobalCommands.js",
