@@ -24,7 +24,6 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-    "prisma": "prisma",
     "registerGlobal": "node build/registerGlobalCommands.js",
     "start": "node ."
   },
