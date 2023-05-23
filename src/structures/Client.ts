@@ -13,7 +13,6 @@ import {
 } from "discord.js";
 import type {
   CacheType,
-  CommandInteraction,
   GuildMember,
   EmbedData,
   EmbedField,
@@ -308,7 +307,7 @@ export default class Client extends DiscordClient {
   }
 
   async sendMultiPageEmbed(
-    interaction: CommandInteraction<CacheType>,
+    interaction: ChatInputCommandInteraction<CacheType>,
     embedFields: EmbedField[],
     options: Partial<SendMultiPageEmbedOptions> = {}
   ) {

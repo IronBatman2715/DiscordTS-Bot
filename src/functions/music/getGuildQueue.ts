@@ -1,4 +1,4 @@
-import type { CacheType, CommandInteraction } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 
 import assertQueueData from "./assertQueueData";
 import type Client from "../../structures/Client";
@@ -8,7 +8,11 @@ import logger from "../../logger";
 /**
  * @param updateLatestInteraction Set to true to override `queue.data.latestInteraction` with `interaction`
  */
-export default async (client: Client, interaction: CommandInteraction<CacheType>, updateLatestInteraction = false) => {
+export default async (
+  client: Client,
+  interaction: ChatInputCommandInteraction<CacheType>,
+  updateLatestInteraction = false
+) => {
   const guildId = interaction.guildId;
   if (typeof guildId !== "string") throw new TypeError("interaction.guildId has invalid type");
 

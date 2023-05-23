@@ -1,4 +1,4 @@
-import type { Message, CommandInteraction, CacheType } from "discord.js";
+import type { Message, ChatInputCommandInteraction, CacheType } from "discord.js";
 
 import logger from "../../logger";
 import { isNaturalNumber } from "../general/math";
@@ -14,7 +14,7 @@ import sleep from "../general/sleep";
  * @param countdownIntervalInSeconds [default: 2] Second interval between updates to the countdown
  */
 export default async (
-  interaction: CommandInteraction<CacheType>,
+  interaction: ChatInputCommandInteraction<CacheType>,
   text: string,
   showCountdown = true,
   durationInSeconds = 10,
