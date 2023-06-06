@@ -1,3 +1,6 @@
+// import first so .env files are handled first
+import logger from "../logger";
+
 import { readdirSync } from "fs";
 import { resolve } from "path";
 import {
@@ -30,7 +33,6 @@ import type BaseEvent from "./Event";
 import type QueueData from "./QueueData";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
-import logger from "../logger";
 import { defaultBotConfig, getConfigFile } from "../botConfig";
 import type { BotConfig } from "../botConfig";
 
