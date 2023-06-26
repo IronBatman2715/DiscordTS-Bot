@@ -34,6 +34,8 @@ export default class QueueData {
   }
 
   async updateNowPlaying(song: Song) {
+    logger.verbose("Update now playing embed message");
+
     // Create now playing embed
     const nowPlayingEmbed = this.client.genEmbed({
       title: song.name,
@@ -87,6 +89,7 @@ export default class QueueData {
   async deleteEmbedMessage() {
     try {
       if (this._embedMessage !== undefined) {
+        logger.verbose("Deleting QueueData embed message.");
         await this.embedMessage.delete();
       } else {
         logger.verbose("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");

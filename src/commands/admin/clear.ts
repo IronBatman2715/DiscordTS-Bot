@@ -4,6 +4,7 @@ import type { TextChannel } from "discord.js";
 import Command from "../../structures/Command";
 import { isInRange } from "../../functions/general/math";
 import tempMessage from "../../functions/discord/tempMessage";
+import logger from "../../logger";
 
 export = new Command(
   new SlashCommandBuilder()
@@ -32,8 +33,17 @@ export = new Command(
       before: interaction.id,
     });
 
-    // Note: 2nd argument in bulkDelete filters out messages >=2 weeks old, as they cannot be deleted via bulkDelete
-    await channel.bulkDelete(messagesToDelete, true);
+    try {
+      // Note: 2nd argument in bulkDelete filters out messages +2 weeks old, as they cannot be deleted via bulkDelete
+      await channel.bulkDelete(messagesToDelete, true);
+    } catch (err) {
+      logger.error("Errored while trying to bulkDelete messages", err);
+
+      return await interaction.followUp({
+        content: `Errored while trying to bulkDelete messages! Make sure you are not 
+        (1) deleting more than are in the channel or (2) trying to delete messages made +2 weeks ago.`,
+      });
+    }
 
     // Confirmation message
     await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, true, 3, 1);

@@ -301,7 +301,6 @@ export default class Client extends DiscordClient {
     const embed = new EmbedBuilder(data);
 
     // Add in default values
-    if (data.timestamp === undefined) embed.setTimestamp(new Date());
     if (data.color === undefined) embed.setColor(Colors.DarkBlue);
     if (data.footer === undefined) embed.setFooter({ text: `${this.config.name}@${this.version}` });
 
