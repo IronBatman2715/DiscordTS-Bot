@@ -33,15 +33,11 @@ export default class Command {
   }
 
   set category(category: string) {
-    if (this.hasCategory) {
+    if (this._hasCategory) {
       throw new TypeError("Command: category has already been set!");
     } else {
       this._category = category;
       this._hasCategory = true;
     }
-  }
-
-  get hasCategory() {
-    return this._hasCategory;
   }
 }
