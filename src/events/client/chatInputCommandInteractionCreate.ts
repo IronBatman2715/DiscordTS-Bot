@@ -1,9 +1,12 @@
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
+import Client from "../../structures/Client";
 
-export = new ClientEvent("interactionCreate", async (client, interaction) => {
+export = new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isChatInputCommand()) {
     logger.verbose("ChatInputCommandInteraction created!", { interaction });
+
+    const client = Client.get();
 
     // Get command
     const command = client.commands.get(interaction.commandName);

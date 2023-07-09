@@ -2,7 +2,7 @@ import assertQueueData from "../../functions/music/assertQueueData";
 import { MusicPlayerEvent } from "../../structures/Event";
 import logger from "../../logger";
 
-export = new MusicPlayerEvent("playlistAdd", async (client, queue, playlist) => {
+export = new MusicPlayerEvent("playlistAdd", async (queue, playlist) => {
   assertQueueData(queue);
 
   const requestedBy = playlist.songs[0].requestedBy?.username || "UNKNOWN";

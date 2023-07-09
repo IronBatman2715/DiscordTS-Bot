@@ -2,8 +2,9 @@ import type { EmbedField } from "discord.js";
 
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
+import Client from "../../structures/Client";
 
-export = new ClientEvent("interactionCreate", async (client, interaction) => {
+export = new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isStringSelectMenu()) {
     logger.verbose("SelectMenuInteraction created!", { interaction });
     logger.verbose(`values selected: [${interaction.values}]`);
@@ -12,6 +13,8 @@ export = new ClientEvent("interactionCreate", async (client, interaction) => {
     await interaction.deferUpdate().catch((error) => {
       logger.error(error);
     });
+
+    const client = Client.get();
 
     switch (interaction.customId) {
       case "test-select-menu-id": {

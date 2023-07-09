@@ -2,7 +2,7 @@ import assertQueueData from "../../functions/music/assertQueueData";
 import { MusicPlayerEvent } from "../../structures/Event";
 import logger from "../../logger";
 
-export = new MusicPlayerEvent("songChanged", async (client, queue, newSong, oldSong) => {
+export = new MusicPlayerEvent("songChanged", async (queue, newSong, oldSong) => {
   assertQueueData(queue);
 
   if (oldSong === newSong) {

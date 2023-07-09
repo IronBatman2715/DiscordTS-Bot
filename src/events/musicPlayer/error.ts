@@ -2,7 +2,7 @@ import assertQueueData from "../../functions/music/assertQueueData";
 import { MusicPlayerEvent } from "../../structures/Event";
 import logger from "../../logger";
 
-export = new MusicPlayerEvent("error", async (client, error, queue) => {
+export = new MusicPlayerEvent("error", async (error, queue) => {
   logger.error(new Error(`${error} in ${queue.guild.name}!`));
   assertQueueData(queue);
 

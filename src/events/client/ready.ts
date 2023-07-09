@@ -1,9 +1,10 @@
-import type Client from "../../structures/Client";
+import Client from "../../structures/Client";
 import { ClientEvent } from "../../structures/Event";
 import logger from "../../logger";
 import type { ActivitiesOptions } from "../../botConfig";
 
-export = new ClientEvent("ready", (client) => {
+export = new ClientEvent("ready", () => {
+  const client = Client.get();
   let unusedActivities = setRandomBotPresence(client, client.config.activities.slice());
 
   logger.info("Online and ready!");

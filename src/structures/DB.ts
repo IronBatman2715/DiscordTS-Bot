@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { GuildConfig } from "@prisma/client";
 
-import type Client from "./Client";
 import type { PrismaEvents, PrismaRunFunction } from "./Event";
 import { guildConfigDefaults } from "../database/GuildConfig";
 import logger from "../logger";
@@ -16,19 +15,18 @@ const prisma = new PrismaClient({
 });
 
 export default class DB {
-  private static prisma = prisma;
-  private static dbHandlerExists = false;
-  client: Client;
-  private hasDoneInitialConnection: boolean;
+  /** Singleton instance */
+  private static instance: DB;
+  private hasDoneInitialConnection = false;
 
-  constructor(client: Client) {
-    this.client = client;
-
-    if (DB.dbHandlerExists) throw new TypeError("Should only instantiate DB once, as only one DB handler is required!");
-    DB.dbHandlerExists = true;
-
-    this.hasDoneInitialConnection = false;
+  /** Get/Generate singleton instance */
+  static get() {
+    if (!DB.instance) DB.instance = new this();
+    return DB.instance;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
 
   /** Connects to database with `DB_URL` environment variable specified in schema.prisma file.
    *
@@ -36,7 +34,7 @@ export default class DB {
    */
   async connect() {
     if (!this.hasDoneInitialConnection) {
-      await DB.prisma.$connect();
+      await prisma.$connect();
       this.hasDoneInitialConnection = true;
       logger.info("Successfully completed initial connection to database");
     } else {
@@ -52,7 +50,7 @@ export default class DB {
    */
   async disconnect() {
     try {
-      await DB.prisma.$disconnect();
+      await prisma.$disconnect();
       logger.info("Disconnected from DB!");
     } catch (error) {
       logger.error(error);
@@ -61,7 +59,7 @@ export default class DB {
   }
 
   bindEvent<Ev extends PrismaEvents>(event: Ev, eventFunction: PrismaRunFunction<Ev>) {
-    DB.prisma.$on(event, eventFunction.bind(null, this.client));
+    prisma.$on(event, eventFunction);
   }
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
@@ -70,12 +68,12 @@ export default class DB {
 
     if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
-    const query = await DB.prisma.guildConfig.findUnique({ where: { guildId } });
+    const query = await prisma.guildConfig.findUnique({ where: { guildId } });
 
     if (query) return query;
 
     logger.verbose("DB.getGuildConfig(): Could not find match, creating a new one");
-    return await DB.prisma.guildConfig.create({
+    return await prisma.guildConfig.create({
       data: {
         guildId,
         greetings: guildConfigDefaults.greetings,
@@ -92,7 +90,7 @@ export default class DB {
 
     if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
-    return await DB.prisma.guildConfig.update({
+    return await prisma.guildConfig.update({
       where: { guildId },
       data: guildConfig,
     });
@@ -104,6 +102,6 @@ export default class DB {
 
     if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
-    return await DB.prisma.guildConfig.delete({ where: { guildId } });
+    return await prisma.guildConfig.delete({ where: { guildId } });
   }
 }
