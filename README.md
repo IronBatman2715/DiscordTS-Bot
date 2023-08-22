@@ -16,7 +16,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 ## Setup
 
-**_Requires [Node.js](https://nodejs.org/) 16.9.0 or higher_**
+**_Requires [Node.js](https://nodejs.org/) 16.13.0 or higher_**
 
 ### Development environment
 
