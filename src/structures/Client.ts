@@ -13,6 +13,8 @@ import {
   ButtonBuilder,
   EmbedBuilder,
   PermissionsBitField,
+  Routes,
+  REST,
 } from "discord.js";
 import type {
   CacheType,
@@ -23,8 +25,6 @@ import type {
   InteractionUpdateOptions,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { Routes } from "discord-api-types/v10";
-import { REST } from "@discordjs/rest";
 import { Player } from "discord-music-player";
 
 import type Command from "./Command";
@@ -193,7 +193,7 @@ export default class Client extends DiscordClient {
       commands: { raw: this.commands, json: commandDataArr },
     });
 
-    const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
+    const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 
     try {
       if (this.devMode) {
