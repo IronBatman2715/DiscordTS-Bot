@@ -25,12 +25,11 @@ import type {
   InteractionUpdateOptions,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { Player } from "discord-music-player";
+import { Player } from "discord-player";
 
 import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
-import type QueueData from "./QueueData";
 import camelCase2Display from "../functions/general/camelCase2Display";
 import isUser from "../functions/discord/isUser";
 import { defaultBotConfig, getConfigFile } from "../botConfig";
@@ -55,7 +54,7 @@ export default class Client extends DiscordClient {
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
   readonly DB: DB = DB.get();
-  readonly player: Player<QueueData>;
+  readonly player: Player;
 
   /** Get/Generate singleton instance */
   static get() {
@@ -98,9 +97,7 @@ export default class Client extends DiscordClient {
       }
       logger.info("Successfully verified that environment variables are set!");
 
-      this.player = new Player<QueueData>(this, {
-        deafenOnJoin: true,
-      });
+      this.player = new Player(this);
 
       // Load config
       this.config = this.devMode ? defaultBotConfig : getConfigFile();
@@ -127,6 +124,7 @@ export default class Client extends DiscordClient {
       if (this.devMode) await this.registerCommands();
 
       await this.DB.connect();
+      await this.player.extractors.loadDefault();
 
       logger.info("Logging in... ");
       await this.login(process.env.DISCORD_TOKEN);
@@ -183,7 +181,7 @@ export default class Client extends DiscordClient {
    *
    * MUST have run {@link Client.loadCommands() loadCommands()} first (runs in constructor)!
    *
-   * If `devMode` property is true, will register commands to all guilds/servers this bot is in (
+   * If `devMode` property is false, will register commands to all guilds/servers this bot is in (
    * {@link https://discordjs.guide/interactions/slash-commands.html#global-commands may take up to 1 hour to register changes})
    */
   async registerCommands(): Promise<void> {
@@ -209,7 +207,7 @@ export default class Client extends DiscordClient {
           body: commandDataArr,
         });
       } else {
-        // Register globally, will take up to one hour to register changes
+        // Register globally, can take up to one hour to register changes
         logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
 
         const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID);
@@ -271,6 +269,8 @@ export default class Client extends DiscordClient {
    * Use this if you KNOW that `data.fields` will not be longer than 25!
    */
   genEmbed(data: Partial<EmbedData> = {}): EmbedBuilder {
+    logger.verbose("Generating embed");
+
     // Check for invalid entries
     if (data.title !== undefined && data.title.length > 256) {
       logger.warn("Had to shorten an embed title.", { embedTitle: data.title });

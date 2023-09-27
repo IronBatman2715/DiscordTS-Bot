@@ -1,25 +1,21 @@
 import { SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
+import getQueue from "../../functions/music/getQueue";
 
 export = new Command(
   new SlashCommandBuilder().setName("resume").setDescription("Resume paused music."),
 
   async (client, interaction) => {
-    const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") {
-      return await interaction.followUp({
-        content: "No active music queue to resume!",
-      });
-    }
+    const guildQueue = await getQueue(interaction);
+    if (!guildQueue) return;
 
-    if (!guildQueue.paused) {
+    if (!guildQueue.node.isPaused()) {
       await interaction.followUp({
         content: "Queue is not paused right now.",
       });
     } else {
-      guildQueue.setPaused(false);
+      guildQueue.node.setPaused(false);
       await interaction.followUp({
         content: "Resumed the music queue!",
       });

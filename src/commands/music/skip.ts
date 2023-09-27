@@ -1,35 +1,25 @@
 import { SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
-import { isInRange } from "../../functions/general/math";
+import getQueue from "../../functions/music/getQueue";
 
 export = new Command(
-  new SlashCommandBuilder()
-    .setName("skip")
-    .setDescription("Skip a number of song(s) [default: 1].")
-    .addIntegerOption((option) => option.setName("quantity").setDescription("Number of songs to skip.").setMinValue(1)),
+  new SlashCommandBuilder().setName("skip").setDescription("Skip the current track."),
   async (client, interaction) => {
-    // Get queue
-    const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") {
-      return await interaction.followUp({
-        content: "No active music queue to skip a song in!",
+    const guildQueue = await getQueue(interaction);
+    if (!guildQueue) return;
+
+    const skippedTrack = guildQueue.currentTrack;
+    if (!skippedTrack) throw new ReferenceError("Could not retrieve current track");
+
+    if (guildQueue.node.skip()) {
+      await interaction.followUp({
+        content: `Skipped '${skippedTrack.title}'.`,
+      });
+    } else {
+      await interaction.followUp({
+        content: `Could not skip track!`,
       });
     }
-
-    const quantity =
-      interaction.options.getInteger("quantity") === null ? 1 : interaction.options.getInteger("quantity", true);
-
-    if ((quantity === 1 && guildQueue.songs.length === 1) || !isInRange(quantity, 1, guildQueue.songs.length - 1)) {
-      return await interaction.followUp({
-        content: "Cannot skip as many or more songs than are in the queue!",
-      });
-    }
-
-    guildQueue.skip(quantity - 1); //quantity - 1 = song index to skip
-    await interaction.followUp({
-      content: `Skipped ${quantity} song${quantity === 1 ? "" : "s"}.`,
-    });
   }
 );

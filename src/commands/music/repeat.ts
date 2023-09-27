@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "discord.js";
-import { RepeatMode } from "discord-music-player";
+import { QueueRepeatMode } from "discord-player";
 
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
+import getQueue from "../../functions/music/getQueue";
 
 export = new Command(
   new SlashCommandBuilder()
@@ -14,23 +14,19 @@ export = new Command(
         .setDescription("Repeat mode to use.")
         .setRequired(true)
         .addChoices(
-          { name: "disable", value: RepeatMode.DISABLED },
-          { name: "song", value: RepeatMode.SONG },
-          { name: "queue", value: RepeatMode.QUEUE }
+          { name: "off", value: QueueRepeatMode.OFF },
+          { name: "track", value: QueueRepeatMode.TRACK },
+          { name: "queue", value: QueueRepeatMode.QUEUE },
+          { name: "autoplay", value: QueueRepeatMode.AUTOPLAY }
         )
     ),
 
   async (client, interaction) => {
-    // Get queue
-    const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") {
-      return await interaction.followUp({
-        content: "No active music queue!",
-      });
-    }
+    const guildQueue = await getQueue(interaction);
+    if (!guildQueue) return;
 
     const repeatMode = interaction.options.getInteger("option", true);
-    const repeatModeStr = RepeatMode[repeatMode].toLowerCase();
+    const repeatModeStr = QueueRepeatMode[repeatMode].toLowerCase();
 
     // Change the repeat behavior of the queue
     if (guildQueue.repeatMode === repeatMode) {

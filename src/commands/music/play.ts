@@ -1,41 +1,63 @@
-import { SlashCommandBuilder } from "discord.js";
-import type { GuildMember } from "discord.js";
+import { GuildMember, SlashCommandBuilder } from "discord.js";
 
+import getQueue from "../../functions/music/getQueue";
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
+import QueueData from "../../structures/QueueData";
+import logger from "../../logger";
 
 export = new Command(
   new SlashCommandBuilder()
     .setName("play")
-    .setDescription("Plays a song or adds it to the end of the music queue.")
+    .setDescription("Plays track(s) or adds it to the end of the music queue.")
     .addStringOption((option) =>
       option
-        .setName("song-query")
-        .setDescription("A URL (youtube, spotify, or apple music) or search query.")
+        .setName("query")
+        .setDescription("A search query or URL (youtube, spotify, apple music, etc.).")
         .setRequired(true)
     ),
   async (client, interaction) => {
-    const voiceChannel = (interaction.member as GuildMember).voice.channel;
+    if (!(interaction.member instanceof GuildMember))
+      throw TypeError("Expected `interaction.member` to be of type `GuildMember`");
 
     // Check if user is currently in a voice channel
-    if (!voiceChannel) {
+    if (!interaction.member.voice.channel) {
       return await interaction.followUp({
         content: "Join a voice channel first!",
       });
     }
 
-    const songQuery = interaction.options.getString("song-query", true);
+    const query = interaction.options.getString("query", true);
 
-    const guildQueue = await getGuildQueue(client, interaction, true);
-    if (typeof guildQueue === "undefined") {
-      throw new ReferenceError("Could not get guildQueue");
-    }
-
-    await guildQueue.join(voiceChannel);
-
-    await guildQueue.play(songQuery, {
-      timecode: true,
+    const searchResult = await client.player.search(query, {
       requestedBy: interaction.user,
     });
+
+    if (searchResult.isEmpty()) {
+      return await interaction.followUp({
+        content: "Could not get a definitive link from your query! Try adding more details.",
+      });
+    }
+
+    const guildQueue = await getQueue(interaction, true);
+    if (!guildQueue) {
+      logger.info("Player is creating a new GuildQueue");
+
+      const { queue } = await client.player.play(interaction.member.voice.channel, searchResult, {
+        nodeOptions: {
+          metadata: new QueueData(client, interaction),
+          selfDeaf: true,
+        },
+        requestedBy: interaction.user,
+      });
+
+      const { defaultRepeatMode } = await client.DB.getGuildConfig(interaction.guildId);
+      if (queue.repeatMode !== defaultRepeatMode) queue.setRepeatMode(defaultRepeatMode);
+    } else {
+      logger.info("Player is using pre-existing GuildQueue");
+
+      await client.player.play(interaction.member.voice.channel, searchResult, {
+        requestedBy: interaction.user,
+      });
+    }
   }
 );

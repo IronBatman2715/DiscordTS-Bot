@@ -1,37 +1,45 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { EmbedField } from "discord.js";
-import { RepeatMode } from "discord-music-player";
+import { QueueRepeatMode } from "discord-player";
 
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
+import getQueue from "../../functions/music/getQueue";
 
 export = new Command(
   new SlashCommandBuilder().setName("queue").setDescription("Display music queue."),
   async (client, interaction) => {
-    // Get queue
-    const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") {
-      return await interaction.followUp({
-        content: "No active music queue to show!",
+    const guildQueue = await getQueue(interaction);
+    if (!guildQueue) return;
+
+    // Check if queue is empty
+    if (!guildQueue.currentTrack && guildQueue.tracks.toArray().length === 0) {
+      return await interaction.followUp({ content: "No tracks in queue!" });
+    }
+
+    const embedFieldArr: EmbedField[] = [];
+    if (guildQueue.currentTrack) {
+      const track = guildQueue.currentTrack;
+
+      embedFieldArr.unshift({
+        name: `Playing now: ${track.title})`,
+        value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy}\n`,
+        inline: false,
       });
     }
 
-    // Check if queue is empty
-    if (guildQueue.songs.length === 0) {
-      return await interaction.followUp({ content: "No songs in queue!" });
-    }
+    embedFieldArr.push(
+      ...guildQueue.tracks.toArray().map((track, i) => {
+        return {
+          name: `${i + 1}: ${track.title}`,
+          value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy}\n`,
+          inline: false,
+        };
+      })
+    );
 
-    const queueFieldArr: EmbedField[] = guildQueue.songs.map((song, i) => {
-      return {
-        name: `${i + 1}: [${song.name}] (${song.url})`,
-        value: `by: ${song.author}\nrequested by: ${song.requestedBy}\n`,
-        inline: false,
-      };
-    });
-
-    await client.sendMultiPageEmbed(interaction, queueFieldArr, {
+    await client.sendMultiPageEmbed(interaction, embedFieldArr, {
       otherEmbedData: {
-        title: `Music Queue [Repeat mode: ${RepeatMode[guildQueue.repeatMode]}]`,
+        title: `Music Queue [Repeat mode: ${QueueRepeatMode[guildQueue.repeatMode]}]`,
         thumbnail: {
           url: "attachment://music.png",
         },

@@ -1,22 +1,23 @@
 import { SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command";
-import getGuildQueue from "../../functions/music/getGuildQueue";
+import getQueue from "../../functions/music/getQueue";
 
 export = new Command(
-  new SlashCommandBuilder().setName("shuffle").setDescription("Shuffles the songs currently in the music queue."),
+  new SlashCommandBuilder().setName("shuffle").setDescription("Shuffles the tracks currently in the music queue."),
   async (client, interaction) => {
-    // Get queue
-    const guildQueue = await getGuildQueue(client, interaction);
-    if (typeof guildQueue === "undefined") {
-      return await interaction.followUp({
-        content: "No active music queue to shuffle!",
+    const guildQueue = await getQueue(interaction);
+    if (!guildQueue) return;
+
+    if (guildQueue.tracks.toArray().length > 1) {
+      guildQueue.tracks.shuffle();
+      await interaction.followUp({
+        content: "Shuffled the music queue!",
+      });
+    } else {
+      await interaction.followUp({
+        content: "The queue has only one song in it! Use `/play` to queue more songs.",
       });
     }
-
-    guildQueue.shuffle();
-    await interaction.followUp({
-      content: "Shuffled the music queue!",
-    });
   }
 );

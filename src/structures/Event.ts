@@ -1,6 +1,6 @@
 import type { Awaitable, ClientEvents } from "discord.js";
 import type { Prisma } from "@prisma/client";
-import type { PlayerEvents } from "discord-music-player";
+import type { GuildQueueEvents, PlayerEvents } from "discord-player";
 
 import type Client from "./Client";
 
@@ -56,9 +56,7 @@ export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
 }
 
 /* --- Music Player --- */
-type MusicPlayerRunFunction<Ev extends keyof PlayerEvents> = {
-  (...args: PlayerEvents[Ev]): Awaitable<void>;
-};
+type MusicPlayerRunFunction<Ev extends keyof PlayerEvents> = PlayerEvents[Ev];
 
 export class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEvent {
   readonly event: Ev;
@@ -71,6 +69,23 @@ export class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEve
 
   bindToEventEmitter(client: Client) {
     client.player.on(this.event, this.run);
+  }
+}
+
+/* --- Music Player Guild Queue --- */
+type MusicPlayerGuildQueueRunFunction<Ev extends keyof GuildQueueEvents> = GuildQueueEvents[Ev];
+
+export class MusicPlayerGuildQueueEvent<Ev extends keyof GuildQueueEvents> implements IBaseEvent {
+  readonly event: Ev;
+  readonly run: MusicPlayerGuildQueueRunFunction<Ev>;
+
+  constructor(event: Ev, run: MusicPlayerGuildQueueRunFunction<Ev>) {
+    this.event = event;
+    this.run = run;
+  }
+
+  bindToEventEmitter(client: Client) {
+    client.player.events.on(this.event, this.run);
   }
 }
 

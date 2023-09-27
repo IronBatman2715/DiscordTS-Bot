@@ -1,4 +1,4 @@
-import { RepeatMode } from "discord-music-player";
+import { QueueRepeatMode } from "discord-player";
 import type { GuildConfig } from "@prisma/client";
 
 export const guildConfigDefaults: Omit<GuildConfig, "guildId" | "id"> = {
@@ -16,7 +16,7 @@ export const guildConfigDefaults: Omit<GuildConfig, "guildId" | "id"> = {
   ],
   maxMessagesCleared: 100,
   musicChannelId: "",
-  defaultRepeatMode: RepeatMode.DISABLED,
+  defaultRepeatMode: QueueRepeatMode.OFF,
 };
 
 export const guildConfigDescriptions: Record<string, string> = {

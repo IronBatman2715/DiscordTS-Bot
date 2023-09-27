@@ -1,5 +1,5 @@
 import type { CacheType, ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
-import type { Song } from "discord-music-player";
+import type { Track } from "discord-player";
 
 import type Client from "./Client";
 import logger from "../logger";
@@ -12,6 +12,7 @@ export default class QueueData {
   readonly musicTextChannel: TextBasedChannel;
 
   constructor(client: Client, initialInteraction: ChatInputCommandInteraction<CacheType>) {
+    logger.verbose("Initializing queue data");
     this.client = client;
 
     if (initialInteraction.channel === null) throw new ReferenceError("Interaction not made in a text channel..?");
@@ -33,31 +34,31 @@ export default class QueueData {
     this._embedMessage = newEmbedMessage;
   }
 
-  async updateNowPlaying(song: Song) {
+  async updateNowPlaying(track: Track) {
     logger.verbose("Update now playing embed message");
 
     // Create now playing embed
     const nowPlayingEmbed = this.client.genEmbed({
-      title: song.name,
-      url: song.url,
+      title: track.title,
+      url: track.url,
       author: {
-        name: song.requestedBy?.username || "unassigned",
-        iconURL: song.requestedBy?.avatarURL() || "",
+        name: track.requestedBy?.username || "unassigned",
+        iconURL: track.requestedBy?.avatarURL() || "",
       },
       fields: [
         {
           name: "Channel/Artist",
-          value: song.author,
+          value: track.author,
           inline: true,
         },
         {
           name: "Duration",
-          value: song.duration,
+          value: track.duration,
           inline: true,
         },
       ],
       thumbnail: {
-        url: song.thumbnail,
+        url: track.thumbnail,
       },
     });
 

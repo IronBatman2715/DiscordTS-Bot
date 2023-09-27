@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
-import { RepeatMode } from "discord-music-player";
+import { QueueRepeatMode } from "discord-player";
 
 import type Client from "../../structures/Client";
 import Command from "../../structures/Command";
@@ -64,9 +64,10 @@ builder
           .setDescription("Enter a new value.")
           .setRequired(true)
           .addChoices(
-            { name: "DISABLED", value: RepeatMode.DISABLED },
-            { name: "SONG", value: RepeatMode.SONG },
-            { name: "QUEUE", value: RepeatMode.QUEUE }
+            { name: "OFF", value: QueueRepeatMode.OFF },
+            { name: "TRACK", value: QueueRepeatMode.TRACK },
+            { name: "QUEUE", value: QueueRepeatMode.QUEUE },
+            { name: "AUTOPLAY", value: QueueRepeatMode.AUTOPLAY }
           )
       )
   );
@@ -230,7 +231,7 @@ function getSettingDisplayValue(settingData: SettingData): string {
   switch (settingData.name) {
     case "defaultRepeatMode": {
       if (typeof settingData.value !== "number") throw new TypeError("settingData.value must be of type 'number'");
-      return `\`${RepeatMode[settingData.value]}\``;
+      return `\`${QueueRepeatMode[settingData.value]}\``;
     }
 
     default: {

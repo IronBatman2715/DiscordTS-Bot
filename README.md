@@ -4,7 +4,7 @@
 
 A customizable Discord bot based on [discord.js v14](https://discord.js.org) with [Typescript](https://www.typescriptlang.org/)!
 
-- Bring music to your servers with the included [Discord music player](https://discord-music-player.js.org) library!
+- Bring music to your servers with the included [Discord player](https://discord-player.js.org) library!
 
 - Persist settings for each discord server/guild with [MongoDB](https://www.mongodb.com/), managed by [Prisma](https://www.prisma.io) (code can be modified to use [other databases supported by Prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)).
 
@@ -16,7 +16,10 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 ## Setup
 
-**_Requires [Node.js](https://nodejs.org/) 16.13.0 or higher_**
+**_Requires the following software:_**
+
+- [Node.js](https://nodejs.org/) 16.13.0 or higher
+- [FFMPEG](https://ffmpeg.org/)
 
 ### Development environment
 

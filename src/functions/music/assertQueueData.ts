@@ -1,13 +1,9 @@
-import type { Queue } from "discord-music-player";
+import type { GuildQueue } from "discord-player";
 
 import logger from "../../logger";
-import type QueueData from "../../structures/QueueData";
+import QueueData from "../../structures/QueueData";
 
-export interface QueueWithData extends Queue<QueueData> {
-  data: QueueData;
-  setData: (data: QueueData) => void;
-}
-
-export default function _(queue: Queue<unknown>): asserts queue is QueueWithData {
-  if (!queue.data) logger.error(new ReferenceError("Could not read Queue data structure!"));
+export default function _(queue: GuildQueue<unknown>): asserts queue is GuildQueue<QueueData> {
+  if (!(queue.metadata instanceof QueueData))
+    logger.error(new ReferenceError("Could not read GuildQueue data structure!"));
 }
