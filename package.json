@@ -22,8 +22,8 @@
     "postbuild": "run-func build/botConfig.js getConfigFile true",
     "predev": "prisma format && prisma generate",
     "dev": "nodemon",
-    "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write .",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
     "registerGlobal": "node build/registerGlobalCommands.js",
     "start": "node ."
   },
@@ -41,7 +41,7 @@
     "youtube-ext": "^1.1.14"
   },
   "devDependencies": {
-    "@types/node": "^20.7.0",
+    "@types/node": "^20.7.1",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
     "cross-env": "^7.0.3",
@@ -50,9 +50,9 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "nodemon": "^3.0.1",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.3",
     "prisma": "^5.3.1",
     "run-func": "^3.0.0",
     "ts-node": "^10.9.1",

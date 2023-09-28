@@ -5,5 +5,5 @@
   "endOfLine": "auto",
   "printWidth": 120,
   "useTabs": false,
-  "pluginSearchDirs": ["."]
+  "plugins": ["eslint-plugin-prettier"]
 }
