@@ -7,6 +7,7 @@ import type {
   GuildMember,
   InteractionReplyOptions,
   InteractionUpdateOptions,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from "discord.js";
 import {
   ActionRowBuilder,
@@ -32,6 +33,13 @@ import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
 import logger from "./Logger";
+
+export enum DiscordAPIAction {
+  /** Update commands. Will NOT remove commands with names that are no longer in use! */
+  Register = 0,
+  /** Reset commands to empty. */
+  Reset = 1,
+}
 
 type SendMultiPageEmbedOptions = {
   maxFieldsPerEmbed: number;
@@ -119,7 +127,7 @@ export default class Client extends DiscordClient {
   /** Login to Discord API */
   async start(): Promise<void> {
     try {
-      if (this.devMode) await this.registerCommands();
+      if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
       await this.DB.connect();
       await this.player.extractors.loadDefault();
@@ -175,55 +183,77 @@ export default class Client extends DiscordClient {
   }
 
   /**
-   * Register command files with Discord API.
+   * Manage this bots registered commands with the Discord API.
    *
-   * MUST have run {@link Client.loadCommands() loadCommands()} first (runs in constructor)!
+   * This should typically ONLY BE RUN MANUALLY via npm scripts.
+   *
+   * Options are in {@link DiscordAPIAction}
    *
    * If `devMode` property is false, will register commands to all guilds/servers this bot is in (
    * {@link https://discordjs.guide/interactions/slash-commands.html#global-commands may take up to 1 hour to register changes})
    */
-  async registerCommands(): Promise<void> {
-    const commandDataArr = this.commands.map((command) => command.builder.toJSON());
+  async manageDiscordAPICommands(action: DiscordAPIAction): Promise<void> {
+    let actionDescriptor: string;
+    let commandDataArr: RESTPostAPIChatInputApplicationCommandsJSONBody[];
+    switch (action) {
+      case DiscordAPIAction.Register: {
+        if (this.commands.size < 1) {
+          throw new Error(`Must run Client.loadCommands() first (runs in constructor)!`);
+        }
 
-    logger.info("Registering commands with Discord API", {
-      commands: { raw: this.commands, json: commandDataArr },
-    });
+        actionDescriptor = "register";
+        commandDataArr = this.commands.map((command) => command.builder.toJSON());
+
+        logger.info("Registering commands with Discord API", {
+          commands: { raw: this.commands, json: commandDataArr },
+        });
+        break;
+      }
+      case DiscordAPIAction.Reset: {
+        actionDescriptor = "reset";
+        commandDataArr = [];
+
+        logger.info("Resetting commands with Discord API");
+        break;
+      }
+      default: {
+        throw new Error(`Invalid action type!`);
+      }
+    }
 
     const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 
     try {
       if (this.devMode) {
-        // Instantly register to test guild
-        logger.info(`\tDEVELOPMENT MODE. Only registering in guild with "TEST_GUILD_ID" environment variable`);
+        logger.info(`\tDEVELOPMENT MODE. Only working in guild with "TEST_GUILD_ID" environment variable`);
 
-        // Can cast `TEST_GUILD_ID` to string since it is verified in constructor
+        // Can cast `TEST_GUILD_ID` to string since it is verified in constructor and this is a non-static method
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.TEST_GUILD_ID!);
 
-        // Add all new/updated commands. Does NOT remove no longer used commands!
         await rest.put(fullRoute, {
           body: commandDataArr,
         });
       } else {
-        // Register globally, can take up to one hour to register changes
-        logger.info("\tPRODUCTION MODE. Registering to any server this bot is in");
+        logger.info(
+          "\tPRODUCTION MODE. Working on all server(s) this bot is in. Can take up to one hour to register changes"
+        );
 
         const fullRoute = Routes.applicationCommands(process.env.CLIENT_ID);
 
-        // Add all new/updated commands
         await rest.put(fullRoute, {
           body: commandDataArr,
         });
       }
 
       logger.info(
-        `\tSuccessfully registered ${
+        `\tSuccessfully ${actionDescriptor} ${
           this.devMode ? "test guild development" : "global production"
         } commands with Discord API!`
       );
     } catch (error) {
       logger.error(error);
-      logger.error(new Error("Errored attempting to register commands with Discord API!"));
+      logger.error(new Error(`Errored attempting to ${actionDescriptor} commands with Discord API!`));
     }
   }
 

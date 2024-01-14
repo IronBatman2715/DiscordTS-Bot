@@ -24,7 +24,9 @@
     "dev": "nodemon",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "registerGlobal": "node build/registerGlobalCommands.js",
+    "commands:register": "node build/scripts/discordAPI/registerCommands.js",
+    "commands:resetDev": "cross-env NODE_ENV=development ts-node --files src/scripts/discordAPI/resetCommands.ts --enable-source-maps",
+    "commands:resetProd": "node build/scripts/discordAPI/resetCommands.js",
     "start": "node ."
   },
   "dependencies": {
