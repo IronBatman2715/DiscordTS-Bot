@@ -1,7 +1,7 @@
 import { useQueue } from "discord-player";
 import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 
-import logger from "../../logger";
+import logger from "../../structures/Logger";
 import type QueueData from "../../structures/QueueData";
 
 /** Get Discord Player queue for corresponding guildId (if exists) */

@@ -3,8 +3,8 @@ import { SlashCommandBuilder } from "discord.js";
 
 import tempMessage from "../../functions/discord/tempMessage";
 import { isInRange } from "../../functions/general/math";
-import logger from "../../logger";
 import Command from "../../structures/Command";
+import logger from "../../structures/Logger";
 
 export = new Command(
   new SlashCommandBuilder()

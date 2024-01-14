@@ -1,6 +1,6 @@
 import assertQueueData from "../../functions/music/assertQueueData";
-import logger from "../../logger";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
+import logger from "../../structures/Logger";
 
 export = new MusicPlayerGuildQueueEvent("emptyQueue", async (queue) => {
   assertQueueData(queue);

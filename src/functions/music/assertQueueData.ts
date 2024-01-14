@@ -1,6 +1,6 @@
 import type { GuildQueue } from "discord-player";
 
-import logger from "../../logger";
+import logger from "../../structures/Logger";
 import QueueData from "../../structures/QueueData";
 
 export default function _(queue: GuildQueue<unknown>): asserts queue is GuildQueue<QueueData> {

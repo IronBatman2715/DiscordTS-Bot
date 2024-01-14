@@ -1,8 +1,8 @@
 import { MessageFlags } from "discord.js";
 
 import assertQueueData from "../../functions/music/assertQueueData";
-import logger from "../../logger";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
+import logger from "../../structures/Logger";
 
 export = new MusicPlayerGuildQueueEvent("audioTrackAdd", async (queue, track) => {
   assertQueueData(queue);

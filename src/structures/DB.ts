@@ -2,8 +2,8 @@ import type { GuildConfig } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 
 import { guildConfigDefaults } from "../database/GuildConfig";
-import logger from "../logger";
 import type { PrismaEvents, PrismaRunFunction } from "./Event";
+import logger from "./Logger";
 
 const prisma = new PrismaClient({
   log: [

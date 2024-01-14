@@ -1,4 +1,4 @@
-import logger from "../../logger";
+import logger from "../../structures/Logger";
 import { isNaturalNumber } from "./math";
 
 export default (num: number) => {

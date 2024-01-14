@@ -1,6 +1,3 @@
-// import first so .env files are handled first
-import logger from "../logger";
-
 import { Player } from "discord-player";
 import type {
   CacheType,
@@ -34,6 +31,7 @@ import camelCase2Display from "../functions/general/camelCase2Display";
 import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
+import logger from "./Logger";
 
 type SendMultiPageEmbedOptions = {
   maxFieldsPerEmbed: number;

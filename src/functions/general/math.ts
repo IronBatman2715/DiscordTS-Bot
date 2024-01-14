@@ -1,4 +1,4 @@
-import logger from "../../logger";
+import logger from "../../structures/Logger";
 
 /**
  * Evaluate if `value` is between `min` and `max` (inclusive).

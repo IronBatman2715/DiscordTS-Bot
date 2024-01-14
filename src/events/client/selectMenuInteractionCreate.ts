@@ -1,8 +1,8 @@
 import type { EmbedField } from "discord.js";
 
-import logger from "../../logger";
 import Client from "../../structures/Client";
 import { ClientEvent } from "../../structures/Event";
+import logger from "../../structures/Logger";
 
 export = new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isStringSelectMenu()) {
