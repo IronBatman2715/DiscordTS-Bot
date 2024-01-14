@@ -5,5 +5,5 @@
   "endOfLine": "auto",
   "printWidth": 120,
   "useTabs": false,
-  "plugins": ["eslint-plugin-prettier"]
+  "plugins": ["eslint-plugin-prettier", "prettier-plugin-organize-imports"]
 }

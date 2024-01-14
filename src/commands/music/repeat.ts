@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
 import { QueueRepeatMode } from "discord-player";
+import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
 import getQueue from "../../functions/music/getQueue";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder()

@@ -1,6 +1,6 @@
-import type { Awaitable, ClientEvents } from "discord.js";
 import type { Prisma } from "@prisma/client";
 import type { GuildQueueEvents, PlayerEvents } from "discord-player";
+import type { Awaitable, ClientEvents } from "discord.js";
 
 import type Client from "./Client";
 

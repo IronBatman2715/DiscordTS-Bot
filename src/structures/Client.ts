@@ -1,39 +1,39 @@
 // import first so .env files are handled first
 import logger from "../logger";
 
-import { readdirSync } from "fs";
-import { resolve } from "path";
-import {
-  Client as DiscordClient,
-  Collection,
-  GatewayIntentBits,
-  Colors,
-  ButtonStyle,
-  ActionRowBuilder,
-  ButtonBuilder,
-  EmbedBuilder,
-  PermissionsBitField,
-  Routes,
-  REST,
-} from "discord.js";
+import { Player } from "discord-player";
 import type {
   CacheType,
-  GuildMember,
+  ChatInputCommandInteraction,
   EmbedData,
   EmbedField,
+  GuildMember,
   InteractionReplyOptions,
   InteractionUpdateOptions,
-  ChatInputCommandInteraction,
 } from "discord.js";
-import { Player } from "discord-player";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Collection,
+  Colors,
+  Client as DiscordClient,
+  EmbedBuilder,
+  GatewayIntentBits,
+  PermissionsBitField,
+  REST,
+  Routes,
+} from "discord.js";
+import { readdirSync } from "fs";
+import { resolve } from "path";
 
+import type { BotConfig } from "../botConfig";
+import { defaultBotConfig, getConfigFile } from "../botConfig";
+import isUser from "../functions/discord/isUser";
+import camelCase2Display from "../functions/general/camelCase2Display";
 import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
-import camelCase2Display from "../functions/general/camelCase2Display";
-import isUser from "../functions/discord/isUser";
-import { defaultBotConfig, getConfigFile } from "../botConfig";
-import type { BotConfig } from "../botConfig";
 
 type SendMultiPageEmbedOptions = {
   maxFieldsPerEmbed: number;

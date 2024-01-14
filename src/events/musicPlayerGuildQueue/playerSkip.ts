@@ -1,5 +1,5 @@
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
 import assertQueueData from "../../functions/music/assertQueueData";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
 
 export = new MusicPlayerGuildQueueEvent("playerSkip", async (queue, track) => {
   assertQueueData(queue);

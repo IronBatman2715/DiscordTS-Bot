@@ -1,5 +1,5 @@
-import { QueueRepeatMode } from "discord-player";
 import type { GuildConfig } from "@prisma/client";
+import { QueueRepeatMode } from "discord-player";
 
 export const guildConfigDefaults: Omit<GuildConfig, "guildId" | "id"> = {
   greetings: [

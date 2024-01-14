@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
 import getQueue from "../../functions/music/getQueue";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder().setName("shuffle").setDescription("Shuffles the tracks currently in the music queue."),

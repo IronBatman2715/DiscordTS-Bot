@@ -1,8 +1,8 @@
-import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 import { useQueue } from "discord-player";
+import type { CacheType, ChatInputCommandInteraction } from "discord.js";
 
-import type QueueData from "../../structures/QueueData";
 import logger from "../../logger";
+import type QueueData from "../../structures/QueueData";
 
 /** Get Discord Player queue for corresponding guildId (if exists) */
 export default async (interaction: ChatInputCommandInteraction<CacheType>, updateLatestInteraction = false) => {

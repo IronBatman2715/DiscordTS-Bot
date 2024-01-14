@@ -1,5 +1,5 @@
-import { Colors, SlashCommandBuilder } from "discord.js";
 import type { GuildMember } from "discord.js";
+import { Colors, SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command";
 

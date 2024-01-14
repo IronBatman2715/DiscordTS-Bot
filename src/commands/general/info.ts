@@ -1,9 +1,9 @@
-import { ActivityType, SlashCommandBuilder } from "discord.js";
 import type { EmbedField } from "discord.js";
+import { ActivityType, SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
-import camelCase2Display from "../../functions/general/camelCase2Display";
 import type { ActivitiesOptions } from "../../botConfig";
+import camelCase2Display from "../../functions/general/camelCase2Display";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder().setName("info").setDescription("Shows information about this bot."),

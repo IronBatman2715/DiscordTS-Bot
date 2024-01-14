@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from "discord.js";
 import type { TextChannel } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
-import { isInRange } from "../../functions/general/math";
 import tempMessage from "../../functions/discord/tempMessage";
+import { isInRange } from "../../functions/general/math";
 import logger from "../../logger";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder()

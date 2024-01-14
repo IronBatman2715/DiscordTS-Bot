@@ -1,5 +1,5 @@
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
 import logger from "../../logger";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
 
 export = new MusicPlayerGuildQueueEvent("playerError", async (queue, error) => {
   // Emitted when the audio player errors while streaming audio track

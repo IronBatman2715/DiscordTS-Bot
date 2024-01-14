@@ -1,9 +1,9 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { ActivityType } from "discord.js";
-import Ajv from "ajv";
 import type { JSONSchemaType } from "ajv";
-import addFormats from "ajv-formats";
+import Ajv from "ajv";
 import addErrors from "ajv-errors";
+import addFormats from "ajv-formats";
+import { ActivityType } from "discord.js";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 
 export type ActivitiesOptions = {
   /** String after type string */

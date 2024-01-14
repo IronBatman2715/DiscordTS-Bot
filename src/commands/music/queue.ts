@@ -1,9 +1,9 @@
-import { SlashCommandBuilder } from "discord.js";
-import type { EmbedField } from "discord.js";
 import { QueueRepeatMode } from "discord-player";
+import type { EmbedField } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
 import getQueue from "../../functions/music/getQueue";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder().setName("queue").setDescription("Display music queue."),

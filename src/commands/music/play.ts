@@ -1,9 +1,9 @@
 import { GuildMember, SlashCommandBuilder } from "discord.js";
 
 import getQueue from "../../functions/music/getQueue";
+import logger from "../../logger";
 import Command from "../../structures/Command";
 import QueueData from "../../structures/QueueData";
-import logger from "../../logger";
 
 export = new Command(
   new SlashCommandBuilder()

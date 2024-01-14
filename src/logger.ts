@@ -1,6 +1,6 @@
 import { config } from "dotenv";
-import { format, createLogger, transports } from "winston";
 import type { Logger } from "winston";
+import { createLogger, format, transports } from "winston";
 
 import { defaultBotConfig, getConfigFile } from "./botConfig";
 

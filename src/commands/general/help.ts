@@ -1,8 +1,8 @@
-import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
 import type { SelectMenuComponentOptionData } from "discord.js";
+import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
 import logger from "../../logger";
+import Command from "../../structures/Command";
 
 export = new Command(
   new SlashCommandBuilder().setName("help").setDescription("Show a list of available commands."),

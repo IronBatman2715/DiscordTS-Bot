@@ -1,4 +1,4 @@
-import type { Message, ChatInputCommandInteraction, CacheType } from "discord.js";
+import type { CacheType, ChatInputCommandInteraction, Message } from "discord.js";
 
 import logger from "../../logger";
 import { isNaturalNumber } from "../general/math";

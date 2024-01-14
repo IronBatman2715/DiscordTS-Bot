@@ -1,12 +1,12 @@
-import { SlashCommandBuilder } from "discord.js";
-import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
 import { QueueRepeatMode } from "discord-player";
+import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
-import type Client from "../../structures/Client";
-import Command from "../../structures/Command";
+import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
 import camelCase2KebabCase from "../../functions/general/camelCase2KebabCase";
 import kebabCase2CamelCase from "../../functions/general/kebabCase2CamelCase";
-import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
+import type Client from "../../structures/Client";
+import Command from "../../structures/Command";
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
