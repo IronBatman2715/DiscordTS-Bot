@@ -28,7 +28,7 @@ import { resolve } from "path";
 import type { BotConfig } from "../botConfig";
 import { defaultBotConfig, getConfigFile } from "../botConfig";
 import isUser from "../functions/discord/isUser";
-import camelCase2Display from "../functions/general/camelCase2Display";
+import { camel2Display } from "../functions/general/strings";
 import type Command from "./Command";
 import DB from "./DB";
 import type BaseEvent from "./Event";
@@ -155,7 +155,7 @@ export default class Client extends DiscordClient {
       // Omit this subDir if there are no valid files within it
       // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
       if ((subDir !== "dev" || this.devMode) && files.length > 0) {
-        logger.info(`\t${camelCase2Display(subDir)}`);
+        logger.info(`\t${camel2Display(subDir)}`);
 
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
@@ -270,7 +270,7 @@ export default class Client extends DiscordClient {
 
       // Omit this subDir if there are no valid files within it
       if (files.length > 0) {
-        logger.info(`\t${camelCase2Display(subDir)}`);
+        logger.info(`\t${camel2Display(subDir)}`);
 
         files.forEach((file) => {
           const eventFilePath = resolve(eventsSubDir, file);

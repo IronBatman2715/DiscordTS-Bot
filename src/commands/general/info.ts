@@ -2,7 +2,7 @@ import type { EmbedField } from "discord.js";
 import { ActivityType, SlashCommandBuilder } from "discord.js";
 
 import type { ActivitiesOptions } from "../../botConfig";
-import camelCase2Display from "../../functions/general/camelCase2Display";
+import { camel2Display } from "../../functions/general/strings";
 import Command from "../../structures/Command";
 
 export = new Command(
@@ -25,7 +25,7 @@ export = new Command(
       }
 
       return {
-        name: camelCase2Display(key),
+        name: camel2Display(key),
         value: formattedValue,
         inline: false,
       };
