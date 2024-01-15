@@ -19,5 +19,3 @@ export const isInRange = (value: number, min = 1, max = Number.MAX_SAFE_INTEGER)
 export const isNaturalNumber = (value: number): boolean => {
   return Number.isInteger(value) && isInRange(value);
 };
-
-export default { isInRange, isNaturalNumber };
