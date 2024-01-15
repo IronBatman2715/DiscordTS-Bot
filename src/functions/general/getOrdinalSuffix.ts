@@ -1,24 +1,36 @@
 import logger from "../../structures/Logger";
 import { isNaturalNumber } from "./math";
 
-export default (num: number) => {
+const enOrdinalRules = new Intl.PluralRules("en", { type: "ordinal" });
+const suffixes = {
+  one: "st",
+  two: "nd",
+  few: "rd",
+  other: "th",
+};
+
+/** Get the ordinal suffix corresponding to the entered natural number.
+ *
+ *  Ex:
+ *  - 1 -> "st"
+ *  - 102 -> "nd"
+ *  - 23 -> "rd"
+ *  - 11 -> "th"
+ */
+export default (num: number): string => {
   if (!isNaturalNumber(num)) {
-    logger.warn(new RangeError("getOrdinalSuffix received an invalid number! Returning `th`."));
+    logger.warn(new RangeError(`getOrdinalSuffix received an invalid number! Returning "th".`));
     return "th";
   }
 
-  switch (num) {
-    case 1: {
-      return "st";
-    }
-    case 2: {
-      return "nd";
-    }
-    case 3: {
-      return "rd";
-    }
-    default: {
-      return "th";
-    }
+  const category = enOrdinalRules.select(num);
+
+  if (category === "zero" || category === "many") {
+    logger.warn(
+      new Error(`getOrdinalSuffix received an unexpected ordinal rule (${num} -> ${category})! Returning "th".`)
+    );
+    return "th";
   }
+
+  return suffixes[category];
 };
