@@ -38,12 +38,14 @@
     "discord-player": "^6.6.7",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
+    "lodash": "^4.17.21",
     "mediaplex": "^0.0.9",
     "winston": "^3.11.0",
     "youtube-ext": "^1.1.16"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.5",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.24",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",

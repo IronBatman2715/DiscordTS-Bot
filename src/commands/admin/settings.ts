@@ -1,9 +1,9 @@
 import { QueueRepeatMode } from "discord-player";
 import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
+import { camelCase, kebabCase } from "lodash";
 
 import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
-import { camel2Kebab, kebab2Camel } from "../../functions/general/strings";
 import type Client from "../../structures/Client";
 import Command from "../../structures/Command";
 
@@ -24,7 +24,7 @@ builder
   // maxMessagesCleared
   .addSubcommand((option) =>
     option
-      .setName(camel2Kebab(guildConfigSettings[0]))
+      .setName(kebabCase(guildConfigSettings[0]))
       .setDescription(guildConfigDescriptions[guildConfigSettings[0]])
       .addIntegerOption((subOption) =>
         subOption
@@ -38,7 +38,7 @@ builder
   // musicChannelId
   .addSubcommandGroup((groupOption) =>
     groupOption
-      .setName(camel2Kebab(guildConfigSettings[1]))
+      .setName(kebabCase(guildConfigSettings[1]))
       .setDescription(guildConfigDescriptions[guildConfigSettings[1]])
       .addSubcommand((option) =>
         option
@@ -55,7 +55,7 @@ builder
   // defaultRepeatMode
   .addSubcommand((option) =>
     option
-      .setName(camel2Kebab(guildConfigSettings[2]))
+      .setName(kebabCase(guildConfigSettings[2]))
       .setDescription(guildConfigDescriptions[guildConfigSettings[2]])
       .addIntegerOption((subOption) =>
         subOption
@@ -94,7 +94,7 @@ export = new Command(builder, async (client, interaction) => {
 
   // Check subcommand groups (For now, this can only be music-channel-id)
   if (interaction.options.getSubcommandGroup(false) === "music-channel-id") {
-    newSettingData.name = kebab2Camel(interaction.options.getSubcommandGroup(true));
+    newSettingData.name = camelCase(interaction.options.getSubcommandGroup(true));
 
     switch (interaction.options.getSubcommand(true)) {
       case "overwrite": {
@@ -118,7 +118,7 @@ export = new Command(builder, async (client, interaction) => {
   switch (interaction.options.getSubcommand()) {
     case "max-messages-cleared":
     case "default-repeat-mode": {
-      newSettingData.name = kebab2Camel(interaction.options.getSubcommand());
+      newSettingData.name = camelCase(interaction.options.getSubcommand());
       newSettingData.value = interaction.options.getInteger("new-value", true);
 
       return await changeSetting(client, interaction, newSettingData);
@@ -172,7 +172,7 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
     };
 
     const settingDisplay: SettingDisplay = {
-      name: camel2Kebab(settingData.name),
+      name: kebabCase(settingData.name),
       value: getSettingDisplayValue(settingData),
     };
 
@@ -217,7 +217,7 @@ async function changeSetting(
   });
 
   const newSettingDisplay: SettingDisplay = {
-    name: camel2Kebab(newSettingData.name),
+    name: kebabCase(newSettingData.name),
     value: getSettingDisplayValue(newSettingData),
   };
 
