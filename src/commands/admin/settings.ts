@@ -72,60 +72,56 @@ builder
   );
 
 export = new Command(builder, async (client, interaction) => {
-  // Check for no user input subcommands
-  switch (interaction.options.getSubcommand()) {
-    // User wants to see current settings
+  const subCommandQuery = interaction.options.getSubcommand(false);
+  const subCommandGroupQuery = interaction.options.getSubcommandGroup(false);
+
+  // Check subcommand groups (For now, this can only be "music-channel-id")
+  switch (subCommandGroupQuery) {
+    case "music-channel-id": {
+      const name = camelCase(subCommandGroupQuery);
+      switch (subCommandQuery) {
+        case "overwrite": {
+          return await changeSetting(client, interaction, {
+            name,
+            value: interaction.options.getChannel("new-value", true).id,
+          });
+        }
+
+        case "disable": {
+          return await changeSetting(client, interaction, {
+            name,
+            value: "",
+          });
+        }
+
+        default: {
+          throw new ReferenceError(`Could not match subcommand within "music-channel-id" subcommand group`);
+        }
+      }
+    }
+  }
+
+  // Check subcommands
+  switch (subCommandQuery) {
     case "display": {
       return await displayCurrentSettings(client, interaction);
     }
 
-    // User wants to reset settings
     case "reset": {
       // Add in user confirmation..?
       return await resetSettings(client, interaction);
     }
-  }
 
-  // User must have entered a change to a setting, proceed to determine which setting is to be changed
-  const newSettingData: SettingData = {
-    name: "",
-    value: "",
-  };
-
-  // Check subcommand groups (For now, this can only be music-channel-id)
-  if (interaction.options.getSubcommandGroup(false) === "music-channel-id") {
-    newSettingData.name = camelCase(interaction.options.getSubcommandGroup(true));
-
-    switch (interaction.options.getSubcommand(true)) {
-      case "overwrite": {
-        newSettingData.value = interaction.options.getChannel("new-value", true).id;
-
-        return await changeSetting(client, interaction, newSettingData);
-      }
-
-      case "disable": {
-        return await changeSetting(client, interaction, newSettingData);
-      }
-
-      // Could not match
-      default: {
-        throw new ReferenceError("Could not match subcommand within subcommand group");
-      }
-    }
-  }
-
-  // Interaction did not have a subcommand group, must be a single subcommand
-  switch (interaction.options.getSubcommand()) {
     case "max-messages-cleared":
     case "default-repeat-mode": {
-      newSettingData.name = camelCase(interaction.options.getSubcommand());
-      newSettingData.value = interaction.options.getInteger("new-value", true);
-
-      return await changeSetting(client, interaction, newSettingData);
+      return await changeSetting(client, interaction, {
+        name: camelCase(subCommandQuery),
+        value: interaction.options.getInteger("new-value", true),
+      });
     }
 
     default: {
-      throw new ReferenceError("Could not find the command the user entered!");
+      throw new ReferenceError("Could not parse the command the user entered!");
     }
   }
 });
