@@ -1,10 +1,4 @@
-import type {
-  Awaitable,
-  CacheType,
-  ChatInputCommandInteraction,
-  SlashCommandBuilder,
-  SlashCommandSubcommandsOnlyBuilder,
-} from "discord.js";
+import type { Awaitable, CacheType, ChatInputCommandInteraction, SharedSlashCommand } from "discord.js";
 
 import Client from "./Client";
 
@@ -12,7 +6,7 @@ type RunFunction = {
   (client: Client, interaction: ChatInputCommandInteraction<CacheType>): Awaitable<unknown>;
 };
 
-type Builder = Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand"> | SlashCommandSubcommandsOnlyBuilder;
+type Builder = SharedSlashCommand;
 
 export default class Command {
   private _category: string;
