@@ -34,9 +34,10 @@ export default class DB {
    */
   async connect() {
     if (!this.hasDoneInitialConnection) {
+      logger.info("Initializing connection to database...");
       await prisma.$connect();
       this.hasDoneInitialConnection = true;
-      logger.info("Successfully completed initial connection to database");
+      logger.info("Successfully completed initial connection to database!");
     } else {
       logger.warn(
         "Do not need to explicitly connect to the database! Refer to: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect"
@@ -50,8 +51,9 @@ export default class DB {
    */
   async disconnect() {
     try {
+      logger.info("Disconnecting from database...");
       await prisma.$disconnect();
-      logger.info("Disconnected from DB!");
+      logger.info("Successfully disconnected from database!");
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Errored trying to disconnect from database!"));

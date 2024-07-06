@@ -70,7 +70,7 @@ export default class Client extends DiscordClient {
 
   private constructor() {
     try {
-      logger.info("*** DISCORD.JS BOT: INITIALIZATION ***");
+      logger.info("*** DISCORD.JS BOT: CONSTRUCTION ***");
 
       super({
         intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
@@ -113,26 +113,27 @@ export default class Client extends DiscordClient {
       // Load events
       this.loadEvents();
 
-      // Load & Register commands
+      // Load commands
       this.loadCommands();
 
-      logger.info("*** DISCORD.JS BOT: INITIALIZATION DONE ***");
+      logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
     } catch (error) {
       logger.error(error);
-      logger.error(new Error("Could not initialize the bot!"));
+      logger.error(new Error("Could not construct bot!"));
       process.exit(1);
     }
   }
 
-  /** Login to Discord API */
+  /** Start bot by connecting to external server(s). Namely, Discord itself */
   async start(): Promise<void> {
     try {
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
       await this.DB.connect();
+      logger.info("Loading discord player extractors");
       await this.player.extractors.loadDefault();
 
-      logger.info("Logging in... ");
+      logger.info("Logging into Discord... ");
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
       logger.error(error);
