@@ -216,5 +216,3 @@ export const defaultBotConfig: BotConfig = {
     },
   ],
 };
-
-export default defaultBotConfig;
