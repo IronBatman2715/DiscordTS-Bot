@@ -87,7 +87,7 @@ export function getConfigFile(overwrite = false): BotConfig {
       try {
         writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
       } catch (error) {
-        throw Error(`Could not generate "config.json"`);
+        throw new Error(`Could not generate "config.json"`);
       }
 
       console.info(`Successfully generated "config.json"\n`);

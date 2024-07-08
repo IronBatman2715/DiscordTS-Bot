@@ -17,7 +17,7 @@ export = new Command(
     ),
   async (client, interaction) => {
     if (!(interaction.member instanceof GuildMember))
-      throw TypeError("Expected `interaction.member` to be of type `GuildMember`");
+      throw new TypeError("Expected `interaction.member` to be of type `GuildMember`");
 
     // Check if user is currently in a voice channel
     if (!interaction.member.voice.channel) {
