@@ -28,6 +28,7 @@ import { resolve } from "path";
 import type { BotConfig } from "../botConfig";
 import { defaultBotConfig, getConfigFile } from "../botConfig";
 import isUser from "../functions/discord/isUser";
+import { isDevEnvironment } from "../functions/general/environment";
 import { camel2Display } from "../functions/general/strings";
 import type Command from "./Command";
 import DB from "./DB";
@@ -77,7 +78,7 @@ export default class Client extends DiscordClient {
         allowedMentions: { repliedUser: false },
       });
 
-      this.devMode = process.env.NODE_ENV === "development";
+      this.devMode = isDevEnvironment();
       this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
 
       logger.info("Verifying environment variables are set... ");

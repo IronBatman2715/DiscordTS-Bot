@@ -3,6 +3,7 @@ import type { Logger as WinstonLogger } from "winston";
 import { createLogger, format, transports } from "winston";
 
 import { defaultBotConfig, getConfigFile } from "../botConfig";
+import { isDevEnvironment } from "../functions/general/environment";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
 
@@ -21,7 +22,7 @@ export class Logger {
   }
 
   private constructor() {
-    if (process.env.NODE_ENV === "development") {
+    if (isDevEnvironment()) {
       // Load "development.env"
       config({ path: "development.env" });
 
