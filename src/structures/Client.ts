@@ -79,9 +79,12 @@ export default class Client extends DiscordClient {
       });
 
       this.devMode = isDevEnvironment();
-      this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
+      logger.info(`Loading in ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`);
 
-      logger.info("Verifying environment variables are set... ");
+      this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
+      logger.verbose(`Bot version: ${this.version}`);
+
+      logger.verbose("Verifying environment variables are set... ");
 
       // Always required environment variables
       if (process.env.DISCORD_TOKEN === undefined)
@@ -109,15 +112,16 @@ export default class Client extends DiscordClient {
 
       this.player = new Player(this);
 
-      // Load config
-      this.config = this.devMode ? defaultBotConfig : getConfigFile();
+      if (this.devMode) {
+        this.config = defaultBotConfig;
+        logger.info(`Loaded default config`);
+      } else {
+        logger.info("Loading config file");
+        this.config = getConfigFile();
+        logger.info(`Loaded config for "${this.config.name}"`);
+      }
 
-      logger.info(`Loading ${this.config.name}@${this.version}: ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`);
-
-      // Load events
       this.loadEvents();
-
-      // Load commands
       this.loadCommands();
 
       logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
@@ -148,7 +152,7 @@ export default class Client extends DiscordClient {
 
   /** Load slash commands */
   private loadCommands(): void {
-    logger.info("Commands:");
+    logger.info("Loading commands");
 
     const commandsDir = resolve(__dirname, "../commands");
 
@@ -160,7 +164,7 @@ export default class Client extends DiscordClient {
       // Omit this subDir if there are no valid files within it
       // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
       if ((subDir !== "dev" || this.devMode) && files.length > 0) {
-        logger.info(`\t${camel2Display(subDir)}`);
+        logger.verbose(`\t${camel2Display(subDir)}`);
 
         files.forEach((file) => {
           const commandFilePath = resolve(commandsSubDir, file);
@@ -181,10 +185,12 @@ export default class Client extends DiscordClient {
 
           this.commands.set(command.builder.name, command);
 
-          logger.info(`\t\t${command.builder.name}`);
+          logger.verbose(`\t\t${command.builder.name}`);
         });
       }
     });
+
+    logger.verbose("Successfully loaded commands");
   }
 
   /**
@@ -264,7 +270,7 @@ export default class Client extends DiscordClient {
 
   /** Load events */
   private loadEvents(): void {
-    logger.info("Events:");
+    logger.info("Loading events");
 
     const eventsDir = resolve(__dirname, "../events");
 
@@ -275,7 +281,7 @@ export default class Client extends DiscordClient {
 
       // Omit this subDir if there are no valid files within it
       if (files.length > 0) {
-        logger.info(`\t${camel2Display(subDir)}`);
+        logger.verbose(`\t${camel2Display(subDir)}`);
 
         files.forEach((file) => {
           const eventFilePath = resolve(eventsSubDir, file);
@@ -288,13 +294,15 @@ export default class Client extends DiscordClient {
           event.bindToEventEmitter(this);
 
           if (event.event !== eventFileName) {
-            logger.info(`\t\t"${eventFileName}" -> ${event.event}`);
+            logger.verbose(`\t\t"${eventFileName}" -> ${event.event}`);
           } else {
-            logger.info(`\t\t${eventFileName}`);
+            logger.verbose(`\t\t${eventFileName}`);
           }
         });
       }
     });
+
+    logger.verbose("Successfully loaded events");
   }
 
   /** Generate embed with default values and check for valid data
