@@ -47,8 +47,8 @@
     "@types/eslint": "^8.56.10",
     "@types/lodash": "^4.17.6",
     "@types/node": "^20.14.10",
-    "@typescript-eslint/eslint-plugin": "^7.15.0",
-    "@typescript-eslint/parser": "^7.15.0",
+    "@typescript-eslint/eslint-plugin": "^7.16.0",
+    "@typescript-eslint/parser": "^7.16.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -66,6 +66,6 @@
     "typescript": "5.5.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.18"
   }
 }
