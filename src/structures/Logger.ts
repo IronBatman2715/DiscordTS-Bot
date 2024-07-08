@@ -27,8 +27,9 @@ export class Logger {
       config({ path: "development.env" });
 
       // Initialize development logger
+      const { name } = defaultBotConfig;
       Logger.instance = createLogger({
-        defaultMeta: { service: `${defaultBotConfig.name}@${version}-dev` },
+        defaultMeta: { service: `${name}@${version}-dev` },
         format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
         level: "debug",
         transports: [
