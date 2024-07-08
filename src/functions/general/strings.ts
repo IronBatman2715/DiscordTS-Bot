@@ -9,3 +9,11 @@ export function camel2Display(str: string): string {
     })
     .join(""); //join character array back into string
 }
+
+/** Test if a string contains *only* digits in base 10.
+ *
+ * Ex: "1234567890987654321"
+ */
+export function isOnlyDigits(str: string): boolean {
+  return /^\d+$/.test(str);
+}
