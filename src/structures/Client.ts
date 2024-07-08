@@ -103,6 +103,9 @@ export default class Client extends DiscordClient {
         }
       }
       logger.info("Successfully verified that environment variables are set!");
+      logger.warn(
+        "Note that environment variable *values* can NOT be verified. They may still error at first use if the value(s) are invalid!"
+      );
 
       this.player = new Player(this);
 
