@@ -65,6 +65,11 @@
     "tslib": "^2.6.3",
     "typescript": "5.5.3"
   },
+  "overrides": {
+    "eslint": {
+      "file-entry-cache": "8.x"
+    }
+  },
   "engines": {
     "node": ">=18.18"
   }
