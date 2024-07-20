@@ -101,7 +101,7 @@ export default class Client extends DiscordClient {
       if (process.env.CLIENT_ID === undefined) {
         throw new ReferenceError("CLIENT_ID environment variable was not set!");
       } else {
-        // Validate type of CLIENT_ID
+        // Validate form of CLIENT_ID
         if (!isOnlyDigits(process.env.CLIENT_ID)) {
           throw new TypeError("CLIENT_ID environment variable must contain only digits!");
         }
@@ -112,7 +112,7 @@ export default class Client extends DiscordClient {
         if (process.env.TEST_GUILD_ID === undefined) {
           throw new ReferenceError("TEST_GUILD_ID environment variable was not set!");
         } else {
-          // Validate type of TEST_GUILD_ID
+          // Validate form of TEST_GUILD_ID
           if (!isOnlyDigits(process.env.TEST_GUILD_ID)) {
             throw new TypeError("TEST_GUILD_ID environment variable must contain only digits!");
           }
@@ -120,7 +120,7 @@ export default class Client extends DiscordClient {
         if (process.env.DEV_IDS === undefined || process.env.DEV_IDS === "") {
           throw new ReferenceError("Must set at least one discord userId to DEV_IDS!");
         } else {
-          // Parse and validate type of DEV_IDS
+          // Parse and validate form of DEV_IDS
           const devIds = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
           for (const devId of devIds) {
             if (!isOnlyDigits(devId)) {
@@ -130,7 +130,7 @@ export default class Client extends DiscordClient {
           this.devIds = devIds;
         }
       }
-      logger.verbose("Successfully verified that environment variables are set with correct type(s)!");
+      logger.verbose("Successfully verified that environment variables are set in a valid form!");
       logger.warn(
         "Note that environment variable *values* can NOT be verified. They may still error at first use if the value(s) are invalid!"
       );
