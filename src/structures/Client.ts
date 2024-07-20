@@ -22,6 +22,7 @@ import {
   REST,
   Routes,
 } from "discord.js";
+import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { resolve } from "path";
 
@@ -84,6 +85,13 @@ export default class Client extends DiscordClient {
       this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
       logger.verbose(`Bot version: ${this.version}`);
 
+      logger.verbose("Loading environment variables from file");
+      if (this.devMode) {
+        config({ path: "development.env" });
+      } else {
+        config({ path: ".env" });
+      }
+
       logger.verbose("Verifying environment variables are set... ");
 
       // Always required environment variables
@@ -122,7 +130,7 @@ export default class Client extends DiscordClient {
           this.devIds = devIds;
         }
       }
-      logger.info("Successfully verified that environment variables are set with correct type(s)!");
+      logger.verbose("Successfully verified that environment variables are set with correct type(s)!");
       logger.warn(
         "Note that environment variable *values* can NOT be verified. They may still error at first use if the value(s) are invalid!"
       );

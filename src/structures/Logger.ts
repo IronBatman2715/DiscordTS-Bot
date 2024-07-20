@@ -1,4 +1,3 @@
-import { config } from "dotenv";
 import type { Logger as WinstonLogger } from "winston";
 import { createLogger, format, transports } from "winston";
 
@@ -23,9 +22,6 @@ export class Logger {
 
   private constructor() {
     if (isDevEnvironment()) {
-      // Load "development.env"
-      config({ path: "development.env" });
-
       // Initialize development logger
       const { name } = defaultBotConfig;
       Logger.instance = createLogger({
@@ -46,9 +42,6 @@ export class Logger {
         ],
       });
     } else {
-      // Load ".env"
-      config({ path: ".env" });
-
       // Initialize production logger
       const { name } = getConfigFile();
       Logger.instance = createLogger({
