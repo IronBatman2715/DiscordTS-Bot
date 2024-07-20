@@ -28,7 +28,7 @@ export default class DB {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  /** Connects to database with `DB_URL` environment variable specified in schema.prisma file.
+  /** Connects to database with `DB_URL` environment variable specified in `prisma/schema.prisma` file.
    *
    * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect here})
    */

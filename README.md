@@ -26,7 +26,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    - Refer to the [discord.js guide](https://discordjs.guide) for directions. Specifically: [setting up your bot application](https://discordjs.guide/preparations/setting-up-a-bot-application) and then [adding it to server(s)](https://discordjs.guide/preparations/adding-your-bot-to-servers).
 
-   > It is recommended to use separate discord bot applications for development and production. Otherwise, it will be difficult to differentiate global commands from in development commands.
+   > It is recommended to use separate discord bot applications for development and production. This is for security reasons and because it can be difficult to differentiate global commands from in development commands otherwise.
 
 3. Setup your database of choice.
 
@@ -45,8 +45,6 @@ From here, follow the steps for your desired setup:
 
 5. Rename `sample.development.env` to `development.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
-   > Note that **all** the environment variables are strings.
-
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
 
    - `DB_URL` Database URL
@@ -61,7 +59,7 @@ From here, follow the steps for your desired setup:
 
    - `DEV_IDS` A list of developer discord user IDs (must set _at least_ one)
 
-     - IDs should be separated by `", "`. Ex: `DEV_IDS = DEV_ID1, DEV_ID2, DEV_ID3`.
+     - IDs should be separated by `", "`. Ex: `DEV_IDS='DEV_ID1, DEV_ID2, DEV_ID3'`.
 
 6. Run `npm ci` to do a clean install of dependencies and generate Prisma client files.
 
@@ -72,8 +70,6 @@ From here, follow the steps for your desired setup:
 ### Production environment
 
 5. Rename `sample.env` to `.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
-
-   > Note that **all** the environment variables are strings.
 
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
 
