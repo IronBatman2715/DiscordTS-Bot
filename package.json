@@ -30,25 +30,25 @@
     "start": "node ."
   },
   "dependencies": {
-    "@discord-player/extractor": "^4.5.0",
-    "@prisma/client": "^5.17.0",
+    "@discord-player/extractor": "^4.5.1",
+    "@prisma/client": "^5.18.0",
     "ajv": "^8.17.1",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^3.0.1",
-    "discord-player": "^6.7.0",
+    "discord-player": "^6.7.1",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
     "mediaplex": "^0.0.9",
-    "winston": "^3.13.1",
+    "winston": "^3.14.1",
     "youtube-ext": "^1.1.25"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.10",
+    "@types/eslint": "^8.56.11",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^20.14.11",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@types/node": "^22.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -59,11 +59,11 @@
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "prisma": "^5.17.0",
+    "prisma": "^5.18.0",
     "run-func": "^3.0.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   },
   "overrides": {
     "eslint": {
