@@ -17,10 +17,10 @@
   "private": true,
   "main": "build/index.js",
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate --no-hints",
     "build": "tsc",
     "postbuild": "run-func build/botConfig.js getConfigFile true",
-    "predev": "prisma format && prisma generate",
+    "predev": "prisma format && prisma generate --no-hints",
     "dev": "nodemon",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
