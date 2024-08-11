@@ -6,6 +6,5 @@ node_modules/
 .vscode/
 
 /build/
-/@types/
 /config.json
 /logs/
