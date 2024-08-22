@@ -1,11 +1,23 @@
+import { config } from "dotenv";
+
+let loadedFile = false;
+
 /** Determine if this is a development runtime environment or not according to the `NODE_ENV` environment variable. */
 export function isDevEnvironment(): boolean {
   switch (process.env.NODE_ENV) {
     case "development": {
+      if (!loadedFile) {
+        config({ path: "development.env" });
+        loadedFile = true;
+      }
       return true;
     }
     case undefined: // allow default to fallthrough to production
     case "production": {
+      if (!loadedFile) {
+        config({ path: ".env" });
+        loadedFile = true;
+      }
       return false;
     }
 
@@ -16,3 +28,4 @@ export function isDevEnvironment(): boolean {
     }
   }
 }
+isDevEnvironment(); // force load file on first import

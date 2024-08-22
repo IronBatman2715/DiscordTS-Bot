@@ -1,4 +1,5 @@
 import type { GuildConfig } from "@prisma/client";
+// import below force loads `.env` file if present AND `schema.prisma` refers to an environment variable that is unset
 import { PrismaClient } from "@prisma/client";
 
 import { guildConfigDefaults } from "../database/GuildConfig";

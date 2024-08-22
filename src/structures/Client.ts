@@ -22,7 +22,6 @@ import {
   REST,
   Routes,
 } from "discord.js";
-import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { resolve } from "path";
 
@@ -85,14 +84,7 @@ export default class Client extends DiscordClient {
       this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
       logger.verbose(`Bot version: ${this.version}`);
 
-      logger.verbose("Loading environment variables from file");
-      if (this.devMode) {
-        config({ path: "development.env" });
-      } else {
-        config({ path: ".env" });
-      }
-
-      logger.verbose("Verifying environment variables are set... ");
+      logger.verbose("Verifying environment variables are set in a valid form... ");
 
       // Always required environment variables
       if (process.env.DISCORD_TOKEN === undefined)
