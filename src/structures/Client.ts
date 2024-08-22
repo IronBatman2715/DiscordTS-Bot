@@ -1,4 +1,5 @@
 import { Player } from "discord-player";
+import { YoutubeiExtractor } from "discord-player-youtubei";
 import type {
   CacheType,
   ChatInputCommandInteraction,
@@ -156,7 +157,8 @@ export default class Client extends DiscordClient {
 
       await this.DB.connect();
       logger.info("Loading discord player extractors");
-      await this.player.extractors.loadDefault();
+      await this.player.extractors.register(YoutubeiExtractor, {});
+      await this.player.extractors.loadDefault((ext) => !["YouTubeExtractor"].includes(ext));
 
       logger.info("Logging into Discord... ");
       await this.login(process.env.DISCORD_TOKEN);
