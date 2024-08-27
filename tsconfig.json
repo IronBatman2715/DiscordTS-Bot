@@ -15,6 +15,9 @@
     "importHelpers": true,
     "skipLibCheck": true
   },
+  "ts-node": {
+    "files": true
+  },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
