@@ -15,37 +15,24 @@ const prisma = new PrismaClient({
   ],
 });
 
-export default class DB {
-  /** Singleton instance */
-  private static instance: DB;
-  private hasDoneInitialConnection = false;
-
-  /** Get/Generate singleton instance */
-  static get() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!DB.instance) DB.instance = new this();
-    return DB.instance;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
-
+let hasDoneInitialConnection = false;
+const DB = {
   /** Connects to database with `DB_URL` environment variable specified in `prisma/schema.prisma` file.
    *
    * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect here})
    */
   async connect() {
-    if (!this.hasDoneInitialConnection) {
+    if (!hasDoneInitialConnection) {
       logger.info("Initializing connection to database...");
       await prisma.$connect();
-      this.hasDoneInitialConnection = true;
+      hasDoneInitialConnection = true;
       logger.info("Successfully completed initial connection to database!");
     } else {
       logger.warn(
         "Do not need to explicitly connect to the database! Refer to: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect"
       );
     }
-  }
+  },
 
   /** Disconnect from the database until next query/request
    *
@@ -60,11 +47,11 @@ export default class DB {
       logger.error(error);
       logger.error(new Error("Errored trying to disconnect from database!"));
     }
-  }
+  },
 
   bindEvent<Ev extends PrismaEvents>(event: Ev, eventFunction: PrismaRunFunction<Ev>) {
     prisma.$on(event, eventFunction);
-  }
+  },
 
   /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
   async getGuildConfig(guildId: string | null) {
@@ -86,7 +73,7 @@ export default class DB {
         defaultRepeatMode: guildConfigDefaults.defaultRepeatMode,
       },
     });
-  }
+  },
 
   /** Update the guild config document corresponding to guildId with the data in guildConfig. */
   async updateGuildConfig(guildId: string | null, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
@@ -98,7 +85,7 @@ export default class DB {
       where: { guildId },
       data: guildConfig,
     });
-  }
+  },
 
   /** Delete the guild config document corresponding to guildId. */
   async deleteGuildConfig(guildId: string | null) {
@@ -107,5 +94,7 @@ export default class DB {
     if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
     return await prisma.guildConfig.delete({ where: { guildId } });
-  }
-}
+  },
+};
+
+export default DB;

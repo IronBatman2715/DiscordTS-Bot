@@ -50,7 +50,7 @@ interface SendMultiPageEmbedOptions {
 
 export default class Client extends DiscordClient {
   /** Singleton instance */
-  private static instance: Client;
+  private static instance?: Client;
   readonly config: BotConfig;
   readonly version: string;
   /** True in development environment, otherwise false */
@@ -60,12 +60,11 @@ export default class Client extends DiscordClient {
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
-  readonly DB: DB = DB.get();
+  readonly DB = DB;
   readonly player: Player;
 
   /** Get/Generate singleton instance */
   static get() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!Client.instance) Client.instance = new this();
     return Client.instance;
   }

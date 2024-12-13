@@ -1,4 +1,3 @@
-import type { Logger as WinstonLogger } from "winston";
 import { createLogger, format, transports } from "winston";
 
 import { defaultBotConfig, getConfigFile } from "../botConfig.js";
@@ -10,58 +9,45 @@ const { timestamp, combine, printf, errors, colorize, json } = format;
 
 const version = process.env.npm_package_version;
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class Logger {
-  /** Singleton instance */
-  private static instance: WinstonLogger;
-
-  /** Get/Generate singleton instance */
-  static get() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!Logger.instance) new this();
-    return Logger.instance;
-  }
-
-  private constructor() {
-    if (isDevEnvironment()) {
-      // Initialize development logger
-      const { name } = defaultBotConfig;
-      Logger.instance = createLogger({
-        defaultMeta: { service: `${name}@${version}-dev` },
-        format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
-        level: "debug",
-        transports: [
-          new transports.Console({
-            format: combine(
-              colorize(),
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              printf(({ level, message, timestamp, stack }) => `[${timestamp}] ${level}: ${stack || message}`)
-            ),
-          }),
-          new transports.File({
-            filename: "logs/complete-dev.log",
-            format: json(),
-          }),
-        ],
-      });
-    } else {
-      // Initialize production logger
-      const { name } = getConfigFile();
-      Logger.instance = createLogger({
-        defaultMeta: { service: `${name}@${version}` },
-        format: combine(timestamp(), errors({ stack: true }), json()),
-        level: "debug",
-        transports: [
-          new transports.Console(),
-          new transports.File({ filename: "logs/error.log", level: "error" }),
-          new transports.File({ filename: "logs/warn.log", level: "warn" }),
-          new transports.File({ filename: "logs/info.log", level: "info" }),
-          new transports.File({ filename: "logs/complete.log" }),
-        ],
-      });
-    }
+function initLogger() {
+  if (isDevEnvironment()) {
+    // Initialize development logger
+    const { name } = defaultBotConfig;
+    return createLogger({
+      defaultMeta: { service: `${name}@${version}-dev` },
+      format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
+      level: "debug",
+      transports: [
+        new transports.Console({
+          format: combine(
+            colorize(),
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            printf(({ level, message, timestamp, stack }) => `[${timestamp}] ${level}: ${stack || message}`)
+          ),
+        }),
+        new transports.File({
+          filename: "logs/complete-dev.log",
+          format: json(),
+        }),
+      ],
+    });
+  } else {
+    // Initialize production logger
+    const { name } = getConfigFile();
+    return createLogger({
+      defaultMeta: { service: `${name}@${version}` },
+      format: combine(timestamp(), errors({ stack: true }), json()),
+      level: "debug",
+      transports: [
+        new transports.Console(),
+        new transports.File({ filename: "logs/error.log", level: "error" }),
+        new transports.File({ filename: "logs/warn.log", level: "warn" }),
+        new transports.File({ filename: "logs/info.log", level: "info" }),
+        new transports.File({ filename: "logs/complete.log" }),
+      ],
+    });
   }
 }
 
-const logger = Logger.get();
+const logger = initLogger();
 export default logger;
