@@ -1,18 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext"],
-    "module": "CommonJS",
-    "rootDir": "src",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Node",
+    "declaration": false,
     "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "build",
-    "sourceRoot": "src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "importHelpers": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    /* TODO: fix use of path alias */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "ts-node": {
     "files": true

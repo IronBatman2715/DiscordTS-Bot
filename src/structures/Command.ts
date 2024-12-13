@@ -1,10 +1,8 @@
-import type { Awaitable, CacheType, ChatInputCommandInteraction, SharedSlashCommand } from "discord.js";
+import type { Awaitable, ChatInputCommandInteraction, SharedSlashCommand } from "discord.js";
 
-import Client from "./Client";
+import Client from "./Client.js";
 
-type RunFunction = {
-  (client: Client, interaction: ChatInputCommandInteraction<CacheType>): Awaitable<unknown>;
-};
+type RunFunction = (client: Client, interaction: ChatInputCommandInteraction) => Awaitable<unknown>;
 
 type Builder = SharedSlashCommand;
 

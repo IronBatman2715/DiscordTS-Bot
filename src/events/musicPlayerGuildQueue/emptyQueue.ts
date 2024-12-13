@@ -1,8 +1,8 @@
-import assertQueueData from "../../functions/music/assertQueueData";
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import assertQueueData from "../../functions/music/assertQueueData.js";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerGuildQueueEvent("emptyQueue", async (queue) => {
+export default new MusicPlayerGuildQueueEvent("emptyQueue", async (queue) => {
   assertQueueData(queue);
 
   logger.verbose("Empty queue! Deleting embed message");

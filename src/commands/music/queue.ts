@@ -2,10 +2,10 @@ import { QueueRepeatMode } from "discord-player";
 import type { EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 
-import getQueue from "../../functions/music/getQueue";
-import Command from "../../structures/Command";
+import getQueue from "../../functions/music/getQueue.js";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder().setName("queue").setDescription("Display music queue."),
   async (client, interaction) => {
     const guildQueue = await getQueue(interaction);
@@ -22,18 +22,21 @@ export = new Command(
 
       embedFieldArr.unshift({
         name: `Playing now: ${track.title})`,
-        value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy}\n`,
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy ?? "USER"}\n`,
         inline: false,
       });
     }
 
     embedFieldArr.push(
       ...guildQueue.tracks.toArray().map((track, i) => {
+        /* eslint-disable @typescript-eslint/restrict-template-expressions */
         return {
           name: `${i + 1}: ${track.title}`,
-          value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy}\n`,
+          value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy ?? "USER"}\n`,
           inline: false,
         };
+        /* eslint-enable @typescript-eslint/restrict-template-expressions */
       })
     );
 

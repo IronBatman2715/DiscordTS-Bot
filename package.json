@@ -16,6 +16,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "postinstall": "prisma generate --no-hints",
     "build": "tsc",
@@ -25,52 +26,47 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "commands:register": "node build/scripts/discordAPI/registerCommands.js",
-    "commands:resetDev": "cross-env NODE_ENV=development ts-node src/scripts/discordAPI/resetCommands.ts",
+    "commands:resetDev": "cross-env NODE_ENV=development node --import './loader.js' src/scripts/discordAPI/resetCommands.ts",
     "commands:resetProd": "node build/scripts/discordAPI/resetCommands.js",
     "start": "node ."
   },
   "dependencies": {
     "@discord-player/extractor": "^4.5.1",
-    "@prisma/client": "^5.19.0",
+    "@prisma/client": "^6.0.1",
     "ajv": "^8.17.1",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^3.0.1",
     "discord-player": "^6.7.1",
-    "discord-player-youtubei": "^1.2.6",
-    "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5",
+    "discord-player-youtubei": "^1.3.7",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.7",
     "lodash": "^4.17.21",
-    "mediaplex": "^0.0.9",
-    "winston": "^3.14.2"
+    "mediaplex": "^1.0.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.11",
-    "@types/lodash": "^4.17.7",
-    "@types/node": "^22.5.0",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
+    "@eslint/js": "^9.16.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/parser": "^8.18.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.0",
+    "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-typescript": "^3.6.3",
-    "eslint-plugin-deprecation": "^3.0.0",
-    "eslint-plugin-import": "^2.29.1",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "nodemon": "^3.1.4",
-    "prettier": "^3.3.3",
-    "prettier-plugin-organize-imports": "^4.0.0",
-    "prisma": "^5.19.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.4.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prisma": "^6.0.1",
     "run-func": "^3.0.0",
     "ts-node": "^10.9.2",
-    "tslib": "^2.7.0",
-    "typescript": "^5.5.4"
-  },
-  "overrides": {
-    "eslint": {
-      "file-entry-cache": "8.x"
-    }
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0"
   },
   "engines": {
-    "node": ">=18.18"
+    "node": ">=20.18.1"
   }
 }

@@ -1,6 +1,6 @@
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerGuildQueueEvent("debug", async (queue, message) => {
+export default new MusicPlayerGuildQueueEvent("debug", (queue, message) => {
   logger.debug(`Music Player Guild Queue debug (Guild ID: ${queue.guild.id}): ${message}`);
 });

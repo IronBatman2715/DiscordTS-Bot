@@ -1,8 +1,8 @@
-import assertQueueData from "../../functions/music/assertQueueData";
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import assertQueueData from "../../functions/music/assertQueueData.js";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerGuildQueueEvent("error", async (queue, error) => {
+export default new MusicPlayerGuildQueueEvent("error", async (queue, error) => {
   assertQueueData(queue);
 
   // Emitted when the player queue encounters error

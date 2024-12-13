@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder().setName("hello").setDescription("Replies with a greeting."),
 
   async (client, interaction) => {

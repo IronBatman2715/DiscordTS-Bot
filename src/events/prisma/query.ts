@@ -1,6 +1,6 @@
-import { PrismaEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import { PrismaEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new PrismaEvent("query", async ({ query }) => {
+export default new PrismaEvent("query", ({ query }) => {
   logger.verbose("Prisma query", { query });
 });

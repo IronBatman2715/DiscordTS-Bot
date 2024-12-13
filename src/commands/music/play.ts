@@ -1,11 +1,12 @@
 import { GuildMember, SlashCommandBuilder } from "discord.js";
 
-import getQueue from "../../functions/music/getQueue";
-import Command from "../../structures/Command";
-import logger from "../../structures/Logger";
-import QueueData from "../../structures/QueueData";
+import getQueue from "../../functions/music/getQueue.js";
+import { indexToEnumVar } from "../../functions/music/queueRepeatMode.js";
+import Command from "../../structures/Command.js";
+import logger from "../../structures/Logger.js";
+import QueueData from "../../structures/QueueData.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder()
     .setName("play")
     .setDescription("Plays track(s) or adds it to the end of the music queue.")
@@ -51,7 +52,7 @@ export = new Command(
       });
 
       const { defaultRepeatMode } = await client.DB.getGuildConfig(interaction.guildId);
-      if (queue.repeatMode !== defaultRepeatMode) queue.setRepeatMode(defaultRepeatMode);
+      if (queue.repeatMode !== indexToEnumVar(defaultRepeatMode)) queue.setRepeatMode(defaultRepeatMode);
     } else {
       logger.info("Player is using pre-existing GuildQueue");
 

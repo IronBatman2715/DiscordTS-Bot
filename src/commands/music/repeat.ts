@@ -1,10 +1,11 @@
 import { QueueRepeatMode } from "discord-player";
 import { SlashCommandBuilder } from "discord.js";
 
-import getQueue from "../../functions/music/getQueue";
-import Command from "../../structures/Command";
+import getQueue from "../../functions/music/getQueue.js";
+import { indexToEnumVar } from "../../functions/music/queueRepeatMode.js";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder()
     .setName("repeat")
     .setDescription("Set the repeat mode of the music queue.")
@@ -21,7 +22,7 @@ export = new Command(
         )
     ),
 
-  async (client, interaction) => {
+  async (_client, interaction) => {
     const guildQueue = await getQueue(interaction);
     if (!guildQueue) return;
 
@@ -29,7 +30,7 @@ export = new Command(
     const repeatModeStr = QueueRepeatMode[repeatMode].toLowerCase();
 
     // Change the repeat behavior of the queue
-    if (guildQueue.repeatMode === repeatMode) {
+    if (guildQueue.repeatMode === indexToEnumVar(repeatMode)) {
       await interaction.followUp({
         content: `Already set to that repeat mode (${repeatModeStr})!`,
       });

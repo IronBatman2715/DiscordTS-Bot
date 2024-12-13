@@ -1,6 +1,6 @@
-import { ClientEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import { ClientEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new ClientEvent("error", (error) => {
+export default new ClientEvent("error", (error) => {
   logger.error(error);
 });

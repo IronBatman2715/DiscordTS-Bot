@@ -1,12 +1,12 @@
 import type { TextChannel } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 
-import tempMessage from "../../functions/discord/tempMessage";
-import { isInRange } from "../../functions/general/math";
-import Command from "../../structures/Command";
-import logger from "../../structures/Logger";
+import tempMessage from "../../functions/discord/tempMessage.js";
+import { isInRange } from "../../functions/general/math.js";
+import Command from "../../structures/Command.js";
+import logger from "../../structures/Logger.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder()
     .setName("clear")
     .setDescription("ADMIN ONLY: Clear messages from the text channel! (Cannot clear older than 2 weeks)")
@@ -22,6 +22,7 @@ export = new Command(
     // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {
       return await interaction.followUp({
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         content: `You can not clear ${quantity} messages! Allowed range is from 1 to ${maxMessagesCleared}.`,
       });
     }
@@ -46,6 +47,7 @@ export = new Command(
     }
 
     // Confirmation message
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, true, 3, 1);
   }
 );

@@ -1,6 +1,6 @@
-import { PrismaEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import { PrismaEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new PrismaEvent("error", async ({ message }) => {
+export default new PrismaEvent("error", ({ message }) => {
   logger.error(new Error(`Prisma error: ${message}`));
 });

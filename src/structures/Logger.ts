@@ -1,8 +1,8 @@
 import type { Logger as WinstonLogger } from "winston";
 import { createLogger, format, transports } from "winston";
 
-import { defaultBotConfig, getConfigFile } from "../botConfig";
-import { isDevEnvironment } from "../functions/general/environment";
+import { defaultBotConfig, getConfigFile } from "../botConfig.js";
+import { isDevEnvironment } from "../functions/general/environment.js";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
 
@@ -10,12 +10,14 @@ const { timestamp, combine, printf, errors, colorize, json } = format;
 
 const version = process.env.npm_package_version;
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Logger {
   /** Singleton instance */
   private static instance: WinstonLogger;
 
   /** Get/Generate singleton instance */
   static get() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!Logger.instance) new this();
     return Logger.instance;
   }
@@ -32,6 +34,7 @@ export class Logger {
           new transports.Console({
             format: combine(
               colorize(),
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               printf(({ level, message, timestamp, stack }) => `[${timestamp}] ${level}: ${stack || message}`)
             ),
           }),

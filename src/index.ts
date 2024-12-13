@@ -1,3 +1,3 @@
-import Client from "./structures/Client";
+import Client from "./structures/Client.js";
 
-Client.get().start();
+await Client.get().start();

@@ -1,11 +1,11 @@
-import assertQueueData from "../../functions/music/assertQueueData";
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import assertQueueData from "../../functions/music/assertQueueData.js";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerGuildQueueEvent("playerStart", async (queue, track) => {
+export default new MusicPlayerGuildQueueEvent("playerStart", async (queue, track) => {
   assertQueueData(queue);
 
   logger.verbose(`Starting new audio track: ${track.title}`);
 
-  queue.metadata.updateNowPlaying(track);
+  await queue.metadata.updateNowPlaying(track);
 });

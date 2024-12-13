@@ -1,17 +1,17 @@
 import type { Track } from "discord-player";
-import type { CacheType, ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
+import type { ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
 
-import type Client from "./Client";
-import logger from "./Logger";
+import type Client from "./Client.js";
+import logger from "./Logger.js";
 
 export default class QueueData {
-  latestInteraction: ChatInputCommandInteraction<CacheType>;
-  private _embedMessage?: Message<boolean>;
+  latestInteraction: ChatInputCommandInteraction;
+  private _embedMessage?: Message;
   readonly client: Client;
-  readonly initialInteraction: ChatInputCommandInteraction<CacheType>;
+  readonly initialInteraction: ChatInputCommandInteraction;
   readonly musicTextChannel: TextBasedChannel;
 
-  constructor(client: Client, initialInteraction: ChatInputCommandInteraction<CacheType>) {
+  constructor(client: Client, initialInteraction: ChatInputCommandInteraction) {
     logger.verbose("Initializing queue data");
     this.client = client;
 
@@ -30,7 +30,7 @@ export default class QueueData {
     return this._embedMessage;
   }
 
-  private set embedMessage(newEmbedMessage: Message<boolean>) {
+  private set embedMessage(newEmbedMessage: Message) {
     this._embedMessage = newEmbedMessage;
   }
 
@@ -42,8 +42,8 @@ export default class QueueData {
       title: track.title,
       url: track.url,
       author: {
-        name: track.requestedBy?.username || "unassigned",
-        iconURL: track.requestedBy?.avatarURL() || "",
+        name: track.requestedBy?.displayName ?? "USER_DISPLAY_NAME",
+        iconURL: track.requestedBy?.avatarURL() ?? "",
       },
       fields: [
         {
@@ -68,14 +68,14 @@ export default class QueueData {
         embeds: [nowPlayingEmbed],
       });
 
-      this.setEmbedMessage(newEmbedMessage);
+      await this.setEmbedMessage(newEmbedMessage);
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Errored trying to send/update now playing embed message!"));
     }
   }
 
-  private async setEmbedMessage(newEmbedMessage: Message<boolean>) {
+  private async setEmbedMessage(newEmbedMessage: Message) {
     if (newEmbedMessage.embeds.length !== 1) {
       throw new ReferenceError(
         `newEmbedMessage has ${newEmbedMessage.embeds.length === 0 ? "no embeds!" : "more than one embed!"}`

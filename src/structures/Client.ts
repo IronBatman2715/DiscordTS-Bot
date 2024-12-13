@@ -1,7 +1,6 @@
 import { Player } from "discord-player";
 import { YoutubeiExtractor } from "discord-player-youtubei";
 import type {
-  CacheType,
   ChatInputCommandInteraction,
   EmbedData,
   EmbedField,
@@ -24,17 +23,17 @@ import {
   Routes,
 } from "discord.js";
 import { readdirSync } from "fs";
-import { resolve } from "path";
+import { join } from "path";
 
-import type { BotConfig } from "../botConfig";
-import { defaultBotConfig, getConfigFile } from "../botConfig";
-import isUser from "../functions/discord/isUser";
-import { isDevEnvironment } from "../functions/general/environment";
-import { camel2Display, isOnlyDigits } from "../functions/general/strings";
-import type Command from "./Command";
-import DB from "./DB";
-import type BaseEvent from "./Event";
-import logger from "./Logger";
+import type { BotConfig } from "../botConfig.js";
+import { defaultBotConfig, getConfigFile } from "../botConfig.js";
+import isUser from "../functions/discord/isUser.js";
+import { isDevEnvironment } from "../functions/general/environment.js";
+import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
+import type Command from "./Command.js";
+import DB from "./DB.js";
+import type BaseEvent from "./Event.js";
+import logger from "./Logger.js";
 
 export enum DiscordAPIAction {
   /** Update commands. Will NOT remove commands with names that are no longer in use! */
@@ -43,11 +42,11 @@ export enum DiscordAPIAction {
   Reset = 1,
 }
 
-type SendMultiPageEmbedOptions = {
+interface SendMultiPageEmbedOptions {
   maxFieldsPerEmbed: number;
   otherEmbedData: Partial<Omit<EmbedData, "fields">>;
   otherReplyOptions: Partial<Omit<InteractionReplyOptions & InteractionUpdateOptions, "embeds" | "components">>;
-};
+}
 
 export default class Client extends DiscordClient {
   /** Singleton instance */
@@ -66,6 +65,7 @@ export default class Client extends DiscordClient {
 
   /** Get/Generate singleton instance */
   static get() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!Client.instance) Client.instance = new this();
     return Client.instance;
   }
@@ -88,6 +88,7 @@ export default class Client extends DiscordClient {
       logger.verbose("Verifying environment variables are set in a valid form... ");
 
       // Always required environment variables
+      /* eslint-disable @typescript-eslint/no-unnecessary-condition */
       if (process.env.DISCORD_TOKEN === undefined)
         throw new ReferenceError("DISCORD_TOKEN environment variable was not set!");
       if (process.env.DB_URL === undefined) throw new ReferenceError("DB_URL environment variable was not set!");
@@ -99,6 +100,7 @@ export default class Client extends DiscordClient {
           throw new TypeError("CLIENT_ID environment variable must contain only digits!");
         }
       }
+      /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
       // Development environment variables
       if (this.devMode) {
@@ -139,9 +141,6 @@ export default class Client extends DiscordClient {
         logger.info(`Loaded config for "${this.config.name}"`);
       }
 
-      this.loadEvents();
-      this.loadCommands();
-
       logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
     } catch (error) {
       logger.error(error);
@@ -153,6 +152,15 @@ export default class Client extends DiscordClient {
   /** Start bot by connecting to external server(s). Namely, Discord itself */
   async start(): Promise<void> {
     try {
+      /**
+       * TODO
+       *
+       * Make sure load function are only called once.
+       * This was previously done by being in the constructor, but can no longer since async.
+       */
+      await this.loadEvents();
+      await this.loadCommands();
+
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
       await this.DB.connect();
@@ -170,13 +178,14 @@ export default class Client extends DiscordClient {
   }
 
   /** Load slash commands */
-  private loadCommands(): void {
+  private async loadCommands(): Promise<void> {
     logger.info("Loading commands");
 
-    const commandsDir = resolve(__dirname, "../commands");
+    const commandsDir = join(import.meta.dirname, "..", "commands");
 
-    readdirSync(commandsDir).forEach((subDir) => {
-      const commandsSubDir = resolve(commandsDir, subDir);
+    // TODO: since this function is now async, should use async `readdir`
+    for (const subDir of readdirSync(commandsDir)) {
+      const commandsSubDir = join(commandsDir, subDir);
 
       const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
@@ -185,11 +194,12 @@ export default class Client extends DiscordClient {
       if ((subDir !== "dev" || this.devMode) && files.length > 0) {
         logger.verbose(`\t${camel2Display(subDir)}`);
 
-        files.forEach((file) => {
-          const commandFilePath = resolve(commandsSubDir, file);
+        for (const file of files) {
+          const commandFilePath = join(commandsSubDir, file);
 
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const command: Command = require(commandFilePath);
+          // TODO: properly confirm type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          const command: Command = (await import(commandFilePath)).default;
 
           // Set and store command categories
           command.category = subDir;
@@ -205,9 +215,9 @@ export default class Client extends DiscordClient {
           this.commands.set(command.builder.name, command);
 
           logger.verbose(`\t\t${command.builder.name}`);
-        });
+        }
       }
-    });
+    }
 
     logger.verbose("Successfully loaded commands");
   }
@@ -288,13 +298,14 @@ export default class Client extends DiscordClient {
   }
 
   /** Load events */
-  private loadEvents(): void {
+  private async loadEvents(): Promise<void> {
     logger.info("Loading events");
 
-    const eventsDir = resolve(__dirname, "../events");
+    const eventsDir = join(import.meta.dirname, "..", "events");
 
-    readdirSync(eventsDir).forEach((subDir) => {
-      const eventsSubDir = resolve(eventsDir, subDir);
+    // TODO: since this function is now async, should use async `readdir`
+    for (const subDir of readdirSync(eventsDir)) {
+      const eventsSubDir = join(eventsDir, subDir);
 
       const files = readdirSync(eventsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
@@ -302,12 +313,13 @@ export default class Client extends DiscordClient {
       if (files.length > 0) {
         logger.verbose(`\t${camel2Display(subDir)}`);
 
-        files.forEach((file) => {
-          const eventFilePath = resolve(eventsSubDir, file);
+        for (const file of files) {
+          const eventFilePath = join(eventsSubDir, file);
           const eventFileName = file.slice(0, file.length - 3);
 
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const event: BaseEvent = require(eventFilePath);
+          // TODO: properly confirm type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          const event: BaseEvent = (await import(eventFilePath)).default;
 
           // Bind event to its corresponding event emitter
           event.bindToEventEmitter(this);
@@ -317,9 +329,9 @@ export default class Client extends DiscordClient {
           } else {
             logger.verbose(`\t\t${eventFileName}`);
           }
-        });
+        }
       }
-    });
+    }
 
     logger.verbose("Successfully loaded events");
   }
@@ -376,7 +388,7 @@ export default class Client extends DiscordClient {
   }
 
   async sendMultiPageEmbed(
-    interaction: ChatInputCommandInteraction<CacheType>,
+    interaction: ChatInputCommandInteraction,
     embedFields: EmbedField[],
     options: Partial<SendMultiPageEmbedOptions> = {}
   ) {
@@ -399,11 +411,12 @@ export default class Client extends DiscordClient {
     });
 
     // Set defaults if needed
-    const maxFieldsPerEmbed = options.maxFieldsPerEmbed || 5;
-    const otherEmbedData = options.otherEmbedData || {};
-    const otherReplyOptions = options.otherReplyOptions || {};
+    const maxFieldsPerEmbed = options.maxFieldsPerEmbed ?? 5;
+    const otherEmbedData = options.otherEmbedData ?? {};
+    const otherReplyOptions = options.otherReplyOptions ?? {};
 
     const canFitOnOnePage = embedFields.length <= maxFieldsPerEmbed;
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     logger.verbose(`Using ${Math.ceil(embedFields.length / maxFieldsPerEmbed)} page${canFitOnOnePage ? "" : "s"}.`);
 
     const originalTitle = (() => {
@@ -430,9 +443,8 @@ export default class Client extends DiscordClient {
       if (canFitOnOnePage) {
         fullEmbedData.title = originalTitle;
       } else {
-        const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${
-          embedFields.length
-        }`;
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${embedFields.length}`;
         if (originalTitle.length > 0) {
           fullEmbedData.title = `${originalTitle} (${titlePageSubstr})`;
         } else {
@@ -474,7 +486,7 @@ export default class Client extends DiscordClient {
       const collector = embedMessage.createMessageComponentCollector();
 
       let i = 0;
-      collector.on("collect", async (componentInteraction) => {
+      collector.on("collect", (componentInteraction) => {
         // Increase/decrease index
         if (componentInteraction.customId === forwardId) {
           logger.verbose("Someone clicked forward on multi-page embed", { embedMessage, collector });
@@ -486,14 +498,15 @@ export default class Client extends DiscordClient {
         }
 
         // Respond to component interaction by updating message with new embed
-        await componentInteraction.update(genReplyOptions(i));
+        // TODO: probably shouldn't be voiding here. investigate for better solution
+        void componentInteraction.update(genReplyOptions(i));
       });
     }
 
     return embedMessage;
   }
 
-  async runCommand(command: Command, interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
+  async runCommand(command: Command, interaction: ChatInputCommandInteraction): Promise<void> {
     // Validate this user can use this command
     switch (command.category) {
       // Admin only commands
@@ -527,9 +540,11 @@ export default class Client extends DiscordClient {
         const { musicChannelId } = await this.DB.getGuildConfig(interaction.guildId);
 
         if (musicChannelId !== "" && interaction.channelId !== musicChannelId) {
-          const musicChannelObj = await interaction.guild?.channels.fetch(musicChannelId);
+          const musicChannelName =
+            (await interaction.guild?.channels.fetch(musicChannelId))?.name ?? "MUSIC_CHANNEL_NAME";
+
           await interaction.followUp({
-            content: `Must enter music commands in ${musicChannelObj}!`,
+            content: `Must enter music commands in ${musicChannelName}!`,
           });
           return;
         }
@@ -542,7 +557,7 @@ export default class Client extends DiscordClient {
       }
     }
 
-    const guildName = interaction.guild?.name || "NO NAME";
+    const guildName = interaction.guild?.name ?? "NO NAME";
     logger.info(`${guildName}[id: ${interaction.guildId}] ran \`/${command.builder.name}\` command`);
     try {
       await command.run(this, interaction);

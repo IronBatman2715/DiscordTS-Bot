@@ -1,8 +1,8 @@
-import type { CacheType, ChatInputCommandInteraction, Message } from "discord.js";
+import type { ChatInputCommandInteraction, Message } from "discord.js";
 
-import logger from "../../structures/Logger";
-import { isNaturalNumber } from "../general/math";
-import sleep from "../general/sleep";
+import logger from "../../structures/Logger.js";
+import { isNaturalNumber } from "../general/math.js";
+import sleep from "../general/sleep.js";
 
 /**
  * Send a temporary message with content `text` to the channel that `interaction` is in.
@@ -14,7 +14,7 @@ import sleep from "../general/sleep";
  * @param countdownIntervalInSeconds [default: 2] Second interval between updates to the countdown
  */
 export default async (
-  interaction: ChatInputCommandInteraction<CacheType>,
+  interaction: ChatInputCommandInteraction,
   text: string,
   showCountdown = true,
   durationInSeconds = 10,

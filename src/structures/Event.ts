@@ -2,20 +2,18 @@ import type { Prisma } from "@prisma/client";
 import type { GuildQueueEvents, PlayerEvents } from "discord-player";
 import type { Awaitable, ClientEvents } from "discord.js";
 
-import type Client from "./Client";
+import type Client from "./Client.js";
 
 /* --- BaseEvent --- */
 export interface IBaseEvent {
   event: string;
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   run: Function;
   bindToEventEmitter(client: Client): void;
 }
 
 /* --- Client --- */
-type ClientRunFunction<Ev extends keyof ClientEvents> = {
-  (...args: ClientEvents[Ev]): Awaitable<void>;
-};
+type ClientRunFunction<Ev extends keyof ClientEvents> = (...args: ClientEvents[Ev]) => Awaitable<void>;
 
 export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
   readonly event: Ev;
@@ -27,6 +25,7 @@ export class ClientEvent<Ev extends keyof ClientEvents> implements IBaseEvent {
   }
 
   bindToEventEmitter(client: Client) {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     client.on(this.event, this.run);
   }
 }
@@ -37,9 +36,9 @@ export type PrismaEvents = Prisma.LogLevel;
 /** Omit `params` and `duration` for MongoDB, as they
  *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined}
  */
-export type PrismaRunFunction<Ev extends PrismaEvents> = {
-  (event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent): Awaitable<void>;
-};
+export type PrismaRunFunction<Ev extends PrismaEvents> = (
+  event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent
+) => void;
 
 export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
   readonly event: Ev;

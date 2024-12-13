@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder().setName("testing").setDescription('DEVELOPER ONLY: Replies with "1, 2, 3!".'),
 
-  async (client, interaction) => {
+  async (_client, interaction) => {
     await interaction.followUp({ content: "1, 2, 3!" });
   }
 );

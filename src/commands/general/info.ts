@@ -1,17 +1,21 @@
 import type { EmbedField } from "discord.js";
 import { ActivityType, SlashCommandBuilder } from "discord.js";
 
-import type { ActivitiesOptions } from "../../botConfig";
-import { camel2Display } from "../../functions/general/strings";
-import Command from "../../structures/Command";
+import type { ActivitiesOptions } from "../../botConfig.js";
+import { camel2Display } from "../../functions/general/strings.js";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder().setName("info").setDescription("Shows information about this bot."),
 
   async (client, interaction) => {
     const fields: EmbedField[] = Object.entries(client.config).map(([key, value]) => {
       let formattedValue = "";
       switch (key) {
+        case "name": {
+          formattedValue = value as string;
+          break;
+        }
         case "activities": {
           (value as ActivitiesOptions[]).forEach(({ name, type, url }) => {
             formattedValue += url ? `[${ActivityType[type]} ${name}](${url})\n` : `${ActivityType[type]} ${name}\n`;
@@ -19,8 +23,7 @@ export = new Command(
           break;
         }
         default: {
-          formattedValue = value.toString();
-          break;
+          throw new Error(`Unexpected key in "client.config"`);
         }
       }
 

@@ -1,8 +1,8 @@
-import Client from "../../structures/Client";
-import { ClientEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import Client from "../../structures/Client.js";
+import { ClientEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new ClientEvent("interactionCreate", async (interaction) => {
+export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isChatInputCommand()) {
     logger.verbose("ChatInputCommandInteraction created!", { interaction });
 
@@ -15,10 +15,10 @@ export = new ClientEvent("interactionCreate", async (interaction) => {
     if (!command) return;
 
     // Show user that command is loading
-    await interaction.deferReply().catch((error) => {
+    await interaction.deferReply().catch((error: unknown) => {
       logger.error(error);
     });
 
-    client.runCommand(command, interaction);
+    await client.runCommand(command, interaction);
   }
 });

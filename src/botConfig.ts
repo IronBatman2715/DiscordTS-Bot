@@ -1,23 +1,23 @@
 import type { JSONSchemaType } from "ajv";
-import Ajv from "ajv";
+import { Ajv } from "ajv";
 import addErrors from "ajv-errors";
 import addFormats from "ajv-formats";
 import { ActivityType } from "discord.js";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 
-export type ActivitiesOptions = {
+export interface ActivitiesOptions {
   /** String after type string */
   name: string;
   /** `0 | 1 | 2 | 3 | 5` */
   type: Exclude<ActivityType, ActivityType.Custom>;
   /** Only add if `type` is `1 | ActivityType.Streaming` */
   url?: string;
-};
+}
 
-export type BotConfig = {
+export interface BotConfig {
   name: string;
   activities: ActivitiesOptions[];
-};
+}
 
 const ajv = addErrors(addFormats(new Ajv({ allErrors: true })));
 
@@ -86,18 +86,20 @@ export function getConfigFile(overwrite = false): BotConfig {
 
       try {
         writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
-      } catch (error) {
+      } catch (_error) {
         throw new Error(`Could not generate "config.json"`);
       }
 
       console.info(`Successfully generated "config.json"\n`);
     }
 
-    const parsedConfigJson = JSON.parse(readFileSync("config.json", "utf-8"));
+    const parsedConfigJson: unknown = JSON.parse(readFileSync("config.json", "utf-8"));
 
     if (!validate(parsedConfigJson)) {
       console.error("Error messages for config.json");
-      validate.errors?.forEach(({ instancePath, message }) => console.error(`${instancePath} ${message}.`));
+      validate.errors?.forEach(({ instancePath, message }) => {
+        console.error(`${instancePath} ${message ?? ""}.`);
+      });
       console.log();
       throw new Error("Invalid config file!");
     }

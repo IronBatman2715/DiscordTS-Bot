@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import getQueue from "../../functions/music/getQueue";
-import Command from "../../structures/Command";
+import getQueue from "../../functions/music/getQueue.js";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder().setName("pause").setDescription("Pause music."),
 
-  async (client, interaction) => {
+  async (_client, interaction) => {
     const guildQueue = await getQueue(interaction);
     if (!guildQueue) return;
 

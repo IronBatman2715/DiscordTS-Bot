@@ -23,6 +23,7 @@ export function isDevEnvironment(): boolean {
 
     default: {
       throw new Error(
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         `Invalid value for environment variable "NODE_ENV" ${process.env.NODE_ENV}. Refer to \`global.d.ts\`.`
       );
     }

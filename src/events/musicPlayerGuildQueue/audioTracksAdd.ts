@@ -1,9 +1,10 @@
-import assertQueueData from "../../functions/music/assertQueueData";
-import { MusicPlayerGuildQueueEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import assertQueueData from "../../functions/music/assertQueueData.js";
+import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerGuildQueueEvent("audioTracksAdd", async (queue, tracks) => {
+export default new MusicPlayerGuildQueueEvent("audioTracksAdd", (queue, tracks) => {
   assertQueueData(queue);
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   logger.verbose(`Added ${tracks.length} audio tracks to the queue. (Use \`/queue\` to inspect which ones)`);
 });

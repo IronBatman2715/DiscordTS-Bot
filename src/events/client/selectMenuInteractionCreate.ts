@@ -1,16 +1,17 @@
 import type { EmbedField } from "discord.js";
 
-import Client from "../../structures/Client";
-import { ClientEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import Client from "../../structures/Client.js";
+import { ClientEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new ClientEvent("interactionCreate", async (interaction) => {
+export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isStringSelectMenu()) {
     logger.verbose("SelectMenuInteraction created!", { interaction });
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     logger.verbose(`values selected: [${interaction.values}]`);
 
     // Show user that select menu is loading
-    await interaction.deferUpdate().catch((error) => {
+    await interaction.deferUpdate().catch((error: unknown) => {
       logger.error(error);
     });
 
@@ -41,7 +42,7 @@ export = new ClientEvent("interactionCreate", async (interaction) => {
           .map((command) => {
             return {
               name: `\`${command.builder.name}\``,
-              value: `${command.builder.description}`,
+              value: command.builder.description,
               inline: true,
             };
           });

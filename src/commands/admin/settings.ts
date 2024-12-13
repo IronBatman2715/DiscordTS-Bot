@@ -1,11 +1,14 @@
 import { QueueRepeatMode } from "discord-player";
-import type { CacheType, ChatInputCommandInteraction, EmbedField } from "discord.js";
+import type { ChatInputCommandInteraction, EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
-import { camelCase, kebabCase } from "lodash";
+import lodash from "lodash";
 
-import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig";
-import type Client from "../../structures/Client";
-import Command from "../../structures/Command";
+import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig.js";
+import type Client from "../../structures/Client.js";
+import Command from "../../structures/Command.js";
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { kebabCase, camelCase } = lodash;
 
 /** Omit `greetings` from `GuildConfig` */
 const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) => setting !== "greetings");
@@ -71,7 +74,7 @@ builder
       )
   );
 
-export = new Command(builder, async (client, interaction) => {
+export default new Command(builder, async (client, interaction) => {
   const subCommandQuery = interaction.options.getSubcommand(false);
   const subCommandGroupQuery = interaction.options.getSubcommandGroup(false);
 
@@ -104,7 +107,8 @@ export = new Command(builder, async (client, interaction) => {
   // Check subcommands
   switch (subCommandQuery) {
     case "display": {
-      return await displayCurrentSettings(client, interaction);
+      await displayCurrentSettings(client, interaction);
+      return;
     }
 
     case "reset": {
@@ -126,20 +130,20 @@ export = new Command(builder, async (client, interaction) => {
   }
 });
 
-type SettingData = {
+interface SettingData {
   /** Name of setting in camel-case */
   name: string;
   value: number | string;
-};
+}
 
-type SettingDisplay = {
+interface SettingDisplay {
   /** Name of setting in kebab-case */
   name: string;
   /** Value represented as a string */
   value: string;
-};
+}
 
-async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction<CacheType>) {
+async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction) {
   const currentGuildConfig = await client.DB.getGuildConfig(interaction.guildId);
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
@@ -191,7 +195,7 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
   });
 }
 
-async function resetSettings(client: Client, interaction: ChatInputCommandInteraction<CacheType>) {
+async function resetSettings(client: Client, interaction: ChatInputCommandInteraction) {
   // Reset
   await client.DB.deleteGuildConfig(interaction.guildId);
 
@@ -203,11 +207,7 @@ async function resetSettings(client: Client, interaction: ChatInputCommandIntera
   });
 }
 
-async function changeSetting(
-  client: Client,
-  interaction: ChatInputCommandInteraction<CacheType>,
-  newSettingData: SettingData
-) {
+async function changeSetting(client: Client, interaction: ChatInputCommandInteraction, newSettingData: SettingData) {
   await client.DB.updateGuildConfig(interaction.guildId, {
     [newSettingData.name]: newSettingData.value,
   });

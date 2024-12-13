@@ -2,9 +2,9 @@ import type { GuildConfig } from "@prisma/client";
 // import below force loads `.env` file if present AND `schema.prisma` refers to an environment variable that is unset
 import { PrismaClient } from "@prisma/client";
 
-import { guildConfigDefaults } from "../database/GuildConfig";
-import type { PrismaEvents, PrismaRunFunction } from "./Event";
-import logger from "./Logger";
+import { guildConfigDefaults } from "../database/GuildConfig.js";
+import type { PrismaEvents, PrismaRunFunction } from "./Event.js";
+import logger from "./Logger.js";
 
 const prisma = new PrismaClient({
   log: [
@@ -22,6 +22,7 @@ export default class DB {
 
   /** Get/Generate singleton instance */
   static get() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!DB.instance) DB.instance = new this();
     return DB.instance;
   }

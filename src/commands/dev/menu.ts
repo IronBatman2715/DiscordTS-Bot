@@ -1,9 +1,9 @@
 import type { SelectMenuComponentOptionData } from "discord.js";
 import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder()
     .setName("menu")
     .setDescription("DEVELOPER ONLY: Shows a test menu.")
@@ -16,9 +16,10 @@ export = new Command(
         .setMaxValue(25)
     ),
 
-  async (client, interaction) => {
+  async (_client, interaction) => {
     const numOfOptions = interaction.options.getInteger("number-of-options", true);
 
+    /* eslint-disable @typescript-eslint/restrict-template-expressions */
     const options: SelectMenuComponentOptionData[] = Array.from({ length: numOfOptions }, (_, i) => {
       return {
         label: `Option ${i + 1} label`,
@@ -27,6 +28,7 @@ export = new Command(
         emoji: `1️⃣`,*/,
       };
     });
+    /* eslint-enable @typescript-eslint/restrict-template-expressions */
 
     await interaction.followUp({
       content: "Select something below!",

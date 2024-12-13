@@ -18,7 +18,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
 1. Install the following software.
 
-- [Node.js](https://nodejs.org/) 18.18 or higher
+- [Node.js](https://nodejs.org/) 20.18.1 or higher
 - [FFMPEG](https://ffmpeg.org/)
 - If downloading using Git (clone/fork): [Git-LFS](https://git-lfs.com/)
 

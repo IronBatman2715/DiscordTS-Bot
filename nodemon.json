@@ -1,5 +1,5 @@
 {
   "watch": ["src/"],
   "ext": "ts,json",
-  "exec": "cross-env NODE_ENV=development ts-node src/index.ts"
+  "exec": "cross-env NODE_ENV=development node --import './loader.js' src/index.ts"
 }

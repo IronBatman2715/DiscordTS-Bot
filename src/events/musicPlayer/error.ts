@@ -1,6 +1,6 @@
-import { MusicPlayerEvent } from "../../structures/Event";
-import logger from "../../structures/Logger";
+import { MusicPlayerEvent } from "../../structures/Event.js";
+import logger from "../../structures/Logger.js";
 
-export = new MusicPlayerEvent("error", async (error) => {
+export default new MusicPlayerEvent("error", (error) => {
   logger.error(error);
 });

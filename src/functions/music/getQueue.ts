@@ -1,11 +1,11 @@
 import { useQueue } from "discord-player";
-import type { CacheType, ChatInputCommandInteraction } from "discord.js";
+import type { ChatInputCommandInteraction } from "discord.js";
 
-import logger from "../../structures/Logger";
-import type QueueData from "../../structures/QueueData";
+import logger from "../../structures/Logger.js";
+import type QueueData from "../../structures/QueueData.js";
 
 /** Get Discord Player queue for corresponding guildId (if exists) */
-export default async (interaction: ChatInputCommandInteraction<CacheType>, updateLatestInteraction = false) => {
+export default async (interaction: ChatInputCommandInteraction, updateLatestInteraction = false) => {
   if (!interaction.guildId) throw new ReferenceError("Could not retrieve guildId from interaction");
 
   const guildQueue = useQueue<QueueData>(interaction.guildId);

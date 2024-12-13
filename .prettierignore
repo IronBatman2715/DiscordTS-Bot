@@ -4,6 +4,9 @@ node_modules/
 !sample.env
 
 .vscode/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
 
 /build/
 /config.json

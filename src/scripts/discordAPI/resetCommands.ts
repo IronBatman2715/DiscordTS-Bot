@@ -1,3 +1,3 @@
-import Client, { DiscordAPIAction } from "../../structures/Client";
+import Client, { DiscordAPIAction } from "../../structures/Client.js";
 
-Client.get().manageDiscordAPICommands(DiscordAPIAction.Reset);
+await Client.get().manageDiscordAPICommands(DiscordAPIAction.Reset);

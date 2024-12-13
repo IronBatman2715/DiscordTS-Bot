@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../structures/Command";
+import Command from "../../structures/Command.js";
 
-export = new Command(
+export default new Command(
   new SlashCommandBuilder()
     .setName("roll")
     .setDescription("Roll the dice!")
@@ -19,7 +20,7 @@ export = new Command(
         .setRequired(false)
     ),
 
-  async (client, interaction) => {
+  async (_client, interaction) => {
     const quantity = interaction.options.getInteger("quantity", true);
     const sides = interaction.options.getInteger("sides", true);
 
