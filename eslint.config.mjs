@@ -2,6 +2,7 @@ import eslint from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -16,6 +17,9 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
   {
     languageOptions: {
+      globals: {
+        ...globals.node,
+      },
       parser: tsParser,
       parserOptions: {
         projectService: true,
