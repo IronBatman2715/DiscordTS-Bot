@@ -66,8 +66,18 @@ export default class Client extends DiscordClient {
   readonly player: Player;
 
   /** Get/Generate singleton instance */
-  static get() {
-    if (!Client.instance) Client.instance = new this();
+  static async get() {
+    if (!Client.instance) {
+      Client.instance = new this();
+
+      /* Would like these two to be in constructor, but await is not allowed in constructor */
+      await Client.instance.loadEvents();
+      await Client.instance.loadCommands();
+
+      logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
+
+      await Client.instance.start();
+    }
     return Client.instance;
   }
 
@@ -141,8 +151,6 @@ export default class Client extends DiscordClient {
         this.config = getConfigFile();
         logger.info(`Loaded config for "${this.config.name}"`);
       }
-
-      logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Could not construct bot!"));
@@ -151,17 +159,8 @@ export default class Client extends DiscordClient {
   }
 
   /** Start bot by connecting to external server(s). Namely, Discord itself */
-  async start(): Promise<void> {
+  private async start(): Promise<void> {
     try {
-      /**
-       * TODO
-       *
-       * Make sure load function are only called once.
-       * This was previously done by being in the constructor, but can no longer since async.
-       */
-      await this.loadEvents();
-      await this.loadCommands();
-
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
       await this.DB.connect();

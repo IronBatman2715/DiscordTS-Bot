@@ -15,7 +15,7 @@ export default new ClientEvent("interactionCreate", async (interaction) => {
       logger.error(error);
     });
 
-    const client = Client.get();
+    const client = await Client.get();
 
     switch (interaction.customId) {
       case "test-select-menu-id": {

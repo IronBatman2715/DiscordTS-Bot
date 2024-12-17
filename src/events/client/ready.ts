@@ -3,8 +3,8 @@ import Client from "../../structures/Client.js";
 import { ClientEvent } from "../../structures/Event.js";
 import logger from "../../structures/Logger.js";
 
-export default new ClientEvent("ready", () => {
-  const client = Client.get();
+export default new ClientEvent("ready", async () => {
+  const client = await Client.get();
   let unusedActivities = setRandomBotPresence(client, client.config.activities.slice());
 
   logger.info("Online and ready!");

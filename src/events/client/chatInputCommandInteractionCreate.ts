@@ -6,7 +6,7 @@ export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isChatInputCommand()) {
     logger.verbose("ChatInputCommandInteraction created!", { interaction });
 
-    const client = Client.get();
+    const client = await Client.get();
 
     // Get command
     const command = client.commands.get(interaction.commandName);

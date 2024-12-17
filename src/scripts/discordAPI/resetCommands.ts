@@ -1,3 +1,4 @@
 import Client, { DiscordAPIAction } from "../../structures/Client.js";
 
-await Client.get().manageDiscordAPICommands(DiscordAPIAction.Reset);
+const client = await Client.get();
+await client.manageDiscordAPICommands(DiscordAPIAction.Reset);

@@ -3,4 +3,5 @@ import Client, { DiscordAPIAction } from "../../structures/Client.js";
 
 if (isDevEnvironment()) throw new Error("Must register global commands in production environment!");
 
-await Client.get().manageDiscordAPICommands(DiscordAPIAction.Register);
+const client = await Client.get();
+await client.manageDiscordAPICommands(DiscordAPIAction.Register);
