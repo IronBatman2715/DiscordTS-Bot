@@ -6,6 +6,7 @@ import lodash from "lodash";
 import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
+import logger from "../../structures/Logger.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { kebabCase, camelCase } = lodash;
@@ -85,47 +86,56 @@ export default new Command(builder, async (client, interaction) => {
   // Check subcommand groups (For now, this can only be "music-channel-id")
   switch (subCommandGroupQuery) {
     case "music-channel-id": {
+      logger.verbose(`Changing "${subCommandGroupQuery}" setting`);
       const name = camelCase(subCommandGroupQuery);
       switch (subCommandQuery) {
         case "overwrite": {
-          return await changeSetting(client, interaction, {
+          await changeSetting(client, interaction, {
             name,
             value: interaction.options.getChannel("new-value", true).id,
           });
+          break;
         }
 
         case "disable": {
-          return await changeSetting(client, interaction, {
+          await changeSetting(client, interaction, {
             name,
             value: "",
           });
+          break;
         }
 
         default: {
           throw new ReferenceError(`Could not match subcommand within "music-channel-id" subcommand group`);
         }
       }
+      return;
     }
   }
 
   // Check subcommands
   switch (subCommandQuery) {
     case "display": {
+      logger.verbose("Displaying current settings");
       await displayCurrentSettings(client, interaction);
-      return;
+      break;
     }
 
     case "reset": {
       // Add in user confirmation..?
-      return await resetSettings(client, interaction);
+      logger.verbose("Resetting guild settings to defaults");
+      await resetSettings(client, interaction);
+      break;
     }
 
     case "max-messages-cleared":
     case "default-repeat-mode": {
-      return await changeSetting(client, interaction, {
+      logger.verbose(`Changing "${subCommandQuery}" setting`);
+      await changeSetting(client, interaction, {
         name: camelCase(subCommandQuery),
         value: interaction.options.getInteger("new-value", true),
       });
+      break;
     }
 
     default: {
@@ -206,7 +216,7 @@ async function resetSettings(client: Client, interaction: ChatInputCommandIntera
   // Generate new based on defaults
   await client.DB.getGuildConfig(interaction.guildId);
 
-  return await interaction.followUp({
+  await interaction.followUp({
     content: `Reset guild/server settings to defaults!`,
   });
 }
@@ -221,7 +231,7 @@ async function changeSetting(client: Client, interaction: ChatInputCommandIntera
     value: getSettingDisplayValue(newSettingData),
   };
 
-  return await interaction.followUp({
+  await interaction.followUp({
     content: `Changed \`${newSettingDisplay.name}\` value to \`${newSettingDisplay.value}\``,
   });
 }
