@@ -9,9 +9,10 @@ export default new Command(
 
   async (client, interaction) => {
     if (!(client.commandCategories.length > 0)) {
-      return await interaction.followUp({
+      await interaction.followUp({
         content: "No command categories exist!",
       });
+      return;
     }
 
     const commandCategories: SelectMenuComponentOptionData[] = client.commandCategories

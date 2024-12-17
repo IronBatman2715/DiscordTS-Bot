@@ -21,10 +21,11 @@ export default new Command(
 
     // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {
-      return await interaction.followUp({
+      await interaction.followUp({
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         content: `You can not clear ${quantity} messages! Allowed range is from 1 to ${maxMessagesCleared}.`,
       });
+      return;
     }
 
     const channel = interaction.channel as TextChannel;
@@ -40,10 +41,11 @@ export default new Command(
     } catch (err) {
       logger.error("Errored while trying to bulkDelete messages", err);
 
-      return await interaction.followUp({
+      await interaction.followUp({
         content: `Errored while trying to bulkDelete messages! Make sure you are not 
         (1) deleting more than are in the channel or (2) trying to delete messages made +2 weeks ago.`,
       });
+      return;
     }
 
     // Confirmation message

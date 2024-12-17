@@ -13,7 +13,8 @@ export default new Command(
 
     // Check if queue is empty
     if (!guildQueue.currentTrack && guildQueue.tracks.toArray().length === 0) {
-      return await interaction.followUp({ content: "No tracks in queue!" });
+      await interaction.followUp({ content: "No tracks in queue!" });
+      return;
     }
 
     const embedFieldArr: EmbedField[] = [];

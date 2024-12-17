@@ -22,9 +22,10 @@ export default new Command(
 
     // Check if user is currently in a voice channel
     if (!interaction.member.voice.channel) {
-      return await interaction.followUp({
+      await interaction.followUp({
         content: "Join a voice channel first!",
       });
+      return;
     }
 
     const query = interaction.options.getString("query", true);
@@ -34,9 +35,10 @@ export default new Command(
     });
 
     if (searchResult.isEmpty()) {
-      return await interaction.followUp({
+      await interaction.followUp({
         content: "Could not get a definitive link from your query! Try adding more details.",
       });
+      return;
     }
 
     const guildQueue = await getQueue(interaction, true);
