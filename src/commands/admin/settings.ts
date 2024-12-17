@@ -16,10 +16,14 @@ const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) =>
 // Base slash command builder
 const builder = new SlashCommandBuilder()
   .setName("settings")
-  .setDescription("ADMIN ONLY: Change/view guild settings.")
-  .addSubcommand((option) => option.setName("display").setDescription("Show current settings for this guild/server."))
+  .setDescription("Change/view guild settings.")
   .addSubcommand((option) =>
-    option.setName("reset").setDescription("Resets this guild/server's settings to the default values!")
+    option.setName("display").setDescription("ADMIN ONLY: " + "Show current settings for this guild/server.")
+  )
+  .addSubcommand((option) =>
+    option
+      .setName("reset")
+      .setDescription("ADMIN ONLY: " + "Resets this guild/server's settings to the default values!")
   );
 
 // Add settings
@@ -28,7 +32,7 @@ builder
   .addSubcommand((option) =>
     option
       .setName(kebabCase(guildConfigSettings[0]))
-      .setDescription(guildConfigDescriptions[guildConfigSettings[0]])
+      .setDescription("ADMIN ONLY: " + guildConfigDescriptions[guildConfigSettings[0]])
       .addIntegerOption((subOption) =>
         subOption
           .setName("new-value")
@@ -46,20 +50,20 @@ builder
       .addSubcommand((option) =>
         option
           .setName("overwrite")
-          .setDescription("Overwrite current value with a new one.")
+          .setDescription("ADMIN ONLY: " + "Overwrite current value with a new one.")
           .addChannelOption((subOption) =>
             subOption.setName("new-value").setDescription("Enter a new value.").addChannelTypes(0).setRequired(true)
           )
       )
       .addSubcommand((option) =>
-        option.setName("disable").setDescription("Disable this setting (set to an empty value).")
+        option.setName("disable").setDescription("ADMIN ONLY: " + "Disable this setting (set to an empty value).")
       )
   )
   // defaultRepeatMode
   .addSubcommand((option) =>
     option
       .setName(kebabCase(guildConfigSettings[2]))
-      .setDescription(guildConfigDescriptions[guildConfigSettings[2]])
+      .setDescription("ADMIN ONLY: " + guildConfigDescriptions[guildConfigSettings[2]])
       .addIntegerOption((subOption) =>
         subOption
           .setName("new-value")
