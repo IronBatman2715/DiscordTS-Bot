@@ -28,11 +28,13 @@ import { join } from "path";
 import type { BotConfig } from "../botConfig.js";
 import { defaultBotConfig, getConfigFile } from "../botConfig.js";
 import isUser from "../functions/discord/isUser.js";
+import { dynamicImportDefaultESM } from "../functions/general/dynamicImportESM.js";
 import { isDevEnvironment } from "../functions/general/environment.js";
 import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
 import type Command from "./Command.js";
+import { isCommand } from "./Command.js";
 import DB from "./DB.js";
-import type BaseEvent from "./Event.js";
+import { implementsBaseEvent } from "./Event.js";
 import logger from "./Logger.js";
 
 export enum DiscordAPIAction {
@@ -196,9 +198,7 @@ export default class Client extends DiscordClient {
         for (const file of files) {
           const commandFilePath = join(commandsSubDir, file);
 
-          // TODO: properly confirm type
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          const command: Command = (await import(commandFilePath)).default;
+          const command = await dynamicImportDefaultESM(commandFilePath, isCommand);
 
           // Set and store command categories
           command.category = subDir;
@@ -316,9 +316,7 @@ export default class Client extends DiscordClient {
           const eventFilePath = join(eventsSubDir, file);
           const eventFileName = file.slice(0, file.length - 3);
 
-          // TODO: properly confirm type
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          const event: BaseEvent = (await import(eventFilePath)).default;
+          const event = await dynamicImportDefaultESM(eventFilePath, implementsBaseEvent);
 
           // Bind event to its corresponding event emitter
           event.bindToEventEmitter(this);

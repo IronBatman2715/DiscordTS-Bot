@@ -12,6 +12,19 @@ export interface IBaseEvent {
   bindToEventEmitter(client: Client): void;
 }
 
+export function implementsBaseEvent(input: unknown): input is IBaseEvent {
+  return (
+    input instanceof Object &&
+    "event" in input &&
+    typeof input.event === "string" &&
+    "run" in input &&
+    typeof input.run === "function" && // generic function, so no more checks
+    "bindToEventEmitter" in input &&
+    typeof input.bindToEventEmitter === "function"
+    // TODO: type guard for function signature
+  );
+}
+
 /* --- Client --- */
 type ClientRunFunction<Ev extends keyof ClientEvents> = (...args: ClientEvents[Ev]) => Awaitable<void>;
 

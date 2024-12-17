@@ -6,6 +6,23 @@ type RunFunction = (client: Client, interaction: ChatInputCommandInteraction) =>
 
 type Builder = SharedSlashCommand;
 
+export function isCommand(input: unknown): input is Command {
+  return (
+    input instanceof Object &&
+    "_category" in input &&
+    typeof input._category === "string" &&
+    "_hasCategory" in input &&
+    typeof input._hasCategory === "boolean" &&
+    "builder" in input &&
+    // input.builder instanceof Builder &&
+    "run" in input &&
+    typeof input.run === "function" &&
+    // TODO: type guard for function signature
+    "category" in input &&
+    typeof input.category === "string"
+  );
+}
+
 export default class Command {
   private _category: string;
   private _hasCategory: boolean;
