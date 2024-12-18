@@ -59,6 +59,7 @@ export default class Client extends DiscordClient {
   readonly devMode: boolean;
   /** List of developer discord user Ids */
   private readonly devIds: string[] = [];
+  private started = false;
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
@@ -75,8 +76,6 @@ export default class Client extends DiscordClient {
       await Client.instance.loadCommands();
 
       logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
-
-      await Client.instance.start();
     }
     return Client.instance;
   }
@@ -159,7 +158,12 @@ export default class Client extends DiscordClient {
   }
 
   /** Start bot by connecting to external server(s). Namely, Discord itself */
-  private async start(): Promise<void> {
+  async start(): Promise<void> {
+    if (this.started) {
+      logger.warn("Client is already started. Do not need to call `Client.start()` again.");
+      return;
+    }
+
     try {
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
@@ -170,6 +174,7 @@ export default class Client extends DiscordClient {
 
       logger.info("Logging into Discord... ");
       await this.login(process.env.DISCORD_TOKEN);
+      this.started = true;
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Could not start the bot! Make sure your environment variables are valid!"));
