@@ -195,29 +195,31 @@ export default class Client extends DiscordClient {
 
       // Omit this subDir if there are no valid files within it
       // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
-      if ((subDir !== "dev" || this.devMode) && files.length > 0) {
-        logger.verbose(`\t${camel2Display(subDir)}`);
+      if ((subDir === "dev" && !this.devMode) || files.length <= 0) {
+        continue;
+      }
 
-        for (const file of files) {
-          const commandFilePath = join(commandsSubDir, file);
+      logger.verbose(`\t${camel2Display(subDir)}`);
 
-          const command = await dynamicImportDefaultESM(commandFilePath, isCommand);
+      for (const file of files) {
+        const commandFilePath = join(commandsSubDir, file);
 
-          // Set and store command categories
-          command.category = subDir;
-          if (!this.commandCategories.includes(subDir)) {
-            this.commandCategories.push(subDir);
-          }
+        const command = await dynamicImportDefaultESM(commandFilePath, isCommand);
 
-          // Set admin command permissions default to false
-          if (command.category === "admin") {
-            // command.builder.setDefaultPermission(false);
-          }
-
-          this.commands.set(command.builder.name, command);
-
-          logger.verbose(`\t\t${command.builder.name}`);
+        // Set and store command categories
+        command.category = subDir;
+        if (!this.commandCategories.includes(subDir)) {
+          this.commandCategories.push(subDir);
         }
+
+        // Set admin command permissions default to false
+        if (command.category === "admin") {
+          // command.builder.setDefaultPermission(false);
+        }
+
+        this.commands.set(command.builder.name, command);
+
+        logger.verbose(`\t\t${command.builder.name}`);
       }
     }
 
@@ -311,23 +313,25 @@ export default class Client extends DiscordClient {
       const files = (await readdir(eventsSubDir)).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       // Omit this subDir if there are no valid files within it
-      if (files.length > 0) {
-        logger.verbose(`\t${camel2Display(subDir)}`);
+      if (files.length <= 0) {
+        continue;
+      }
 
-        for (const file of files) {
-          const eventFilePath = join(eventsSubDir, file);
-          const eventFileName = file.slice(0, file.length - 3);
+      logger.verbose(`\t${camel2Display(subDir)}`);
 
-          const event = await dynamicImportDefaultESM(eventFilePath, implementsBaseEvent);
+      for (const file of files) {
+        const eventFilePath = join(eventsSubDir, file);
+        const eventFileName = file.slice(0, file.length - 3);
 
-          // Bind event to its corresponding event emitter
-          event.bindToEventEmitter(this);
+        const event = await dynamicImportDefaultESM(eventFilePath, implementsBaseEvent);
 
-          if (event.event !== eventFileName) {
-            logger.verbose(`\t\t"${eventFileName}" -> ${event.event}`);
-          } else {
-            logger.verbose(`\t\t${eventFileName}`);
-          }
+        // Bind event to its corresponding event emitter
+        event.bindToEventEmitter(this);
+
+        if (event.event !== eventFileName) {
+          logger.verbose(`\t\t"${eventFileName}" -> ${event.event}`);
+        } else {
+          logger.verbose(`\t\t${eventFileName}`);
         }
       }
     }
