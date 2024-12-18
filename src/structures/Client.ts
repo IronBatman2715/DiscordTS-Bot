@@ -187,6 +187,7 @@ export default class Client extends DiscordClient {
     logger.info("Loading commands");
 
     const commandsDir = join(import.meta.dirname, "..", "commands");
+    logger.verbose(`Commands directory: "${commandsDir}"`);
 
     for (const subDir of await readdir(commandsDir)) {
       const commandsSubDir = join(commandsDir, subDir);
@@ -196,10 +197,11 @@ export default class Client extends DiscordClient {
       // Omit this subDir if there are no valid files within it
       // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
       if ((subDir === "dev" && !this.devMode) || files.length <= 0) {
+        logger.verbose(`Skipping sub directory: "${commandsSubDir}"`);
         continue;
       }
 
-      logger.verbose(`\t${camel2Display(subDir)}`);
+      logger.debug(`\t${camel2Display(subDir)}`);
 
       for (const file of files) {
         const commandFilePath = join(commandsSubDir, file);
@@ -219,11 +221,11 @@ export default class Client extends DiscordClient {
 
         this.commands.set(command.builder.name, command);
 
-        logger.verbose(`\t\t${command.builder.name}`);
+        logger.debug(`\t\t${command.builder.name}`);
       }
     }
 
-    logger.verbose("Successfully loaded commands");
+    logger.debug("Successfully loaded commands");
   }
 
   /**
@@ -306,6 +308,7 @@ export default class Client extends DiscordClient {
     logger.info("Loading events");
 
     const eventsDir = join(import.meta.dirname, "..", "events");
+    logger.verbose(`Events directory: "${eventsDir}"`);
 
     for (const subDir of await readdir(eventsDir)) {
       const eventsSubDir = join(eventsDir, subDir);
@@ -314,10 +317,11 @@ export default class Client extends DiscordClient {
 
       // Omit this subDir if there are no valid files within it
       if (files.length <= 0) {
+        logger.verbose(`Skipping sub directory: "${eventsSubDir}"`);
         continue;
       }
 
-      logger.verbose(`\t${camel2Display(subDir)}`);
+      logger.debug(`\t${camel2Display(subDir)}`);
 
       for (const file of files) {
         const eventFilePath = join(eventsSubDir, file);
@@ -329,14 +333,14 @@ export default class Client extends DiscordClient {
         event.bindToEventEmitter(this);
 
         if (event.event !== eventFileName) {
-          logger.verbose(`\t\t"${eventFileName}" -> ${event.event}`);
+          logger.debug(`\t\t"${eventFileName}" -> ${event.event}`);
         } else {
-          logger.verbose(`\t\t${eventFileName}`);
+          logger.debug(`\t\t${eventFileName}`);
         }
       }
     }
 
-    logger.verbose("Successfully loaded events");
+    logger.debug("Successfully loaded events");
   }
 
   /** Generate embed with default values and check for valid data
