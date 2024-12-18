@@ -22,7 +22,7 @@ import {
   REST,
   Routes,
 } from "discord.js";
-import { readdirSync } from "fs";
+import { readdir } from "fs/promises";
 import { join } from "path";
 
 import type { BotConfig } from "../botConfig.js";
@@ -188,11 +188,10 @@ export default class Client extends DiscordClient {
 
     const commandsDir = join(import.meta.dirname, "..", "commands");
 
-    // TODO: since this function is now async, should use async `readdir`
-    for (const subDir of readdirSync(commandsDir)) {
+    for (const subDir of await readdir(commandsDir)) {
       const commandsSubDir = join(commandsDir, subDir);
 
-      const files = readdirSync(commandsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
+      const files = (await readdir(commandsSubDir)).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       // Omit this subDir if there are no valid files within it
       // Also omit this subDir if it is "dev" and bot is in PRODUCTION mode
@@ -306,11 +305,10 @@ export default class Client extends DiscordClient {
 
     const eventsDir = join(import.meta.dirname, "..", "events");
 
-    // TODO: since this function is now async, should use async `readdir`
-    for (const subDir of readdirSync(eventsDir)) {
+    for (const subDir of await readdir(eventsDir)) {
       const eventsSubDir = join(eventsDir, subDir);
 
-      const files = readdirSync(eventsSubDir).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
+      const files = (await readdir(eventsSubDir)).filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       // Omit this subDir if there are no valid files within it
       if (files.length > 0) {
