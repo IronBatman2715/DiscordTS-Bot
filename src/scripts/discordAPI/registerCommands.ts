@@ -8,4 +8,4 @@ const client = await Client.get();
 await client.manageDiscordAPICommands(DiscordAPIAction.Register);
 
 logger.info("Exiting script");
-process.exit(0);
+await client.destroy();
