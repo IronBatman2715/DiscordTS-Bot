@@ -7,6 +7,7 @@ import { guildConfigDefaults, guildConfigDescriptions } from "../../database/Gui
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
+import db from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -91,7 +92,7 @@ export default new Command(builder, async (client, interaction) => {
       const name = camelCase(subCommandGroupQuery);
       switch (subCommandQuery) {
         case "overwrite": {
-          await changeSetting(client, interaction, {
+          await changeSetting(interaction, {
             name,
             value: interaction.options.getChannel("new-value", true).id,
           });
@@ -99,7 +100,7 @@ export default new Command(builder, async (client, interaction) => {
         }
 
         case "disable": {
-          await changeSetting(client, interaction, {
+          await changeSetting(interaction, {
             name,
             value: "",
           });
@@ -125,14 +126,14 @@ export default new Command(builder, async (client, interaction) => {
     case "reset": {
       // Add in user confirmation..?
       logger.verbose("Resetting guild settings to defaults");
-      await resetSettings(client, interaction);
+      await resetSettings(interaction);
       break;
     }
 
     case "max-messages-cleared":
     case "default-repeat-mode": {
       logger.verbose(`Changing "${subCommandQuery}" setting`);
-      await changeSetting(client, interaction, {
+      await changeSetting(interaction, {
         name: camelCase(subCommandQuery),
         value: interaction.options.getInteger("new-value", true),
       });
@@ -159,7 +160,7 @@ interface SettingDisplay {
 }
 
 async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction) {
-  const currentGuildConfig = await client.DB.getGuildConfig(interaction.guildId);
+  const currentGuildConfig = await db.getGuildConfig(interaction.guildId);
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
     let currentValue: number | string;
@@ -210,20 +211,20 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
   });
 }
 
-async function resetSettings(client: Client, interaction: ChatInputCommandInteraction) {
+async function resetSettings(interaction: ChatInputCommandInteraction) {
   // Reset
-  await client.DB.deleteGuildConfig(interaction.guildId);
+  await db.deleteGuildConfig(interaction.guildId);
 
   // Generate new based on defaults
-  await client.DB.getGuildConfig(interaction.guildId);
+  await db.getGuildConfig(interaction.guildId);
 
   await interaction.followUp({
     content: `Reset guild/server settings to defaults!`,
   });
 }
 
-async function changeSetting(client: Client, interaction: ChatInputCommandInteraction, newSettingData: SettingData) {
-  await client.DB.updateGuildConfig(interaction.guildId, {
+async function changeSetting(interaction: ChatInputCommandInteraction, newSettingData: SettingData) {
+  await db.updateGuildConfig(interaction.guildId, {
     [newSettingData.name]: newSettingData.value,
   });
 

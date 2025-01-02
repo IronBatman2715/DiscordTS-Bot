@@ -3,6 +3,7 @@ import type { GuildQueueEvents, PlayerEvents } from "discord-player";
 import type { Awaitable, ClientEvents } from "discord.js";
 
 import type Client from "./Client.js";
+import db from "./DB.js";
 
 /* --- BaseEvent --- */
 export interface IBaseEvent {
@@ -62,8 +63,8 @@ export class PrismaEvent<Ev extends PrismaEvents> implements IBaseEvent {
     this.run = run;
   }
 
-  bindToEventEmitter(client: Client) {
-    client.DB.bindEvent<Ev>(this.event, this.run);
+  bindToEventEmitter() {
+    db.bindEvent<Ev>(this.event, this.run);
   }
 }
 

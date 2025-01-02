@@ -3,6 +3,7 @@ import { GuildMember, SlashCommandBuilder } from "discord.js";
 import getQueue from "../../functions/music/getQueue.js";
 import { isQueueRepeatMode } from "../../functions/music/queueRepeatMode.js";
 import Command from "../../structures/Command.js";
+import db from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 import QueueMetadata from "../../structures/QueueMetadata.js";
 
@@ -53,7 +54,7 @@ export default new Command(
         requestedBy: interaction.user,
       });
 
-      const { defaultRepeatMode } = await client.DB.getGuildConfig(interaction.guildId);
+      const { defaultRepeatMode } = await db.getGuildConfig(interaction.guildId);
       if (!isQueueRepeatMode(defaultRepeatMode)) {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new TypeError(`Invalid default QueueRepeatMode value in database: "${defaultRepeatMode}"`);

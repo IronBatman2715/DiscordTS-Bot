@@ -33,7 +33,7 @@ import { forNestedDirsFiles, importDefaultESM } from "../functions/general/fs.js
 import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
 import type Command from "./Command.js";
 import { isCommand } from "./Command.js";
-import DB from "./DB.js";
+import db from "./DB.js";
 import { implementsBaseEvent } from "./Event.js";
 import logger from "./Logger.js";
 
@@ -63,7 +63,6 @@ export default class Client extends DiscordClient {
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
-  readonly DB = DB;
   readonly player: Player;
 
   /** Get/Generate singleton instance */
@@ -167,7 +166,7 @@ export default class Client extends DiscordClient {
     try {
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
-      await this.DB.connect();
+      await db.connect();
       logger.info("Loading discord player extractors");
       await this.player.extractors.register(YoutubeiExtractor, {});
       await this.player.extractors.loadMulti(DefaultExtractors);
@@ -515,7 +514,7 @@ export default class Client extends DiscordClient {
       }
 
       case "music": {
-        const { musicChannelId } = await this.DB.getGuildConfig(interaction.guildId);
+        const { musicChannelId } = await db.getGuildConfig(interaction.guildId);
 
         if (musicChannelId !== "" && interaction.channelId !== musicChannelId) {
           const musicChannelName =
