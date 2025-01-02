@@ -18,7 +18,7 @@ const guildConfigSettings = Object.keys(guildConfigDefaults).filter((setting) =>
 // Base slash command builder
 const builder = new SlashCommandBuilder()
   .setName("settings")
-  .setDescription("Change/view guild settings.")
+  .setDescription("ADMIN ONLY: " + "Change/view guild settings.")
   .addSubcommand((option) =>
     option.setName("display").setDescription("ADMIN ONLY: " + "Show current settings for this guild/server.")
   )
