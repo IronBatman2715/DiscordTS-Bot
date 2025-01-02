@@ -9,8 +9,7 @@ import QueueMetadata from "./QueueMetadata.js";
 /* --- BaseEvent --- */
 export interface IBaseEvent {
   event: string;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  run: Function;
+  run: CallableFunction;
   bindToEventEmitter(client: Client): void;
 }
 
