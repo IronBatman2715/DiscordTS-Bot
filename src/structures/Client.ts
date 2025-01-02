@@ -145,7 +145,8 @@ export default class Client extends DiscordClient {
         "Note that environment variable *values* can NOT be verified. They may still error at first use if the value(s) are invalid!"
       );
 
-      this.player = new Player(this);
+      logger.info("Initializing discord player");
+      this.player = new Player(this); // TODO: decouple from client and use `useMainPlayer()` from `discord-player` instead
 
       if (this.devMode) {
         this.config = defaultBotConfig;
