@@ -292,15 +292,22 @@ export default class Client extends DiscordClient {
     logger.info("Loading events");
 
     const eventsDir = join(import.meta.dirname, "..", "events");
+    const expectedEventTypes = ["client", "musicPlayer", "musicPlayerGuildQueue", "prisma"];
     const eventTypes: string[] = [];
     await forNestedDirsFiles(eventsDir, async (eventFilePath, eventType, file) => {
-      const eventFileName = file.replace(/\.[^/.]+$/, "");
-      const event = await importDefaultESM(eventFilePath, implementsBaseEvent);
-
+      // Validate directory
       if (!eventTypes.includes(eventType)) {
+        if (!expectedEventTypes.includes(eventType)) {
+          throw new Error(`Unexpected event type directory: "${eventType}"`);
+        }
+
         logger.debug(`\t${camel2Display(eventType)}`);
         eventTypes.push(eventType);
       }
+
+      // Load module. TODO: validate that this file is in expected directory
+      const event = await importDefaultESM(eventFilePath, implementsBaseEvent);
+      const eventFileName = file.replace(/\.[^/.]+$/, "");
       if (event.event !== eventFileName) {
         logger.debug(`\t\t"${eventFileName}" -> ${event.event}`);
       } else {
