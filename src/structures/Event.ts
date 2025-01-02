@@ -19,9 +19,9 @@ export function implementsBaseEvent(input: unknown): input is IBaseEvent {
     "event" in input &&
     typeof input.event === "string" &&
     "run" in input &&
-    typeof input.run === "function" && // generic function, so no more checks
+    input.run instanceof Function && // generic function, so no more checks
     "bindToEventEmitter" in input &&
-    typeof input.bindToEventEmitter === "function"
+    input.bindToEventEmitter instanceof Function
     // TODO: type guard for function signature
   );
 }

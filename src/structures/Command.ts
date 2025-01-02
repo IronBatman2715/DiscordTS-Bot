@@ -16,7 +16,7 @@ export function isCommand(input: unknown): input is Command {
     "builder" in input &&
     // input.builder instanceof Builder &&
     "run" in input &&
-    typeof input.run === "function" &&
+    input.run instanceof Function &&
     // TODO: type guard for function signature
     "category" in input &&
     typeof input.category === "string"
