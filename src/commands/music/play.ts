@@ -1,10 +1,10 @@
 import { GuildMember, SlashCommandBuilder } from "discord.js";
 
 import getQueue from "../../functions/music/getQueue.js";
-import { indexToEnumVar } from "../../functions/music/queueRepeatMode.js";
+import { isQueueRepeatMode } from "../../functions/music/queueRepeatMode.js";
 import Command from "../../structures/Command.js";
 import logger from "../../structures/Logger.js";
-import QueueData from "../../structures/QueueData.js";
+import QueueMetadata from "../../structures/QueueMetadata.js";
 
 export default new Command(
   new SlashCommandBuilder()
@@ -47,14 +47,19 @@ export default new Command(
 
       const { queue } = await client.player.play(interaction.member.voice.channel, searchResult, {
         nodeOptions: {
-          metadata: new QueueData(client, interaction),
+          metadata: new QueueMetadata(client, interaction),
           selfDeaf: true,
         },
         requestedBy: interaction.user,
       });
 
       const { defaultRepeatMode } = await client.DB.getGuildConfig(interaction.guildId);
-      if (queue.repeatMode !== indexToEnumVar(defaultRepeatMode)) queue.setRepeatMode(defaultRepeatMode);
+      if (!isQueueRepeatMode(defaultRepeatMode)) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        throw new TypeError(`Invalid default QueueRepeatMode value in database: "${defaultRepeatMode}"`);
+      }
+
+      if (queue.repeatMode !== defaultRepeatMode) queue.setRepeatMode(defaultRepeatMode);
     } else {
       logger.info("Player is using pre-existing GuildQueue");
 

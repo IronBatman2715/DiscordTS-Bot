@@ -1,3 +1,4 @@
+import { DefaultExtractors } from "@discord-player/extractor";
 import { Player } from "discord-player";
 import { YoutubeiExtractor } from "discord-player-youtubei";
 import type {
@@ -169,7 +170,7 @@ export default class Client extends DiscordClient {
       await this.DB.connect();
       logger.info("Loading discord player extractors");
       await this.player.extractors.register(YoutubeiExtractor, {});
-      await this.player.extractors.loadDefault((ext) => !["YouTubeExtractor"].includes(ext));
+      await this.player.extractors.loadMulti(DefaultExtractors);
 
       logger.info("Logging into Discord... ");
       await this.login(process.env.DISCORD_TOKEN);

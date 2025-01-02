@@ -4,7 +4,7 @@ import type { ChatInputCommandInteraction, Message, TextBasedChannel } from "dis
 import type Client from "./Client.js";
 import logger from "./Logger.js";
 
-export default class QueueData {
+export default class QueueMetadata {
   latestInteraction: ChatInputCommandInteraction;
   private _embedMessage?: Message;
   readonly client: Client;
@@ -90,7 +90,7 @@ export default class QueueData {
   async deleteEmbedMessage() {
     try {
       if (this._embedMessage !== undefined) {
-        logger.verbose("Deleting QueueData embed message.");
+        logger.verbose("Deleting QueueMetadata embed message.");
         await this.embedMessage.delete();
       } else {
         logger.verbose("Can NOT delete embed message as one has not been created yet! Skipping deletion attempt.");

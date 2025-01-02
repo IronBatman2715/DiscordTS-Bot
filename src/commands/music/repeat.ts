@@ -2,7 +2,7 @@ import { QueueRepeatMode } from "discord-player";
 import { SlashCommandBuilder } from "discord.js";
 
 import getQueue from "../../functions/music/getQueue.js";
-import { indexToEnumVar } from "../../functions/music/queueRepeatMode.js";
+import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import Command from "../../structures/Command.js";
 
 export default new Command(
@@ -27,17 +27,22 @@ export default new Command(
     if (!guildQueue) return;
 
     const repeatMode = interaction.options.getInteger("option", true);
-    const repeatModeStr = QueueRepeatMode[repeatMode].toLowerCase();
+    if (!isQueueRepeatMode(repeatMode)) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      throw new TypeError(`Invalid QueueRepeatMode value: "${repeatMode}"`);
+    }
+
+    const repeatModeDisplay = toDisplayString(repeatMode);
 
     // Change the repeat behavior of the queue
-    if (guildQueue.repeatMode === indexToEnumVar(repeatMode)) {
+    if (guildQueue.repeatMode === repeatMode) {
       await interaction.followUp({
-        content: `Already set to that repeat mode (${repeatModeStr})!`,
+        content: `Already set to that repeat mode (${repeatModeDisplay})!`,
       });
     } else {
       guildQueue.setRepeatMode(repeatMode);
       await interaction.followUp({
-        content: `Set music queue repeat mode to: ${repeatModeStr}!`,
+        content: `Set music queue repeat mode to: ${repeatModeDisplay}!`,
       });
     }
   }

@@ -4,6 +4,7 @@ import { SlashCommandBuilder } from "discord.js";
 import lodash from "lodash";
 
 import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig.js";
+import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
 import logger from "../../structures/Logger.js";
@@ -240,7 +241,11 @@ function getSettingDisplayValue(settingData: SettingData): string {
   switch (settingData.name) {
     case "defaultRepeatMode": {
       if (typeof settingData.value !== "number") throw new TypeError("settingData.value must be of type 'number'");
-      return `\`${QueueRepeatMode[settingData.value]}\``;
+      if (!isQueueRepeatMode(settingData.value))
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        throw new TypeError(`Invalid QueueRepeatMode value: "${settingData.value}"`);
+
+      return `\`${toDisplayString(settingData.value)}\``;
     }
 
     default: {

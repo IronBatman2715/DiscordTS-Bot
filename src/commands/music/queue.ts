@@ -1,8 +1,8 @@
-import { QueueRepeatMode } from "discord-player";
 import type { EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 
 import getQueue from "../../functions/music/getQueue.js";
+import { toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import Command from "../../structures/Command.js";
 
 export default new Command(
@@ -43,7 +43,7 @@ export default new Command(
 
     await client.sendMultiPageEmbed(interaction, embedFieldArr, {
       otherEmbedData: {
-        title: `Music Queue [Repeat mode: ${QueueRepeatMode[guildQueue.repeatMode]}]`,
+        title: `Music Queue [Repeat mode: ${toDisplayString(guildQueue.repeatMode)}]`,
         thumbnail: {
           url: "attachment://music.png",
         },
