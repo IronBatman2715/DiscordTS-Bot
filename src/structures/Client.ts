@@ -70,9 +70,15 @@ export default class Client extends DiscordClient {
     if (!Client.instance) {
       Client.instance = new this();
 
-      /* Would like these two to be in constructor, but await is not allowed in constructor */
-      await Client.instance.loadEvents();
-      await Client.instance.loadCommands();
+      try {
+        /* Would like these two to be in constructor, but await is not allowed in constructor */
+        await Client.instance.loadEvents();
+        await Client.instance.loadCommands();
+      } catch (error) {
+        logger.error(error);
+        logger.error(new Error("Could not load bot files!"));
+        process.exit(1);
+      }
 
       logger.info("*** DISCORD.JS BOT: CONSTRUCTION DONE ***");
     }
