@@ -1,12 +1,9 @@
 import { MessageFlags } from "discord.js";
 
-import assertQueueData from "../../functions/music/assertQueueData.js";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
 import logger from "../../structures/Logger.js";
 
 export default new MusicPlayerGuildQueueEvent("audioTrackAdd", async (queue, track) => {
-  assertQueueData(queue);
-
   logger.verbose(
     `${track.requestedBy?.displayName ?? "USER_DISPLAY_NAME"} added this audio track to the queue:\n\t${track.title}`
   );

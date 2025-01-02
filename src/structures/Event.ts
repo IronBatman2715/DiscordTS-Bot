@@ -4,6 +4,7 @@ import type { Awaitable, ClientEvents } from "discord.js";
 
 import type Client from "./Client.js";
 import db from "./DB.js";
+import QueueMetadata from "./QueueMetadata.js";
 
 /* --- BaseEvent --- */
 export interface IBaseEvent {
@@ -86,9 +87,10 @@ export class MusicPlayerEvent<Ev extends keyof PlayerEvents> implements IBaseEve
 }
 
 /* --- Music Player Guild Queue --- */
-type MusicPlayerGuildQueueRunFunction<Ev extends keyof GuildQueueEvents> = GuildQueueEvents[Ev];
+type MusicPlayerGuildQueueRunFunction<Ev extends keyof GuildQueueEvents<QueueMetadata>> =
+  GuildQueueEvents<QueueMetadata>[Ev];
 
-export class MusicPlayerGuildQueueEvent<Ev extends keyof GuildQueueEvents> implements IBaseEvent {
+export class MusicPlayerGuildQueueEvent<Ev extends keyof GuildQueueEvents<QueueMetadata>> implements IBaseEvent {
   readonly event: Ev;
   readonly run: MusicPlayerGuildQueueRunFunction<Ev>;
 
