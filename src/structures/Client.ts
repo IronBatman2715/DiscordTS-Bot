@@ -34,7 +34,7 @@ import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
 import type Command from "./Command.js";
 import { isCommand } from "./Command.js";
 import db from "./DB.js";
-import { implementsBaseEvent } from "./Event.js";
+import { EventEmitterType, eventEmitterTypeFromDir, isBaseEvent } from "./Event.js";
 import logger from "./Logger.js";
 
 export enum DiscordAPIAction {
@@ -301,27 +301,38 @@ export default class Client extends DiscordClient {
     logger.info("Loading events");
 
     const eventsDir = join(import.meta.dirname, "..", "events");
-    const expectedEventTypes = ["client", "musicPlayer", "musicPlayerGuildQueue", "prisma"];
-    const eventTypes: string[] = [];
-    await forNestedDirsFiles(eventsDir, async (eventFilePath, eventType, file) => {
+    const eventEmitterTypes: EventEmitterType[] = [];
+    await forNestedDirsFiles(eventsDir, async (eventFilePath, dir, file) => {
       // Validate directory
-      if (!eventTypes.includes(eventType)) {
-        if (!expectedEventTypes.includes(eventType)) {
-          throw new Error(`Unexpected event type directory: "${eventType}"`);
-        }
-
-        logger.debug(`\t${camel2Display(eventType)}`);
-        eventTypes.push(eventType);
+      const eventEmitterType = eventEmitterTypeFromDir(dir);
+      if (!eventEmitterTypes.includes(eventEmitterType)) {
+        logger.debug(`\t${camel2Display(EventEmitterType[eventEmitterType])}`);
+        eventEmitterTypes.push(eventEmitterType);
       }
 
-      // Load module. TODO: validate that this file is in expected directory
-      const event = await importDefaultESM(eventFilePath, implementsBaseEvent);
+      // Load module
+      const event = await importDefaultESM(eventFilePath, isBaseEvent);
+      const eventFileName = file.replace(/\.[^/.]+$/, "");
 
       // Bind event to its corresponding event emitter
-      event.bindToEventEmitter(this);
+      if (eventEmitterType === EventEmitterType.Client && event.isClient()) {
+        event.bindToEventEmitter(this);
+      } else if (eventEmitterType === EventEmitterType.MusicPlayer && event.isMusicPlayer()) {
+        event.bindToEventEmitter(this.player);
+      } else if (eventEmitterType === EventEmitterType.MusicPlayerGuildQueue && event.isMusicPlayerGuildQueue()) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        event.bindToEventEmitter(this.player.events);
+      } else if (eventEmitterType === EventEmitterType.Prisma && event.isPrisma()) {
+        event.bindToEventEmitter();
+      } else {
+        throw new Error(
+          `Event file does not match expected emitter type ("${EventEmitterType[eventEmitterType]}"): "${eventFileName}"` +
+            `. ` +
+            `This file probably belongs in a different directory (i.e. ...events/client instead of ...events/prisma)`
+        );
+      }
 
       // Log now to signify loading this file is complete
-      const eventFileName = file.replace(/\.[^/.]+$/, "");
       if (event.event !== eventFileName) {
         logger.debug(`\t\t"${eventFileName}" -> ${event.event}`);
       } else {
