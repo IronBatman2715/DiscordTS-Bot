@@ -207,7 +207,6 @@ export default class Client extends DiscordClient {
         logger.debug(`\t${camel2Display(category)}`);
         this.commandCategories.push(category);
       }
-      logger.debug(`\t\t${command.builder.name}`);
 
       // Set admin command permissions default to false
       if (command.category === "admin") {
@@ -215,6 +214,9 @@ export default class Client extends DiscordClient {
       }
 
       this.commands.set(command.builder.name, command);
+
+      // Log now to signify loading this file is complete
+      logger.debug(`\t\t${command.builder.name}`);
     });
     logger.debug("Successfully loaded commands");
   }
@@ -314,15 +316,17 @@ export default class Client extends DiscordClient {
 
       // Load module. TODO: validate that this file is in expected directory
       const event = await importDefaultESM(eventFilePath, implementsBaseEvent);
+
+      // Bind event to its corresponding event emitter
+      event.bindToEventEmitter(this);
+
+      // Log now to signify loading this file is complete
       const eventFileName = file.replace(/\.[^/.]+$/, "");
       if (event.event !== eventFileName) {
         logger.debug(`\t\t"${eventFileName}" -> ${event.event}`);
       } else {
         logger.debug(`\t\t${eventFileName}`);
       }
-
-      // Bind event to its corresponding event emitter
-      event.bindToEventEmitter(this);
     });
     logger.debug("Successfully loaded events");
   }
