@@ -1,5 +1,5 @@
 import { DefaultExtractors } from "@discord-player/extractor";
-import { Player } from "discord-player";
+import { Player, useMainPlayer } from "discord-player";
 import { YoutubeiExtractor } from "discord-player-youtubei";
 import type {
   ChatInputCommandInteraction,
@@ -63,7 +63,6 @@ export default class Client extends DiscordClient {
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
   readonly commandCategories: string[] = [];
-  readonly player: Player;
 
   /** Get/Generate singleton instance */
   static async get() {
@@ -146,7 +145,7 @@ export default class Client extends DiscordClient {
       );
 
       logger.info("Initializing discord player");
-      this.player = new Player(this); // TODO: decouple from client and use `useMainPlayer()` from `discord-player` instead
+      new Player(this);
 
       if (this.devMode) {
         this.config = defaultBotConfig;
@@ -175,8 +174,9 @@ export default class Client extends DiscordClient {
 
       await db.connect();
       logger.info("Loading discord player extractors");
-      await this.player.extractors.register(YoutubeiExtractor, {});
-      await this.player.extractors.loadMulti(DefaultExtractors);
+      const player = useMainPlayer();
+      await player.extractors.register(YoutubeiExtractor, {});
+      await player.extractors.loadMulti(DefaultExtractors);
 
       logger.info("Logging into Discord... ");
       await this.login(process.env.DISCORD_TOKEN);
@@ -300,6 +300,8 @@ export default class Client extends DiscordClient {
   private async loadEvents(): Promise<void> {
     logger.info("Loading events");
 
+    const player = useMainPlayer();
+
     const eventsDir = join(import.meta.dirname, "..", "events");
     const eventEmitterTypes: EventEmitterType[] = [];
     await forNestedDirsFiles(eventsDir, async (eventFilePath, dir, file) => {
@@ -318,10 +320,10 @@ export default class Client extends DiscordClient {
       if (eventEmitterType === EventEmitterType.Client && event.isClient()) {
         event.bindToEventEmitter(this);
       } else if (eventEmitterType === EventEmitterType.MusicPlayer && event.isMusicPlayer()) {
-        event.bindToEventEmitter(this.player);
+        event.bindToEventEmitter(player);
       } else if (eventEmitterType === EventEmitterType.MusicPlayerGuildQueue && event.isMusicPlayerGuildQueue()) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        event.bindToEventEmitter(this.player.events);
+        event.bindToEventEmitter(player.events);
       } else if (eventEmitterType === EventEmitterType.Prisma && event.isPrisma()) {
         event.bindToEventEmitter();
       } else {

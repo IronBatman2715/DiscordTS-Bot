@@ -1,3 +1,4 @@
+import { useMainPlayer } from "discord-player";
 import { GuildMember, SlashCommandBuilder } from "discord.js";
 
 import getQueue from "../../functions/music/getQueue.js";
@@ -31,7 +32,8 @@ export default new Command(
 
     const query = interaction.options.getString("query", true);
 
-    const searchResult = await client.player.search(query, {
+    const player = useMainPlayer();
+    const searchResult = await player.search(query, {
       requestedBy: interaction.user,
     });
 
@@ -46,7 +48,7 @@ export default new Command(
     if (!guildQueue) {
       logger.info("Player is creating a new GuildQueue");
 
-      const { queue } = await client.player.play(interaction.member.voice.channel, searchResult, {
+      const { queue } = await player.play(interaction.member.voice.channel, searchResult, {
         nodeOptions: {
           metadata: new QueueMetadata(client, interaction),
           selfDeaf: true,
@@ -64,7 +66,7 @@ export default new Command(
     } else {
       logger.info("Player is using pre-existing GuildQueue");
 
-      await client.player.play(interaction.member.voice.channel, searchResult, {
+      await player.play(interaction.member.voice.channel, searchResult, {
         requestedBy: interaction.user,
       });
     }
