@@ -10,35 +10,32 @@ export function isCommand(input: unknown): input is Command {
   return (
     input instanceof Object &&
     "_category" in input &&
-    typeof input._category === "string" &&
+    (typeof input._category === "string" || typeof input._category === "undefined") &&
     "_hasCategory" in input &&
     typeof input._hasCategory === "boolean" &&
     "builder" in input &&
     // input.builder instanceof Builder &&
     "run" in input &&
-    input.run instanceof Function &&
+    input.run instanceof Function
     // TODO: type guard for function signature
-    "category" in input &&
-    typeof input.category === "string"
   );
 }
 
 export default class Command {
-  private _category: string;
-  private _hasCategory: boolean;
+  private _category?: string;
+  private _hasCategory = false;
   readonly builder: Builder;
   readonly run: RunFunction;
 
   constructor(builder: Builder, run: RunFunction) {
-    this._category = "";
-    this._hasCategory = false;
-
     this.builder = builder;
     this.run = run;
   }
 
-  get category() {
-    return this._category;
+  get category(): string {
+    if (this._category) return this._category;
+
+    throw new TypeError("Command: category has not been set!");
   }
 
   set category(category: string) {
