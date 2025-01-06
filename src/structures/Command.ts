@@ -11,8 +11,6 @@ export function isCommand(input: unknown): input is Command {
     input instanceof Object &&
     "_category" in input &&
     (typeof input._category === "string" || typeof input._category === "undefined") &&
-    "_hasCategory" in input &&
-    typeof input._hasCategory === "boolean" &&
     "builder" in input &&
     // input.builder instanceof Builder &&
     "run" in input &&
@@ -23,7 +21,6 @@ export function isCommand(input: unknown): input is Command {
 
 export default class Command {
   private _category?: string;
-  private _hasCategory = false;
   readonly builder: Builder;
   readonly run: RunFunction;
 
@@ -39,11 +36,10 @@ export default class Command {
   }
 
   set category(category: string) {
-    if (this._hasCategory) {
+    if (this._category !== undefined) {
       throw new TypeError("Command: category has already been set!");
     } else {
       this._category = category;
-      this._hasCategory = true;
     }
   }
 }
