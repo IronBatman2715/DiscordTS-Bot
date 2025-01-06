@@ -9,23 +9,23 @@ import QueueMetadata from "./QueueMetadata.js";
 /* --- BaseEvent --- */
 export enum EventEmitterType {
   Client,
+  Prisma,
   MusicPlayer,
   MusicPlayerGuildQueue,
-  Prisma,
 }
 export function eventEmitterTypeFromDir(dirName: string): EventEmitterType {
   switch (dirName) {
     case "client": {
       return EventEmitterType.Client;
     }
+    case "prisma": {
+      return EventEmitterType.Prisma;
+    }
     case "musicPlayer": {
       return EventEmitterType.MusicPlayer;
     }
     case "musicPlayerGuildQueue": {
       return EventEmitterType.MusicPlayerGuildQueue;
-    }
-    case "prisma": {
-      return EventEmitterType.Prisma;
     }
 
     default: {
@@ -51,16 +51,16 @@ class BaseEvent<Ev extends string, EventRunFunc extends CallableFunction> {
     return this instanceof ClientEvent;
   }
 
-  isPrisma<Ev extends PrismaEvents>(): this is PrismaEvent<Ev> {
-    return this instanceof PrismaEvent;
-  }
-
   isMusicPlayer<Ev extends keyof PlayerEvents>(): this is MusicPlayerEvent<Ev> {
     return this instanceof MusicPlayerEvent;
   }
 
   isMusicPlayerGuildQueue<Ev extends keyof GuildQueueEvents<QueueMetadata>>(): this is MusicPlayerGuildQueueEvent<Ev> {
     return this instanceof MusicPlayerGuildQueueEvent;
+  }
+
+  isPrisma<Ev extends PrismaEvents>(): this is PrismaEvent<Ev> {
+    return this instanceof PrismaEvent;
   }
 }
 export function isBaseEvent(input: unknown): input is BaseEvent<string, CallableFunction> {
@@ -86,22 +86,6 @@ export class ClientEvent<Ev extends keyof ClientEvents>
   }
 }
 
-/* --- Prisma --- */
-export type PrismaEvents = Prisma.LogLevel;
-
-/** Omit `params` and `duration` for MongoDB, as they
- *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined}
- */
-export type PrismaRunFunction<Ev extends PrismaEvents> = (
-  event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent
-) => void;
-
-export class PrismaEvent<Ev extends PrismaEvents> extends BaseEvent<Ev, PrismaRunFunction<Ev>> implements IBindEvent {
-  bindToEventEmitter(): void {
-    db.bindEvent<Ev>(this.event, this.run);
-  }
-}
-
 /* --- Music Player --- */
 type MusicPlayerRunFunction<Ev extends keyof PlayerEvents> = PlayerEvents[Ev];
 
@@ -124,5 +108,21 @@ export class MusicPlayerGuildQueueEvent<Ev extends keyof GuildQueueEvents<QueueM
 {
   bindToEventEmitter(eventEmitter: PlayerEventsEmitter<GuildQueueEvents<QueueMetadata>>): void {
     eventEmitter.on(this.event, this.run);
+  }
+}
+
+/* --- Prisma --- */
+export type PrismaEvents = Prisma.LogLevel;
+
+/** Omit `params` and `duration` for MongoDB, as they
+ *  {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#event-types will be undefined}
+ */
+export type PrismaRunFunction<Ev extends PrismaEvents> = (
+  event: Ev extends "query" ? Omit<Prisma.QueryEvent, "params" | "duration"> : Prisma.LogEvent
+) => void;
+
+export class PrismaEvent<Ev extends PrismaEvents> extends BaseEvent<Ev, PrismaRunFunction<Ev>> implements IBindEvent {
+  bindToEventEmitter(): void {
+    db.bindEvent<Ev>(this.event, this.run);
   }
 }
