@@ -344,9 +344,8 @@ export default class Client extends DiscordClient {
     logger.debug("Successfully loaded events");
   }
 
-  /** Generate embed with default values and check for valid data
-   *
-   * Use this if you KNOW that `data.fields` will not be longer than 25!
+  /** Generate embed with default values and check for
+   * {@link https://discordjs.guide/popular-topics/embeds.html#embed-limits valid data}
    */
   genEmbed(data: Partial<EmbedData> = {}): EmbedBuilder {
     logger.verbose("Generating embed");
@@ -363,7 +362,8 @@ export default class Client extends DiscordClient {
     if (data.fields !== undefined) {
       // Cannot have more than 25 fields in one embed
       if (data.fields.length > 25) {
-        throw new RangeError("Client.genEmbed() tried to generate an embed with more than 25 fields!");
+        logger.warn("Had to shorten an embed's fields.", { embedFields: data.fields });
+        data.fields = data.fields.slice(0, 25);
       }
       data.fields.forEach((f) => {
         if (f.name.length > 256) {
