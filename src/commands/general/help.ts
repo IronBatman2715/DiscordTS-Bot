@@ -8,6 +8,10 @@ import {
 import Command from "../../structures/Command.js";
 import logger from "../../structures/Logger.js";
 
+// TODO: standardize this normalization of components similar to `Client.genEmbed` (i.e. `Client.genComponents`)
+const truncatedMessage =
+  "`/help` tried to generate a menu with more than 25 options! You have too many command categories to display in a singular help menu. Truncating output to 25.";
+
 export default new Command(
   new SlashCommandBuilder().setName("help").setDescription("Show a list of available commands."),
 
@@ -19,7 +23,9 @@ export default new Command(
       return;
     }
 
-    const commandCategories = client.commandCategories
+    const [commandCategories, isTruncated] = normalizeSelectMenuOptions(client.commandCategories);
+
+    const options = commandCategories
       .filter((category) => category !== "dev")
       .map((category) => {
         return new StringSelectMenuOptionBuilder()
@@ -27,15 +33,8 @@ export default new Command(
           .setValue(category);
       });
 
-    if (commandCategories.length > 25) {
-      logger.error(
-        new RangeError(
-          "`/help` tried to generate a menu with more than 25 options! You have too many command categories to display in a singular help menu."
-        )
-      );
-      while (commandCategories.length > 25) {
-        commandCategories.pop();
-      }
+    if (isTruncated) {
+      logger.warn(new RangeError(truncatedMessage));
     }
 
     const helpEmbed = client.genEmbed({
@@ -43,6 +42,7 @@ export default new Command(
     });
 
     await interaction.followUp({
+      content: isTruncated ? truncatedMessage : undefined,
       embeds: [helpEmbed],
       components: [
         new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(
@@ -51,9 +51,17 @@ export default new Command(
             .setPlaceholder("Select a Command category")
             .setMinValues(1)
             .setMaxValues(1)
-            .setOptions(commandCategories)
+            .setOptions(options)
         ),
       ],
     });
   }
 );
+
+function normalizeSelectMenuOptions(options: string[]): [string[], boolean] {
+  if (options.length > 25) {
+    return [options.slice(0, 25), true];
+  } else {
+    return [options, false];
+  }
+}

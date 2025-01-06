@@ -11,13 +11,14 @@ export default new Command(
   new SlashCommandBuilder()
     .setName("menu")
     .setDescription("DEVELOPER ONLY: Shows a test menu.")
-    .addIntegerOption((option) =>
-      option
-        .setName("number-of-options")
-        .setDescription("Number of options to generate.")
-        .setRequired(true)
-        .setMinValue(1)
-        .setMaxValue(25)
+    .addIntegerOption(
+      (option) =>
+        option
+          .setName("number-of-options")
+          .setDescription("Number of options to generate.")
+          .setRequired(true)
+          .setMinValue(1)
+          .setMaxValue(25) // can not find documentation on this limit, but testing shows this is the maximum
     ),
 
   async (_client, interaction) => {
