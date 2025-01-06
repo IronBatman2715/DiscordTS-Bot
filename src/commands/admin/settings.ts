@@ -3,11 +3,16 @@ import type { ChatInputCommandInteraction, EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 import lodash from "lodash";
 
-import { guildConfigDefaults, guildConfigDescriptions } from "../../database/GuildConfig.js";
+import {
+  deleteGuildConfig,
+  getGuildConfig,
+  defaults as guildConfigDefaults,
+  descriptions as guildConfigDescriptions,
+  updateGuildConfig,
+} from "../../database/GuildConfig.js";
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
-import { deleteGuildConfig, getGuildConfig, updateGuildConfig } from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method

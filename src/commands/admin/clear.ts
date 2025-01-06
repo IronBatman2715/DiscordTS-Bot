@@ -1,10 +1,10 @@
 import type { TextChannel } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 
+import { getGuildConfig } from "../../database/GuildConfig.js";
 import tempMessage from "../../functions/discord/tempMessage.js";
 import { isInRange } from "../../functions/general/math.js";
 import Command from "../../structures/Command.js";
-import { getGuildConfig } from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 
 export default new Command(

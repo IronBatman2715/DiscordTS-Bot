@@ -27,13 +27,14 @@ import { join } from "path";
 
 import type { BotConfig } from "../botConfig.js";
 import { defaultBotConfig, getConfigFile } from "../botConfig.js";
+import { getGuildConfig } from "../database/GuildConfig.js";
+import { connect as connectToDB } from "../database/index.js";
 import isUser from "../functions/discord/isUser.js";
 import { isDevEnvironment } from "../functions/general/environment.js";
 import { forNestedDirsFiles, importDefaultESM } from "../functions/general/fs.js";
 import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
 import type Command from "./Command.js";
 import { isCommand } from "./Command.js";
-import { connect as connectToDB, getGuildConfig } from "./DB.js";
 import { EventEmitterType, eventEmitterTypeFromDir, isBaseEvent } from "./Event.js";
 import logger from "./Logger.js";
 

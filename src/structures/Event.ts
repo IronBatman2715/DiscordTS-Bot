@@ -2,8 +2,8 @@ import type { Prisma } from "@prisma/client";
 import type { GuildQueueEvents, Player, PlayerEvents, PlayerEventsEmitter } from "discord-player";
 import type { Awaitable, ClientEvents } from "discord.js";
 
+import { bindEvent as bindDBEvent } from "../database/index.js";
 import type Client from "./Client.js";
-import { bindEvent as bindDBEvent } from "./DB.js";
 import QueueMetadata from "./QueueMetadata.js";
 
 /* --- BaseEvent --- */
