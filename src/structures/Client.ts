@@ -33,7 +33,7 @@ import { forNestedDirsFiles, importDefaultESM } from "../functions/general/fs.js
 import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
 import type Command from "./Command.js";
 import { isCommand } from "./Command.js";
-import db from "./DB.js";
+import { connect as connectToDB, getGuildConfig } from "./DB.js";
 import { EventEmitterType, eventEmitterTypeFromDir, isBaseEvent } from "./Event.js";
 import logger from "./Logger.js";
 
@@ -172,7 +172,7 @@ export default class Client extends DiscordClient {
     try {
       if (this.devMode) await this.manageDiscordAPICommands(DiscordAPIAction.Register);
 
-      await db.connect();
+      await connectToDB();
       logger.info("Loading discord player extractors");
       const player = useMainPlayer();
       await player.extractors.register(YoutubeiExtractor, {});
@@ -545,7 +545,7 @@ export default class Client extends DiscordClient {
       }
 
       case "music": {
-        const { musicChannelId } = await db.getGuildConfig(interaction.guildId);
+        const { musicChannelId } = await getGuildConfig(interaction.guildId);
 
         if (musicChannelId !== "" && interaction.channelId !== musicChannelId) {
           const musicChannelName =

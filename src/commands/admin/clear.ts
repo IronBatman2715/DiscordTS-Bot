@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from "discord.js";
 import tempMessage from "../../functions/discord/tempMessage.js";
 import { isInRange } from "../../functions/general/math.js";
 import Command from "../../structures/Command.js";
-import db from "../../structures/DB.js";
+import { getGuildConfig } from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 
 export default new Command(
@@ -18,7 +18,7 @@ export default new Command(
   async (_client, interaction) => {
     const quantity = interaction.options.getInteger("quantity", true);
 
-    const { maxMessagesCleared } = await db.getGuildConfig(interaction.guildId);
+    const { maxMessagesCleared } = await getGuildConfig(interaction.guildId);
 
     // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {

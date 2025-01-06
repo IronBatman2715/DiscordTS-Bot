@@ -20,7 +20,7 @@ let hasDoneInitialConnection = false;
  *
  * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#connect here})
  */
-async function connect() {
+export async function connect() {
   if (!hasDoneInitialConnection) {
     logger.info("Initializing connection to database...");
     await prisma.$connect();
@@ -37,7 +37,7 @@ async function connect() {
  *
  * Should NOT need to call this method (see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/connection-management#disconnect here})
  */
-async function disconnect() {
+export async function disconnect() {
   try {
     logger.info("Disconnecting from database...");
     await prisma.$disconnect();
@@ -48,12 +48,12 @@ async function disconnect() {
   }
 }
 
-function bindEvent<Ev extends PrismaEvents>(event: Ev, eventFunction: PrismaRunFunction<Ev>) {
+export function bindEvent<Ev extends PrismaEvents>(event: Ev, eventFunction: PrismaRunFunction<Ev>) {
   prisma.$on(event, eventFunction);
 }
 
 /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
-async function getGuildConfig(guildId: string | null) {
+export async function getGuildConfig(guildId: string | null) {
   logger.verbose("DB.getGuildConfig()", { guildId });
 
   if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
@@ -75,7 +75,10 @@ async function getGuildConfig(guildId: string | null) {
 }
 
 /** Update the guild config document corresponding to guildId with the data in guildConfig. */
-async function updateGuildConfig(guildId: string | null, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
+export async function updateGuildConfig(
+  guildId: string | null,
+  guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>
+) {
   logger.verbose("DB.updateGuildConfig()", { guildId, guildConfig });
 
   if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
@@ -87,7 +90,7 @@ async function updateGuildConfig(guildId: string | null, guildConfig: Partial<Om
 }
 
 /** Delete the guild config document corresponding to guildId. */
-async function deleteGuildConfig(guildId: string | null) {
+export async function deleteGuildConfig(guildId: string | null) {
   logger.verbose("DB.deleteGuildConfig()", { guildId });
 
   if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);

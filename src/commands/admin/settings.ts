@@ -7,7 +7,7 @@ import { guildConfigDefaults, guildConfigDescriptions } from "../../database/Gui
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
-import db from "../../structures/DB.js";
+import { deleteGuildConfig, getGuildConfig, updateGuildConfig } from "../../structures/DB.js";
 import logger from "../../structures/Logger.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -160,7 +160,7 @@ interface SettingDisplay {
 }
 
 async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction) {
-  const currentGuildConfig = await db.getGuildConfig(interaction.guildId);
+  const currentGuildConfig = await getGuildConfig(interaction.guildId);
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
     let currentValue: number | string;
@@ -213,10 +213,10 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
 
 async function resetSettings(interaction: ChatInputCommandInteraction) {
   // Reset
-  await db.deleteGuildConfig(interaction.guildId);
+  await deleteGuildConfig(interaction.guildId);
 
   // Generate new based on defaults
-  await db.getGuildConfig(interaction.guildId);
+  await getGuildConfig(interaction.guildId);
 
   await interaction.followUp({
     content: `Reset guild/server settings to defaults!`,
@@ -224,7 +224,7 @@ async function resetSettings(interaction: ChatInputCommandInteraction) {
 }
 
 async function changeSetting(interaction: ChatInputCommandInteraction, newSettingData: SettingData) {
-  await db.updateGuildConfig(interaction.guildId, {
+  await updateGuildConfig(interaction.guildId, {
     [newSettingData.name]: newSettingData.value,
   });
 

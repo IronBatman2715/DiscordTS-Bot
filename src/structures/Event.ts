@@ -3,7 +3,7 @@ import type { GuildQueueEvents, Player, PlayerEvents, PlayerEventsEmitter } from
 import type { Awaitable, ClientEvents } from "discord.js";
 
 import type Client from "./Client.js";
-import db from "./DB.js";
+import { bindEvent as bindDBEvent } from "./DB.js";
 import QueueMetadata from "./QueueMetadata.js";
 
 /* --- BaseEvent --- */
@@ -123,6 +123,6 @@ export type PrismaRunFunction<Ev extends PrismaEvents> = (
 
 export class PrismaEvent<Ev extends PrismaEvents> extends BaseEvent<Ev, PrismaRunFunction<Ev>> implements IBindEvent {
   bindToEventEmitter(): void {
-    db.bindEvent<Ev>(this.event, this.run);
+    bindDBEvent<Ev>(this.event, this.run);
   }
 }
