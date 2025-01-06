@@ -1,5 +1,9 @@
-import type { SelectMenuComponentOptionData } from "discord.js";
-import { ActionRowBuilder, SlashCommandBuilder, StringSelectMenuBuilder } from "discord.js";
+import {
+  ActionRowBuilder,
+  SlashCommandBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+} from "discord.js";
 
 import Command from "../../structures/Command.js";
 import logger from "../../structures/Logger.js";
@@ -15,13 +19,12 @@ export default new Command(
       return;
     }
 
-    const commandCategories: SelectMenuComponentOptionData[] = client.commandCategories
+    const commandCategories = client.commandCategories
       .filter((category) => category !== "dev")
       .map((category) => {
-        return {
-          label: category[0].toUpperCase() + category.slice(1).toLowerCase(),
-          value: category,
-        };
+        return new StringSelectMenuOptionBuilder()
+          .setLabel(category[0].toUpperCase() + category.slice(1).toLowerCase())
+          .setValue(category);
       });
 
     if (commandCategories.length > 25) {
