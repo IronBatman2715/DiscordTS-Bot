@@ -1,6 +1,6 @@
+import logger from "../../logger.js";
 import Client from "../../structures/Client.js";
 import { ClientEvent } from "../../structures/Event.js";
-import logger from "../../structures/Logger.js";
 
 export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isChatInputCommand()) {

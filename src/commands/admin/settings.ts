@@ -11,9 +11,9 @@ import {
   updateGuildConfig,
 } from "../../database/GuildConfig.js";
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
+import logger from "../../logger.js";
 import type Client from "../../structures/Client.js";
 import Command from "../../structures/Command.js";
-import logger from "../../structures/Logger.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { kebabCase, camelCase } = lodash;

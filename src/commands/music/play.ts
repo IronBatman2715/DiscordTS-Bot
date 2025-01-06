@@ -4,8 +4,8 @@ import { GuildMember, SlashCommandBuilder } from "discord.js";
 import { getGuildConfig } from "../../database/GuildConfig.js";
 import getQueue from "../../functions/music/getQueue.js";
 import { isQueueRepeatMode } from "../../functions/music/queueRepeatMode.js";
+import logger from "../../logger.js";
 import Command from "../../structures/Command.js";
-import logger from "../../structures/Logger.js";
 import QueueMetadata from "../../structures/QueueMetadata.js";
 
 export default new Command(

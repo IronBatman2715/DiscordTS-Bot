@@ -1,7 +1,7 @@
 import type { GuildConfig } from "@prisma/client";
 import { QueueRepeatMode } from "discord-player";
 
-import logger from "../structures/Logger.js";
+import logger from "../logger.js";
 import { prisma } from "./index.js";
 
 export const defaults: Omit<GuildConfig, "guildId" | "id"> = {

@@ -1,5 +1,5 @@
+import logger from "../../logger.js";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
-import logger from "../../structures/Logger.js";
 
 export default new MusicPlayerGuildQueueEvent("playerError", (queue, error) => {
   // Emitted when the audio player errors while streaming audio track

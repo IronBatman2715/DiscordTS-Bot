@@ -1,4 +1,4 @@
-import logger from "../../structures/Logger.js";
+import logger from "../../logger.js";
 import { isNaturalNumber } from "./math.js";
 
 const enOrdinalRules = new Intl.PluralRules("en", { type: "ordinal" });

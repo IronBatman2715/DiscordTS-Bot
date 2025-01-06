@@ -1,7 +1,7 @@
 import type { ActivitiesOptions } from "../../botConfig.js";
+import logger from "../../logger.js";
 import Client from "../../structures/Client.js";
 import { ClientEvent } from "../../structures/Event.js";
-import logger from "../../structures/Logger.js";
 
 export default new ClientEvent("ready", async () => {
   const client = await Client.get();

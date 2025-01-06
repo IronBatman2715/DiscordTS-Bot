@@ -2,7 +2,7 @@ import { Awaitable } from "discord.js";
 import { lstat, readdir } from "fs/promises";
 import { join } from "path";
 
-import logger from "../../structures/Logger.js";
+import logger from "../../logger.js";
 
 /**
  * Read a directory at `path` whose direct children are all directories with only files within them.

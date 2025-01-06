@@ -1,8 +1,8 @@
 import type { Track } from "discord-player";
 import type { ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
 
+import logger from "../logger.js";
 import type Client from "./Client.js";
-import logger from "./Logger.js";
 
 export default class QueueMetadata {
   latestInteraction: ChatInputCommandInteraction;

@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from "winston";
 
-import { defaultBotConfig, getConfigFile } from "../botConfig.js";
-import { isDevEnvironment } from "../functions/general/environment.js";
+import { defaultBotConfig, getConfigFile } from "./botConfig.js";
+import { isDevEnvironment } from "./functions/general/environment.js";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
 

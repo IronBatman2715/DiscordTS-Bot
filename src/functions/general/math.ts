@@ -1,4 +1,4 @@
-import logger from "../../structures/Logger.js";
+import logger from "../../logger.js";
 
 /**
  * Evaluate if `value` is between `min` and `max` (inclusive).

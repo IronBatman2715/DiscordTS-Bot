@@ -5,8 +5,8 @@ import {
   StringSelectMenuOptionBuilder,
 } from "discord.js";
 
+import logger from "../../logger.js";
 import Command from "../../structures/Command.js";
-import logger from "../../structures/Logger.js";
 
 // TODO: standardize this normalization of components similar to `Client.genEmbed` (i.e. `Client.genComponents`)
 const truncatedMessage =

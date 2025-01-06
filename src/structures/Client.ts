@@ -33,10 +33,10 @@ import isUser from "../functions/discord/isUser.js";
 import { isDevEnvironment } from "../functions/general/environment.js";
 import { forNestedDirsFiles, importDefaultESM } from "../functions/general/fs.js";
 import { camel2Display, isOnlyDigits } from "../functions/general/strings.js";
+import logger from "../logger.js";
 import type Command from "./Command.js";
 import { isCommand } from "./Command.js";
 import { EventEmitterType, eventEmitterTypeFromDir, isBaseEvent } from "./Event.js";
-import logger from "./Logger.js";
 
 export enum DiscordAPIAction {
   /** Update commands. Will NOT remove commands with names that are no longer in use! */

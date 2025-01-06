@@ -1,6 +1,6 @@
 import { isDevEnvironment } from "../../functions/general/environment.js";
+import logger from "../../logger.js";
 import Client, { DiscordAPIAction } from "../../structures/Client.js";
-import logger from "../../structures/Logger.js";
 
 if (isDevEnvironment()) throw new Error("Must register global commands in production environment!");
 

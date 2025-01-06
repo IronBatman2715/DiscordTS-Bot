@@ -1,5 +1,5 @@
+import logger from "../../logger.js";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
-import logger from "../../structures/Logger.js";
 
 export default new MusicPlayerGuildQueueEvent("audioTracksAdd", (_queue, tracks) => {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

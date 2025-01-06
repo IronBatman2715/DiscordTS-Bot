@@ -1,6 +1,6 @@
 import type { GuildMember, PermissionResolvable } from "discord.js";
 
-import logger from "../../structures/Logger.js";
+import logger from "../../logger.js";
 
 interface IUserCheckOptions {
   permissions: PermissionResolvable;

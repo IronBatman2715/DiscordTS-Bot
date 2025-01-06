@@ -1,7 +1,7 @@
 import { MessageFlags } from "discord.js";
 
+import logger from "../../logger.js";
 import { MusicPlayerGuildQueueEvent } from "../../structures/Event.js";
-import logger from "../../structures/Logger.js";
 
 export default new MusicPlayerGuildQueueEvent("audioTrackAdd", async (queue, track) => {
   logger.verbose(

@@ -1,8 +1,8 @@
 // import below force loads `.env` file if present AND `schema.prisma` refers to an environment variable that is unset
 import { PrismaClient } from "@prisma/client";
 
+import logger from "../logger.js";
 import type { PrismaEvents, PrismaRunFunction } from "../structures/Event.js";
-import logger from "../structures/Logger.js";
 
 export const prisma = new PrismaClient({
   log: [
