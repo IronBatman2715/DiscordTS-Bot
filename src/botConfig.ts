@@ -10,7 +10,12 @@ export interface ActivitiesOptions {
   name: string;
   /** `0 | 1 | 2 | 3 | 5` */
   type: Exclude<ActivityType, ActivityType.Custom>;
-  /** Only add if `type` is `1 | ActivityType.Streaming` */
+  /** Either a Twitch or YouTube url
+   *
+   * Should only be present if `type` is `1 | ActivityType.Streaming`
+   *
+   * TODO: add validation of this in JSON schema
+   */
   url?: string;
 }
 
@@ -20,6 +25,9 @@ export interface BotConfig {
 }
 
 const ajv = addErrors(addFormats(new Ajv({ allErrors: true })));
+
+// https://discord.com/developers/docs/events/gateway-events#activity-object-activity-types
+ajv.addFormat("streaming-uri", /^https:\/\/(www\.)?(twitch\.tv|youtube\.com)\/.+$/);
 
 const schema: JSONSchemaType<BotConfig> = {
   type: "object",
@@ -40,10 +48,10 @@ const schema: JSONSchemaType<BotConfig> = {
           },
           url: {
             type: "string",
-            format: "uri",
+            format: "streaming-uri",
             nullable: true,
             errorMessage: {
-              format: "must be a valid uri/url",
+              format: "must be a valid youtube or twitch url",
             },
           },
         },
