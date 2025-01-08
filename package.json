@@ -25,9 +25,9 @@
     "dev": "nodemon",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "commands:register": "node build/scripts/discordAPI/registerCommands.js",
-    "commands:resetDev": "cross-env NODE_ENV=development node --import './loader.js' src/scripts/discordAPI/resetCommands.ts",
-    "commands:resetProd": "node build/scripts/discordAPI/resetCommands.js",
+    "commands:register": "tsc && node build/scripts/discordAPI/registerCommands.js",
+    "commands:resetDev": "tsc && cross-env NODE_ENV=development node build/scripts/discordAPI/resetCommands.js",
+    "commands:resetProd": "tsc && node build/scripts/discordAPI/resetCommands.js",
     "start": "node ."
   },
   "dependencies": {
@@ -62,7 +62,6 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "prisma": "^6.2.1",
     "run-func": "^3.0.0",
-    "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.1"
