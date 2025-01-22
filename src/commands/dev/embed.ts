@@ -42,7 +42,7 @@ export default new Command(
         iconURL: (interaction.member as GuildMember).avatarURL() ?? "",
       },
       thumbnail: {
-        url: "https://www.seoptimer.com/blog/wp-content/uploads/2018/09/image22.png", //youtube icon
+        url: "https://www.youtube.com/s/desktop/a0d4cab0/img/logos/favicon_144x144.png", //youtube icon
       },
       image: {
         url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/U%2B2160.svg/1200px-U%2B2160.svg.png", //letter I
