@@ -2,7 +2,10 @@ import type { Awaitable, ChatInputCommandInteraction, SharedSlashCommand } from 
 
 import Client from "./Client.js";
 
-type RunFunction = (client: Client, interaction: ChatInputCommandInteraction) => Awaitable<unknown>;
+// ChatInputCommandInteraction<"raw" | "cached"> means that ChatInputCommandInteraction.inGuild() is true
+export type GuildChatInputCommandInteraction = ChatInputCommandInteraction<"raw" | "cached">;
+
+type RunFunction = (client: Client, interaction: GuildChatInputCommandInteraction) => Awaitable<unknown>;
 
 type Builder = SharedSlashCommand;
 

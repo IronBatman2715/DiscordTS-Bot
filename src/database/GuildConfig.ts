@@ -29,10 +29,8 @@ export const descriptions: Record<string, string> = {
 };
 
 /** Get the guild config data corresponding to guildId. If does not exist, generate based on defaults! */
-export async function getGuildConfig(guildId: string | null) {
+export async function getGuildConfig(guildId: string) {
   logger.verbose("DB.getGuildConfig()", { guildId });
-
-  if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
   const query = await prisma.guildConfig.findUnique({ where: { guildId } });
 
@@ -51,13 +49,8 @@ export async function getGuildConfig(guildId: string | null) {
 }
 
 /** Update the guild config document corresponding to guildId with the data in guildConfig. */
-export async function updateGuildConfig(
-  guildId: string | null,
-  guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>
-) {
+export async function updateGuildConfig(guildId: string, guildConfig: Partial<Omit<GuildConfig, "id" | "guildId">>) {
   logger.verbose("DB.updateGuildConfig()", { guildId, guildConfig });
-
-  if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
   return await prisma.guildConfig.update({
     where: { guildId },
@@ -66,10 +59,8 @@ export async function updateGuildConfig(
 }
 
 /** Delete the guild config document corresponding to guildId. */
-export async function deleteGuildConfig(guildId: string | null) {
+export async function deleteGuildConfig(guildId: string) {
   logger.verbose("DB.deleteGuildConfig()", { guildId });
-
-  if (!guildId) throw new ReferenceError(`Entered invalid guildId [{${typeof guildId}} guildId: ${guildId}]!`);
 
   return await prisma.guildConfig.delete({ where: { guildId } });
 }

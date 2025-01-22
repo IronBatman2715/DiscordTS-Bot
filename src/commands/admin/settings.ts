@@ -1,5 +1,5 @@
 import { QueueRepeatMode } from "discord-player";
-import type { ChatInputCommandInteraction, EmbedField } from "discord.js";
+import type { EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
 import lodash from "lodash";
 
@@ -13,6 +13,7 @@ import {
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
 import logger from "../../logger.js";
 import type Client from "../../structures/Client.js";
+import type { GuildChatInputCommandInteraction } from "../../structures/Command.js";
 import Command from "../../structures/Command.js";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -164,7 +165,7 @@ interface SettingDisplay {
   value: string;
 }
 
-async function displayCurrentSettings(client: Client, interaction: ChatInputCommandInteraction) {
+async function displayCurrentSettings(client: Client, interaction: GuildChatInputCommandInteraction) {
   const currentGuildConfig = await getGuildConfig(interaction.guildId);
 
   const settingsFieldArr: EmbedField[] = guildConfigSettings.map((setting) => {
@@ -207,7 +208,7 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
   await client.sendMultiPageEmbed(interaction, settingsFieldArr, {
     maxFieldsPerEmbed: 15,
     otherEmbedData: {
-      title: `${interaction.guild?.name} [id: \`${interaction.guildId}\`] Server-wide Settings`,
+      title: `${interaction.guild?.name ?? "NO NAME"} [id: \`${interaction.guildId}\`] Server-wide Settings`,
       thumbnail: {
         url: "attachment://settings.png",
       },
@@ -216,7 +217,7 @@ async function displayCurrentSettings(client: Client, interaction: ChatInputComm
   });
 }
 
-async function resetSettings(interaction: ChatInputCommandInteraction) {
+async function resetSettings(interaction: GuildChatInputCommandInteraction) {
   // Reset
   await deleteGuildConfig(interaction.guildId);
 
@@ -228,7 +229,7 @@ async function resetSettings(interaction: ChatInputCommandInteraction) {
   });
 }
 
-async function changeSetting(interaction: ChatInputCommandInteraction, newSettingData: SettingData) {
+async function changeSetting(interaction: GuildChatInputCommandInteraction, newSettingData: SettingData) {
   await updateGuildConfig(interaction.guildId, {
     [newSettingData.name]: newSettingData.value,
   });

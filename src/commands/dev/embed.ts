@@ -11,7 +11,7 @@ export default new Command(
 
     let userDisplayName = "USER_DISPLAY_NAME";
     // Should always be true, but just in case
-    if (interaction.member?.user instanceof User) {
+    if (interaction.member.user instanceof User) {
       userDisplayName = interaction.member.user.displayName;
     }
 

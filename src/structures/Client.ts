@@ -511,6 +511,14 @@ export default class Client extends DiscordClient {
   }
 
   async runCommand(command: Command, interaction: ChatInputCommandInteraction): Promise<void> {
+    // For now, all commands should assume we are in a guild.
+    // Subject to change.
+    if (!interaction.inGuild()) {
+      logger.warn(`Tried to run \`/${command.builder.name}\` command outside of a server/guild`);
+      await interaction.followUp({ content: "This bot only supports commands in a server/guild!" });
+      return;
+    }
+
     // Validate this user can use this command
     switch (command.category) {
       // Admin only commands
@@ -561,8 +569,9 @@ export default class Client extends DiscordClient {
       }
     }
 
-    const guildName = interaction.guild?.name ?? "NO NAME";
-    logger.info(`${guildName}[id: ${interaction.guildId}] ran \`/${command.builder.name}\` command`);
+    logger.info(
+      `Guild "${interaction.guild?.name ?? "NO NAME"}" [id: ${interaction.guildId}] ran \`/${command.builder.name}\` command`
+    );
     try {
       await command.run(this, interaction);
     } catch (error) {
