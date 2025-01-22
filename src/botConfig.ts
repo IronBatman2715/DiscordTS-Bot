@@ -83,30 +83,36 @@ const schema: JSONSchemaType<BotConfig> = {
 };
 const validate = ajv.compile(schema);
 
+let config: BotConfig | undefined;
+
 /** Load config.json from filesystem or generate it from defaults.
  *
  * Can NOT use logger inside this function as the logger requires the config file!
  */
 export function getConfigFile(overwrite = false): BotConfig {
-  if (overwrite || !existsSync("config.json")) {
-    console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
+  if (config === undefined) {
+    if (overwrite || !existsSync("config.json")) {
+      console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
 
-    writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
+      writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
 
-    console.info(`Successfully generated "config.json"\n`);
+      console.info(`Successfully generated "config.json"\n`);
+    }
+
+    const parsedConfigJson: unknown = JSON.parse(readFileSync("config.json", "utf-8"));
+
+    if (!validate(parsedConfigJson)) {
+      let errorMsg = "Invalid config.json:";
+      validate.errors?.forEach(({ instancePath, message }) => {
+        errorMsg += `\n\t${instancePath} ${message ?? ""}.`;
+      });
+      throw new Error(errorMsg);
+    }
+
+    config = parsedConfigJson;
   }
 
-  const parsedConfigJson: unknown = JSON.parse(readFileSync("config.json", "utf-8"));
-
-  if (!validate(parsedConfigJson)) {
-    let errorMsg = "Invalid config.json:";
-    validate.errors?.forEach(({ instancePath, message }) => {
-      errorMsg += `\n\t${instancePath} ${message ?? ""}.`;
-    });
-    throw new Error(errorMsg);
-  }
-
-  return parsedConfigJson;
+  return config;
 }
 
 /** Default bot configuration. Also used in development environment */
