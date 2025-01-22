@@ -56,8 +56,9 @@ export default tseslint.config(
       "@typescript-eslint/restrict-template-expressions": [
         "warn",
         {
-          allowNumber: false, // manually disable to ensure floating point numbers are properly handled
           allowBoolean: true,
+          allowNullish: false,
+          allowNumber: false, // manually disable to ensure floating point numbers are properly handled
         },
       ],
 
