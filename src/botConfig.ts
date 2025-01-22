@@ -3,7 +3,9 @@ import { Ajv } from "ajv";
 import addErrors from "ajv-errors";
 import addFormats from "ajv-formats";
 import { ActivityType } from "discord.js";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { constants, copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
+
+import { isDevEnvironment } from "./functions/general/environment.js";
 
 export interface ActivitiesOptions {
   /** String after type string */
@@ -85,140 +87,54 @@ const validate = ajv.compile(schema);
 
 let config: BotConfig | undefined;
 
-/** Load config.json from filesystem or generate it from defaults.
+/** Load config from filesystem or generate it from defaults.
  *
  * Can NOT use logger inside this function as the logger requires the config file!
  */
-export function getConfigFile(overwrite = false): BotConfig {
+export function getConfigFile(): BotConfig {
   if (config === undefined) {
-    if (overwrite || !existsSync("config.json")) {
-      console.info(`Generating "config.json"${overwrite ? ". OVERWRITING IF PRESENT" : ""}`);
+    const DEFAULT_CONFIG_FILE_NAME = "config.default.json";
 
-      writeFileSync("config.json", `${JSON.stringify(defaultBotConfig, null, "  ")}\n`);
+    const isDev = isDevEnvironment();
+    const configFileName = isDev ? "config.development.json" : "config.json";
 
-      console.info(`Successfully generated "config.json"\n`);
+    if (!existsSync(configFileName)) {
+      console.info(`Generating "${configFileName}"`);
+
+      if (isDev) {
+        // Edit and then copy
+
+        const defaultJson = parseFile(DEFAULT_CONFIG_FILE_NAME);
+        defaultJson.name = defaultJson.name + "-dev";
+
+        writeFileSync(configFileName, `${JSON.stringify(defaultJson, null, "  ")}\n`, {
+          encoding: "utf-8",
+          flag: "wx", // error if already exists
+        });
+      } else {
+        // Simply copy
+
+        copyFileSync(DEFAULT_CONFIG_FILE_NAME, configFileName, constants.COPYFILE_EXCL); // error if already exists
+      }
+
+      console.info(`Successfully generated "${configFileName}"\n`);
     }
-
-    const parsedConfigJson: unknown = JSON.parse(readFileSync("config.json", "utf-8"));
-
-    if (!validate(parsedConfigJson)) {
-      let errorMsg = "Invalid config.json:";
-      validate.errors?.forEach(({ instancePath, message }) => {
-        errorMsg += `\n\t${instancePath} ${message ?? ""}.`;
-      });
-      throw new Error(errorMsg);
-    }
-
-    config = parsedConfigJson;
+    config = parseFile(configFileName);
   }
 
   return config;
 }
 
-/** Default bot configuration. Also used in development environment */
-export const defaultBotConfig: BotConfig = {
-  name: "Z-Bot",
-  activities: [
-    {
-      type: ActivityType.Playing,
-      name: "Squid Game",
-    },
-    {
-      type: ActivityType.Streaming,
-      name: "the best",
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    },
-    {
-      type: ActivityType.Listening,
-      name: "Never Gonna Give you Up",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "Dota 2 Reporter",
-    },
-    {
-      type: ActivityType.Competing,
-      name: "TI",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Tech Expansion",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Tekkit",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Pudge",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "MEEPOOO",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "carry Wisp mid",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "in vault 666",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "Gandhi nuke everyone",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "The Fellowship of the Ring",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "Two Towers",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "Return of the King",
-    },
-    {
-      type: ActivityType.Listening,
-      name: "The Longest Johns",
-    },
-    {
-      type: ActivityType.Listening,
-      name: "Stan Rogers",
-    },
-    {
-      type: ActivityType.Listening,
-      name: "T-Swizzle",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Connect Four",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Monopoly City",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "🐱",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "🎸",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "🌄",
-    },
-    {
-      type: ActivityType.Playing,
-      name: "Skyrim Ultimate Special Legendary VR Anniversary Edition (Switch)",
-    },
-    {
-      type: ActivityType.Watching,
-      name: "Lydia block the doorway",
-    },
-  ],
-};
+function parseFile(fileName: string): BotConfig {
+  const json: unknown = JSON.parse(readFileSync(fileName, "utf-8"));
+
+  if (!validate(json)) {
+    let errorMsg = "Invalid config file:";
+    validate.errors?.forEach(({ instancePath, message }) => {
+      errorMsg += `\n\t${instancePath} ${message ?? ""}.`;
+    });
+    throw new Error(errorMsg);
+  }
+
+  return json;
+}

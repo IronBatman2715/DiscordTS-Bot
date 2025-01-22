@@ -20,7 +20,7 @@
   "scripts": {
     "postinstall": "prisma generate --no-hints",
     "build": "tsc",
-    "postbuild": "run-func build/botConfig.js getConfigFile true",
+    "postbuild": "node build/scripts/generateConfig.js",
     "predev": "prisma format && prisma generate --no-hints",
     "dev": "nodemon",
     "lint": "prettier --check . && eslint .",
@@ -61,7 +61,6 @@
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prisma": "^6.2.1",
-    "run-func": "^3.0.0",
     "tslib": "^2.8.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.21.0"

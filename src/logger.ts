@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from "winston";
 
-import { defaultBotConfig, getConfigFile } from "./botConfig.js";
+import { getConfigFile } from "./botConfig.js";
 import { isDevEnvironment } from "./functions/general/environment.js";
 
 const { timestamp, combine, printf, errors, colorize, json } = format;
@@ -10,11 +10,13 @@ const { timestamp, combine, printf, errors, colorize, json } = format;
 const version = process.env.npm_package_version;
 
 function initLogger() {
+  const { name } = getConfigFile();
+  const service = `${name}@${version ?? "UNKNOWN"}`;
+
   if (isDevEnvironment()) {
     // Initialize development logger
-    const { name } = defaultBotConfig;
     return createLogger({
-      defaultMeta: { service: `${name}@${version}` },
+      defaultMeta: { service },
       format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
       level: "debug",
       transports: [
@@ -33,9 +35,8 @@ function initLogger() {
     });
   } else {
     // Initialize production logger
-    const { name } = getConfigFile();
     return createLogger({
-      defaultMeta: { service: `${name}@${version}` },
+      defaultMeta: { service },
       format: combine(timestamp(), errors({ stack: true }), json()),
       level: "debug",
       transports: [

@@ -26,7 +26,7 @@ import {
 import { join } from "path";
 
 import type { BotConfig } from "../botConfig.js";
-import { defaultBotConfig, getConfigFile } from "../botConfig.js";
+import { getConfigFile } from "../botConfig.js";
 import { getGuildConfig } from "../database/GuildConfig.js";
 import { connect as connectToDB } from "../database/index.js";
 import isUser from "../functions/discord/isUser.js";
@@ -148,14 +148,9 @@ export default class Client extends DiscordClient {
       logger.info("Initializing discord player");
       new Player(this);
 
-      if (this.devMode) {
-        this.config = defaultBotConfig;
-        logger.info(`Loaded default config`);
-      } else {
-        logger.info("Loading config file");
-        this.config = getConfigFile();
-        logger.info(`Loaded config for "${this.config.name}"`);
-      }
+      logger.info("Loading config file");
+      this.config = getConfigFile();
+      logger.info(`Loaded config for "${this.config.name}"`);
     } catch (error) {
       logger.error(error);
       logger.error(new Error("Could not construct bot!"));

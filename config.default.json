@@ -1,0 +1,62 @@
+{
+  "name": "DiscordTS-Bot",
+  "activities": [
+    {
+      "type": 0,
+      "name": "Squid Game"
+    },
+    {
+      "type": 1,
+      "name": "the best",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+      "type": 2,
+      "name": "Never Gonna Give you Up"
+    },
+    {
+      "type": 0,
+      "name": "Tech Expansion"
+    },
+    {
+      "type": 0,
+      "name": "in vault 111"
+    },
+    {
+      "type": 3,
+      "name": "Gandhi nuke everyone"
+    },
+    {
+      "type": 3,
+      "name": "The Fellowship of the Ring"
+    },
+    {
+      "type": 3,
+      "name": "Two Towers"
+    },
+    {
+      "type": 3,
+      "name": "Return of the King"
+    },
+    {
+      "type": 3,
+      "name": "🐱"
+    },
+    {
+      "type": 0,
+      "name": "🎸"
+    },
+    {
+      "type": 3,
+      "name": "🌄"
+    },
+    {
+      "type": 0,
+      "name": "Skyrim Ultimate Special Legendary VR Anniversary Edition (Switch)"
+    },
+    {
+      "type": 3,
+      "name": "Lydia block the doorway"
+    }
+  ]
+}
