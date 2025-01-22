@@ -14,7 +14,7 @@ function initLogger() {
     // Initialize development logger
     const { name } = defaultBotConfig;
     return createLogger({
-      defaultMeta: { service: `${name}@${version}-dev` },
+      defaultMeta: { service: `${name}@${version}` },
       format: combine(errors({ stack: true }), timestamp({ format: "HH:mm:ss:SS" })),
       level: "debug",
       transports: [

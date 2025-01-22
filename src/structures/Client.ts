@@ -97,7 +97,7 @@ export default class Client extends DiscordClient {
       this.devMode = isDevEnvironment();
       logger.info(`Loading in ${this.devMode ? "DEVELOPMENT" : "PRODUCTION"} MODE`);
 
-      this.version = `${process.env.npm_package_version}${this.devMode ? "-dev" : ""}`;
+      this.version = process.env.npm_package_version ?? "UNKNOWN";
       logger.verbose(`Bot version: ${this.version}`);
 
       logger.verbose("Verifying environment variables are set in a valid form... ");
