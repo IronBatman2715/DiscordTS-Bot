@@ -10,7 +10,10 @@ import { isDevEnvironment } from "./functions/general/environment.js";
 export interface ActivitiesOptions {
   /** String after type string */
   name: string;
-  /** `0 | 1 | 2 | 3 | 5` */
+  /** `0 | 1 | 2 | 3 | 5`
+   *
+   * TODO: allow string values in config file for legibility (i.e. "streaming" instead of 1)
+   */
   type: Exclude<ActivityType, ActivityType.Custom>;
   /** Either a Twitch or YouTube url
    *
