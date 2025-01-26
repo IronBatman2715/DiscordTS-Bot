@@ -103,21 +103,23 @@ From here, follow the steps for your desired setup:
 
 - `activities`: list of activities the bot will randomly cycle through as its current activity (Exs: "Watching The Fellowship of the Ring", "Listening to Never Gonna Give you Up", etc.).
 
+  - `name`: string after the `type`.
+
   - `type`: integer that can _only_ be one of the following values.
 
-    `0` = PLAYING
+    `0` = Playing `name`
 
-    `1` = STREAMING
+    `1` = Streaming `name`
 
-    `2` = LISTENING
+    `2` = Listening to `name`
 
-    `3` = WATCHING
+    `3` = Watching `name`
 
     `4` = **\*\*NOT VALID, DO NOT USE\*\***
 
-    `5` = COMPETING
+    `5` = Competing in `name`
 
-  - `name`: string after the `type`.
+  - `url`: (optional) url link to stream. Only used when `type` is `1`.
 
 ## References
 
