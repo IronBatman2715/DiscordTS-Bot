@@ -1,7 +1,7 @@
 import type { EmbedField } from "discord.js";
 import { ActivityType, SlashCommandBuilder } from "discord.js";
 
-import type { ActivitiesOptions } from "../../botConfig.js";
+import type { ActivityOption } from "../../botConfig.js";
 import { camel2Display } from "../../functions/general/strings.js";
 import Command from "../../structures/Command.js";
 
@@ -17,7 +17,7 @@ export default new Command(
           break;
         }
         case "activities": {
-          (value as ActivitiesOptions[]).forEach(({ name, type, url }) => {
+          (value as ActivityOption[]).forEach(({ name, type, url }) => {
             formattedValue += url ? `[${ActivityType[type]} ${name}](${url})\n` : `${ActivityType[type]} ${name}\n`;
           });
           break;

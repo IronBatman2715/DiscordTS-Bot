@@ -1,4 +1,4 @@
-import type { ActivitiesOptions } from "../../botConfig.js";
+import type { ActivityOption } from "../../botConfig.js";
 import logger from "../../logger.js";
 import Client from "../../structures/Client.js";
 import { ClientEvent } from "../../structures/Event.js";
@@ -15,7 +15,7 @@ export default new ClientEvent("ready", async () => {
   }, 3600000); //set random presence every 3600000 ms = 1 hour
 });
 
-function setRandomBotPresence(client: Client, unusedActivities: ActivitiesOptions[]) {
+function setRandomBotPresence(client: Client, unusedActivities: ActivityOption[]) {
   // If used all of them, regenerate array to restart
   if (unusedActivities.length < 1) {
     unusedActivities = client.config.activities.slice();

@@ -7,7 +7,7 @@ import { constants, copyFileSync, existsSync, readFileSync, writeFileSync } from
 
 import { isDevEnvironment } from "./functions/general/environment.js";
 
-export interface ActivitiesOptions {
+export interface ActivityOption {
   /** String after type string */
   name: string;
   /** `0 | 1 | 2 | 3 | 5`
@@ -26,7 +26,7 @@ export interface ActivitiesOptions {
 
 export interface BotConfig {
   name: string;
-  activities: ActivitiesOptions[];
+  activities: ActivityOption[];
 }
 
 const ajv = addErrors(addFormats(new Ajv({ allErrors: true })));
