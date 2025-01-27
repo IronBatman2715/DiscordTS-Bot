@@ -20,8 +20,6 @@ export interface ActivityOption {
   /** Stream url. Either a {@link https://discord.com/developers/docs/events/gateway-events#activity-object-activity-types Twitch or YouTube url}
    *
    * Should only be present if `type` is `ActivityType.Streaming`
-   *
-   * TODO: add validation of this in JSON schema
    */
   url?: string;
 }
@@ -148,6 +146,23 @@ function parseFile(fileName: string): BotConfigJSON {
     let errorMsg = "Invalid config file:";
     validate.errors?.forEach(({ instancePath, message }) => {
       errorMsg += `\n\t${instancePath} ${message ?? ""}.`;
+    });
+    throw new Error(errorMsg);
+  }
+
+  // TODO: make this check with schema instead of manual check
+  const manualInvalid = json.activities
+    .map((a, i) => {
+      return { a, i }; // need index for error message
+    })
+    .filter(({ a }) => {
+      return a.type !== "streaming" && a.url !== undefined;
+    });
+  if (manualInvalid.length !== 0) {
+    let errorMsg = "Invalid config file:";
+    manualInvalid.forEach(({ i }) => {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      errorMsg += `\n\t/activities/${i}/url should only have "url" property when "type" is "streaming"`;
     });
     throw new Error(errorMsg);
   }
