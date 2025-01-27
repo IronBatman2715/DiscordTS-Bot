@@ -2,60 +2,60 @@
   "name": "DiscordTS-Bot",
   "activities": [
     {
-      "type": 0,
+      "type": "playing",
       "name": "Squid Game"
     },
     {
-      "type": 1,
+      "type": "streaming",
       "name": "the best",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     },
     {
-      "type": 2,
+      "type": "listening",
       "name": "Never Gonna Give you Up"
     },
     {
-      "type": 0,
+      "type": "playing",
       "name": "Tech Expansion"
     },
     {
-      "type": 0,
+      "type": "playing",
       "name": "in vault 111"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "Gandhi nuke everyone"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "The Fellowship of the Ring"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "Two Towers"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "Return of the King"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "🐱"
     },
     {
-      "type": 0,
+      "type": "playing",
       "name": "🎸"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "🌄"
     },
     {
-      "type": 0,
+      "type": "playing",
       "name": "Skyrim Ultimate Special Legendary VR Anniversary Edition (Switch)"
     },
     {
-      "type": 3,
+      "type": "watching",
       "name": "Lydia block the doorway"
     }
   ]

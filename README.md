@@ -105,21 +105,19 @@ From here, follow the steps for your desired setup:
 
   - `name`: string after the `type`.
 
-  - `type`: integer that can _only_ be one of the following values.
+  - `type`: string that can _only_ be one of the following values (case-sensitive).
 
-    `0` = Playing `name`
+    - `playing` = Playing `name`
 
-    `1` = Streaming `name`
+    - `streaming` = Streaming `name`
 
-    `2` = Listening to `name`
+    - `listening` = Listening to `name`
 
-    `3` = Watching `name`
+    - `watching` = Watching `name`
 
-    `4` = **\*\*NOT VALID, DO NOT USE\*\***
+    - `competing` = Competing in `name`
 
-    `5` = Competing in `name`
-
-  - `url`: (optional) url link to stream. Only used when `type` is `1`.
+  - `url`: (optional) url link to stream. Only include when `type` is `streaming`.
 
 ## References
 

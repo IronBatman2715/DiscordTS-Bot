@@ -4,20 +4,22 @@ import addErrors from "ajv-errors";
 import addFormats from "ajv-formats";
 import { ActivityType } from "discord.js";
 import { constants, copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
+import lodash from "lodash";
 
 import { isDevEnvironment } from "./functions/general/environment.js";
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { capitalize } = lodash;
 
 export interface ActivityOption {
   /** String after type string */
   name: string;
-  /** `0 | 1 | 2 | 3 | 5`
-   *
-   * TODO: allow string values in config file for legibility (i.e. "streaming" instead of 1)
+  /** Supported activity types {@link https://discord.com/developers/docs/events/gateway-events#activity-object-activity-structure for a bot}
    */
   type: Exclude<ActivityType, ActivityType.Custom>;
-  /** Either a Twitch or YouTube url
+  /** Stream url. Either a {@link https://discord.com/developers/docs/events/gateway-events#activity-object-activity-types Twitch or YouTube url}
    *
-   * Should only be present if `type` is `1 | ActivityType.Streaming`
+   * Should only be present if `type` is `ActivityType.Streaming`
    *
    * TODO: add validation of this in JSON schema
    */
@@ -31,10 +33,21 @@ export interface BotConfig {
 
 const ajv = addErrors(addFormats(new Ajv({ allErrors: true })));
 
-// https://discord.com/developers/docs/events/gateway-events#activity-object-activity-types
+// Format for ActivityOption.url
 ajv.addFormat("streaming-uri", /^https:\/\/(www\.)?(twitch\.tv|youtube\.com)\/.+$/);
 
-const schema: JSONSchemaType<BotConfig> = {
+interface ActivityOptionJSON {
+  name: string;
+  type: "playing" | "streaming" | "listening" | "watching" | "competing";
+  url?: string;
+}
+
+interface BotConfigJSON {
+  name: string;
+  activities: ActivityOptionJSON[];
+}
+
+const schema: JSONSchemaType<BotConfigJSON> = {
   type: "object",
   properties: {
     name: { type: "string" },
@@ -45,10 +58,10 @@ const schema: JSONSchemaType<BotConfig> = {
         properties: {
           name: { type: "string" },
           type: {
-            type: "integer",
-            enum: [0, 1, 2, 3, 5], //Exclude<ActivityType, ActivityType.Custom>
+            type: "string",
+            enum: ["playing", "streaming", "listening", "watching", "competing"],
             errorMessage: {
-              enum: "must equal one of the allowed values: 0, 1, 2, 3, or 5",
+              enum: `must equal one of the allowed values (case-sensitive): "playing", "streaming", "listening", "watching", "competing"`,
             },
           },
           url: {
@@ -122,13 +135,13 @@ export function getConfigFile(): BotConfig {
 
       console.info(`Successfully generated "${configFileName}"\n`);
     }
-    config = parseFile(configFileName);
+    config = fromJSON(parseFile(configFileName));
   }
 
   return config;
 }
 
-function parseFile(fileName: string): BotConfig {
+function parseFile(fileName: string): BotConfigJSON {
   const json: unknown = JSON.parse(readFileSync(fileName, "utf-8"));
 
   if (!validate(json)) {
@@ -140,4 +153,19 @@ function parseFile(fileName: string): BotConfig {
   }
 
   return json;
+}
+
+function fromJSON(data: BotConfigJSON): BotConfig {
+  const activities: ActivityOption[] = data.activities.map((a) => {
+    return {
+      name: a.name,
+      type: ActivityType[capitalize(a.type)],
+      url: a.url,
+    };
+  });
+
+  return {
+    name: data.name,
+    activities,
+  };
 }
