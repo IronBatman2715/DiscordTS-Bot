@@ -11,8 +11,6 @@ declare global {
       // Development only variables
       /** The guildId of your testing server */
       TEST_GUILD_ID?: string;
-      /** A list of developer discord user Ids separated by ", ". Ex: `DEV_IDS='DEV_ID1, DEV_ID2, DEV_ID3'` */
-      DEV_IDS?: string;
 
       /** Defines runtime environment type (omittance defaults to "production").
        *

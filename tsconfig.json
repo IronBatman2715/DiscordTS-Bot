@@ -6,7 +6,7 @@
     "declaration": false,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "outDir": "build",
+    "outDir": "devBuild",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

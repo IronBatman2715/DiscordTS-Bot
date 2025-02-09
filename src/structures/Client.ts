@@ -58,8 +58,6 @@ export default class Client extends DiscordClient {
   readonly version: string;
   /** True in development environment, otherwise false */
   readonly devMode: boolean;
-  /** List of developer discord user Ids */
-  private readonly devIds: string[] = [];
   private started = false;
 
   readonly commands: Collection<string, Command> = new Collection<string, Command>();
@@ -127,18 +125,6 @@ export default class Client extends DiscordClient {
             throw new TypeError("TEST_GUILD_ID environment variable must contain only digits!");
           }
         }
-        if (process.env.DEV_IDS === undefined || process.env.DEV_IDS === "") {
-          throw new ReferenceError("Must set at least one discord userId to DEV_IDS!");
-        } else {
-          // Parse and validate form of DEV_IDS
-          const devIds = process.env.DEV_IDS.includes(", ") ? process.env.DEV_IDS.split(", ") : [process.env.DEV_IDS];
-          for (const devId of devIds) {
-            if (!isOnlyDigits(devId)) {
-              throw new TypeError("DEV_IDS environment variable is invalid! Refer to `global.d.ts` for guidance");
-            }
-          }
-          this.devIds = devIds;
-        }
       }
       logger.verbose("Successfully verified that environment variables are set in a valid form!");
       logger.warn(
@@ -191,8 +177,8 @@ export default class Client extends DiscordClient {
     const commandsDir = join(import.meta.dirname, "..", "commands");
     await forNestedDirsFiles(commandsDir, async (commandFilePath, category, _) => {
       if (category === "dev" && !this.devMode) {
-        logger.verbose(`Skipping development only command`);
-        return;
+        logger.error(new Error(`Development only commands are present in production environment`));
+        process.exit(1);
       }
 
       const command = await importDefaultESM(commandFilePath, isCommand);
@@ -530,18 +516,6 @@ export default class Client extends DiscordClient {
         ) {
           await interaction.followUp({
             content: `This is a administrator only command!`,
-          });
-          return;
-        }
-        break;
-      }
-
-      // Developer only commands
-      case "dev": {
-        const userCheckOptions = { userIdList: this.devIds };
-        if (!isUser(interaction.member as GuildMember, userCheckOptions)) {
-          await interaction.followUp({
-            content: `This is a developer only command!`,
           });
           return;
         }

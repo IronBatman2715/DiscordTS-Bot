@@ -26,7 +26,7 @@ A customizable Discord bot based on [discord.js v14](https://discord.js.org) wit
 
    - Refer to the [discord.js guide](https://discordjs.guide) for directions. Specifically: [setting up your bot application](https://discordjs.guide/preparations/setting-up-a-bot-application) and then [adding it to server(s)](https://discordjs.guide/preparations/adding-your-bot-to-servers).
 
-   > It is recommended to use separate discord bot applications for development and production. This is for security reasons and because it can be difficult to differentiate global commands from in development commands otherwise.
+   > It is _highly_ recommended to use separate discord bot applications for development and production. It can be difficult to differentiate global (production) commands from guild (development) commands in the discord client.
 
 3. Setup your database of choice.
 
@@ -56,10 +56,6 @@ From here, follow the steps for your desired setup:
    - `TEST_GUILD_ID` guild ID of the server you will use to test this bot.
 
      - Slash commands will _immediately_ be updated for this server and this server only upon restarting the bot in _developer mode_.
-
-   - `DEV_IDS` A list of developer discord user IDs (must set _at least_ one)
-
-     - IDs should be separated by `", "`. Ex: `DEV_IDS='DEV_ID1, DEV_ID2, DEV_ID3'`.
 
 6. Run `npm ci` to do a clean install of dependencies and generate Prisma client files.
 

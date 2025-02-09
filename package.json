@@ -19,15 +19,15 @@
   "type": "module",
   "scripts": {
     "postinstall": "prisma generate --no-hints",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.prod.json",
     "postbuild": "node build/scripts/generateConfig.js",
     "predev": "prisma format && prisma generate --no-hints",
     "dev": "nodemon",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "commands:register": "tsc && node build/scripts/discordAPI/registerCommands.js",
-    "commands:resetDev": "tsc && cross-env NODE_ENV=development node build/scripts/discordAPI/resetCommands.js",
-    "commands:resetProd": "tsc && node build/scripts/discordAPI/resetCommands.js",
+    "commands:register": "tsc -p tsconfig.prod.json && node build/scripts/discordAPI/registerCommands.js",
+    "commands:resetDev": "tsc && cross-env NODE_ENV=development node devBuild/scripts/discordAPI/resetCommands.js",
+    "commands:resetProd": "tsc -p tsconfig.prod.json && node build/scripts/discordAPI/resetCommands.js",
     "start": "node ."
   },
   "dependencies": {

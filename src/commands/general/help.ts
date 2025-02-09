@@ -25,13 +25,11 @@ export default new Command(
 
     const [commandCategories, isTruncated] = normalizeSelectMenuOptions(client.commandCategories);
 
-    const options = commandCategories
-      .filter((category) => category !== "dev")
-      .map((category) => {
-        return new StringSelectMenuOptionBuilder()
-          .setLabel(category[0].toUpperCase() + category.slice(1).toLowerCase())
-          .setValue(category);
-      });
+    const options = commandCategories.map((category) => {
+      return new StringSelectMenuOptionBuilder()
+        .setLabel(category[0].toUpperCase() + category.slice(1).toLowerCase())
+        .setValue(category);
+    });
 
     if (isTruncated) {
       logger.warn(new RangeError(truncatedMessage));
