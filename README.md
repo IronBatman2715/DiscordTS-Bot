@@ -43,7 +43,7 @@ From here, follow the steps for your desired setup:
 
 ### Development environment
 
-5. Rename/copy `sample.development.env` to `development.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
+5. Rename/copy `sample.dev.env` to `dev.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
 
@@ -65,7 +65,7 @@ From here, follow the steps for your desired setup:
 
 7. Run `npm run dev` to start a developer environment instance!
 
-   - Running this for the first time will generate `config.development.json` if not present.
+   - Running this for the first time will generate `config.dev.json` if not present.
 
    - Edit _and_ save any of the files in the `src` directory and the program will automatically restart to reflect the changes!
 

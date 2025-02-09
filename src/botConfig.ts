@@ -110,7 +110,7 @@ export function getConfigFile(): BotConfig {
     const DEFAULT_CONFIG_FILE_NAME = "config.default.json";
 
     const isDev = isDevEnvironment();
-    const configFileName = isDev ? "config.development.json" : "config.json";
+    const configFileName = isDev ? "config.dev.json" : "config.json";
 
     if (!existsSync(configFileName)) {
       console.info(`Generating "${configFileName}"`);
