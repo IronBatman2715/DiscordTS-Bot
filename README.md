@@ -57,13 +57,13 @@ From here, follow the steps for your desired setup:
 
      - Slash commands will _immediately_ be updated for this server and this server only upon restarting the bot in _developer mode_.
 
-6. Run `npm ci` to do a clean install of dependencies and generate Prisma client files.
+6. Run `npm i` to install dependencies and generate Prisma client files.
 
 7. Run `npm run dev` to start a developer environment instance!
 
    - Running this for the first time will generate `config.dev.json` if not present.
 
-   - Edit _and_ save any of the files in the `src` directory and the program will automatically restart to reflect the changes!
+   - Edit _and_ save any of the files in the `src` directory and the development environment will automatically restart to reflect the changes!
 
 ### Production environment
 
@@ -77,17 +77,19 @@ From here, follow the steps for your desired setup:
 
    - `CLIENT_ID` Discord bot client ID (acquired in step 1).
 
-6. Run `npm ci` to do a clean install of dependencies and generate Prisma client files.
+6. Run `npm i` to install dependencies and generate Prisma client files.
 
-7. Run `npm run build` to compile the source code for production.
+7. Run `npm run build` to transpile the source code for production.
 
    - Running this for the first time will generate `config.json` if not present.
 
-   - If you are tight on storage space, delete the `node_modules` folder _after_ running `npm run build`. Then, run `npm ci --production` to install only the dependencies needed for production.
+   - **If this is the first time you have run the bot** or **you are updating the source code**, run `npm run commands:register`_after_ transpilation to register all your commands to any and all servers this bot is in. You may need to run `npm run commands:resetProd` prior to `npm run commands:register` if some old commands are not being removed (Discord states that their servers can take up to an hour to reflect these changes. In experience this takes only a couple minutes).
 
-8. Change the `config.json` file to your liking. See information about how you can change it [here](#configuration-file-properties).
+8. With transpilation complete, you can now delete the `node_modules` folder. Then, run `npm ci --production` to install only the dependencies needed for production, omitting the dependencies only needed for transpilation/development.
 
-9. **If this is the first time you have run the bot** or **you are updating the source code**, run `npm run commands:register` to register all your commands to any and all servers this bot is in. You may need to run `npm run commands:resetProd` prior to `npm run commands:register` if some old commands are not being removed.
+   - Changing/updating any files other than `.env` or `config.json` will require you to redo steps 6 and 7.
+
+9. Change the `config.json` file to your liking. See information about how you can change it [here](#configuration-file-properties).
 
 10. Run `npm start` to run the bot!
 
