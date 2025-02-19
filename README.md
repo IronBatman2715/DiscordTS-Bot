@@ -43,7 +43,7 @@ From here, follow the steps for your desired setup:
 
 ### Development environment
 
-5. Rename/copy `sample.dev.env` to `dev.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
+5. Rename/copy [`sample.dev.env`](sample.dev.env) to `dev.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
 
@@ -67,7 +67,7 @@ From here, follow the steps for your desired setup:
 
 ### Production environment
 
-5. Rename/copy `sample.env` to `.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
+5. Rename/copy [`sample.env`](sample.env) to `.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).
 
