@@ -3,16 +3,16 @@
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "Node",
-    "declaration": false,
     "resolveJsonModule": true,
-    "sourceMap": true,
-    "outDir": "devBuild",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "importHelpers": true,
     "skipLibCheck": true,
+    "importHelpers": true,
 
+    "declaration": false,
+    "sourceMap": true,
+    "outDir": "devBuild",
     /* TODO: fix use of path alias */
     "baseUrl": ".",
     "paths": {
