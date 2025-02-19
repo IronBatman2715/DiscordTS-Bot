@@ -9,7 +9,6 @@ pnpm-lock.yaml
 yarn.lock
 
 /build/
-/devBuild/
 /config*.json
 !/config.default.json
 /logs/

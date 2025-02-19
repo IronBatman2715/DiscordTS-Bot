@@ -1,5 +1,5 @@
 {
   "watch": ["src/"],
   "ext": "ts,json",
-  "exec": "tsc && cross-env NODE_ENV=development node devBuild/index.js"
+  "exec": "tsc && cross-env NODE_ENV=development tsx src/index.ts"
 }

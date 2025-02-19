@@ -7,7 +7,7 @@ import tsEslint from "typescript-eslint";
 
 export default tsEslint.config(
   {
-    ignores: ["*.env", "build/**", "devBuild/**", "logs/**", "eslint.config.mjs"], // would like to lint last file, but can not figure it out
+    ignores: ["*.env", "build/**", "logs/**", "eslint.config.mjs"], // would like to lint last file, but can not figure it out
   },
   {
     files: ["src/**"],

@@ -12,7 +12,8 @@
 
     "declaration": false,
     "sourceMap": true,
-    "outDir": "devBuild",
+    /* do not emit dev build. tsc is only called before tsx for type-checking */
+    "noEmit": true,
     /* TODO: fix use of path alias */
     "baseUrl": ".",
     "paths": {
