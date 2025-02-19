@@ -19,6 +19,10 @@
       "name": "Tech Expansion"
     },
     {
+      "type": "competing",
+      "name": "TI"
+    },
+    {
       "type": "playing",
       "name": "in vault 111"
     },
