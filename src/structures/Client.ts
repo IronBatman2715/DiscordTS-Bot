@@ -488,8 +488,14 @@ export default class Client extends DiscordClient {
         }
 
         // Respond to component interaction by updating message with new embed
-        // TODO: probably shouldn't be voiding here. investigate for better solution
-        void componentInteraction.update(genReplyOptions(i));
+        componentInteraction.update(genReplyOptions(i)).catch((e: unknown) => {
+          if (e instanceof Error) {
+            throw e;
+          } else {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            throw new Error(`Could not update message component collector: ${e}`);
+          }
+        });
       });
     }
 
