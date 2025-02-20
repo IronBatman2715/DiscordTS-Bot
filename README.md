@@ -67,6 +67,8 @@ From here, follow the steps for your desired setup:
 
 ### Production environment
 
+> Pre-configured production Docker image is currently a work in progress. For now, follow steps below.
+
 5. Rename/copy [`sample.env`](sample.env) to `.env` and set the environment variables as defined in [`src/global.d.ts`](src/global.d.ts)
 
    - `DISCORD_TOKEN`: Discord bot token (acquired in step 1).

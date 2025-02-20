@@ -1,0 +1,21 @@
+volumes:
+  logs:
+    driver: local
+
+services:
+  discordts-bot:
+    # TODO: Consider building image(s) in a workflow and uploading to GHCR or DockerHub
+    build:
+      context: .
+    image: discordts-bot:latest
+    container_name: discordts-bot
+    volumes:
+      - logs:/home/node/app/logs
+      - ./.env:/home/node/app/.env:ro
+      # TODO: allow file to not exist at container start and let container r/w
+      - type: bind
+        bind:
+          create_host_path: false # error out instead of creating directory and silently failing
+        source: ./config.json
+        target: /home/node/app/config.json
+    restart: unless-stopped
