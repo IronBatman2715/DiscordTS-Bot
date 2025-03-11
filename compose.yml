@@ -19,3 +19,5 @@ services:
         source: ./config.json
         target: /home/node/app/config.json
     restart: unless-stopped
+
+  # TODO: Run MongoDB image instead of relying on externally hosted database
