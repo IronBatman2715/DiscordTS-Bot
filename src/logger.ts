@@ -24,7 +24,7 @@ function initLogger() {
           format: combine(
             colorize(),
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            printf(({ level, message, timestamp, stack }) => `[${timestamp}] ${level}: ${stack || message}`)
+            printf(({ level, message, timestamp, stack }) => `[${timestamp}] ${level}: ${stack ?? message}`)
           ),
         }),
         new transports.File({
