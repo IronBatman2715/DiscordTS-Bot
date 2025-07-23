@@ -1,6 +1,6 @@
-import { Awaitable } from "discord.js";
-import { lstat, readdir } from "fs/promises";
-import { join } from "path";
+import { lstat, readdir } from "node:fs/promises";
+import { join } from "node:path";
+import type { Awaitable } from "discord.js";
 
 import logger from "../../logger.js";
 

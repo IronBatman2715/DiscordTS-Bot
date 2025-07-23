@@ -14,7 +14,6 @@ node_modules/
 compose.y*ml
 Dockerfile
 .dockerignore
-eslint.config.mjs
+biome.jsonc
 .git*
-.prettier*
 README.md

@@ -23,7 +23,6 @@ export default new Command(
 
       embedFieldArr.unshift({
         name: `Playing now: ${track.title})`,
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy ?? "USER"}\n`,
         inline: false,
       });
@@ -31,13 +30,11 @@ export default new Command(
 
     embedFieldArr.push(
       ...guildQueue.tracks.toArray().map((track, i) => {
-        /* eslint-disable @typescript-eslint/restrict-template-expressions */
         return {
           name: `${i + 1}: ${track.title}`,
           value: `by: ${track.author}\nurl: ${track.url}\nrequested by: ${track.requestedBy ?? "USER"}\n`,
           inline: false,
         };
-        /* eslint-enable @typescript-eslint/restrict-template-expressions */
       })
     );
 

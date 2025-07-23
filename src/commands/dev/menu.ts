@@ -24,14 +24,12 @@ export default new Command(
   async (_client, interaction) => {
     const numOfOptions = interaction.options.getInteger("number-of-options", true);
 
-    /* eslint-disable @typescript-eslint/restrict-template-expressions */
     const options = Array.from({ length: numOfOptions }, (_, i) => {
       return new StringSelectMenuOptionBuilder()
         .setLabel(`Option ${i + 1} label`)
         .setValue(`Option ${i + 1} value`)
         .setDescription(`Option ${i + 1} description`);
     });
-    /* eslint-enable @typescript-eslint/restrict-template-expressions */
 
     await interaction.followUp({
       content: "Select something below!",

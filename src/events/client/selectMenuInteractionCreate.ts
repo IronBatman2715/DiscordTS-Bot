@@ -7,7 +7,6 @@ import { ClientEvent } from "../../structures/Event.js";
 export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isStringSelectMenu()) {
     logger.verbose("SelectMenuInteraction created!", { interaction });
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     logger.verbose(`values selected: [${interaction.values}]`);
 
     // Show user that select menu is loading

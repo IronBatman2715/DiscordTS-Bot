@@ -1,4 +1,4 @@
-import { QueueRepeatMode } from "discord-player";
+import type { QueueRepeatMode } from "discord-player";
 
 import { isInRange } from "../general/math.js";
 

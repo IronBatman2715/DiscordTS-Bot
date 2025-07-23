@@ -23,7 +23,6 @@ export default new Command(
     // Check if desired number is within allowed range
     if (!isInRange(quantity, 1, maxMessagesCleared)) {
       await interaction.followUp({
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         content: `You can not clear ${quantity} messages! Allowed range is from 1 to ${maxMessagesCleared}.`,
       });
       return;
@@ -50,7 +49,6 @@ export default new Command(
     }
 
     // Confirmation message
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, true, 3, 1);
   }
 );

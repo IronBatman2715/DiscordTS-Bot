@@ -1,9 +1,0 @@
-{
-  "semi": true,
-  "singleQuote": false,
-  "trailingComma": "es5",
-  "endOfLine": "auto",
-  "printWidth": 120,
-  "useTabs": false,
-  "plugins": ["eslint-plugin-prettier", "prettier-plugin-organize-imports"]
-}

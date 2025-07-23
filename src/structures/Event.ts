@@ -1,10 +1,10 @@
 import type { Prisma } from "@prisma/client";
-import type { GuildQueueEvents, Player, PlayerEvents, PlayerEventsEmitter } from "discord-player";
 import type { Awaitable, ClientEvents } from "discord.js";
+import type { GuildQueueEvents, Player, PlayerEvents, PlayerEventsEmitter } from "discord-player";
 
 import { bindEvent as bindDBEvent } from "../database/index.js";
 import type Client from "./Client.js";
-import QueueMetadata from "./QueueMetadata.js";
+import type QueueMetadata from "./QueueMetadata.js";
 
 /* --- BaseEvent --- */
 export enum EventEmitterType {
@@ -81,7 +81,6 @@ export class ClientEvent<Ev extends keyof ClientEvents>
   implements IBindEvent<Client>
 {
   bindToEventEmitter(eventEmitter: Client): void {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     eventEmitter.on(this.event, this.run);
   }
 }

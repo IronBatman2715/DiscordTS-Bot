@@ -1,5 +1,5 @@
-import { QueueRepeatMode } from "discord-player";
 import { SlashCommandBuilder } from "discord.js";
+import { QueueRepeatMode } from "discord-player";
 
 import getQueue from "../../functions/music/getQueue.js";
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
@@ -28,7 +28,6 @@ export default new Command(
 
     const repeatMode = interaction.options.getInteger("option", true);
     if (!isQueueRepeatMode(repeatMode)) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new TypeError(`Invalid QueueRepeatMode value: "${repeatMode}"`);
     }
 

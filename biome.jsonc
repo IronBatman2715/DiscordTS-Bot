@@ -1,0 +1,51 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "vcs": { "enabled": false },
+  "files": {
+    "includes": [
+      "**",
+      "!**/node_modules/**",
+      "!**/*.env",
+      "**/sample.dev.env",
+      "**/sample.env",
+      "!**/package-lock.json",
+      "!**/pnpm-lock.yaml",
+      "!**/yarn.lock",
+      "!build/**",
+      "!logs/**"
+    ],
+    "ignoreUnknown": false
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      // Some desired eslint rules lost in migration to biome:
+      //
+      // Nursery
+      // - @typescript-eslint/no-floating-promises -> lint/nursery/noFloatingPromises
+      // - @typescript-eslint/no-misused-promises -> lint/nursery/noMisusedPromises
+      //
+      // No support
+      // - @typescript-eslint/no-deprecated
+      // - @typescript-eslint/no-unnecessary-condition
+      // - @typescript-eslint/no-unsafe-argument
+      // - @typescript-eslint/restrict-template-expressions
+      // - @typescript-eslint/unbound-method
+      "recommended": true,
+      "style": {
+        "noCommonJs": "error"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "es5"
+    }
+  },
+  "assist": { "enabled": true, "actions": { "source": { "recommended": true } } }
+}

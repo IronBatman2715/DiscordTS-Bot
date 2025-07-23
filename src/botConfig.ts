@@ -1,14 +1,13 @@
+import { constants, copyFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import type { JSONSchemaType } from "ajv";
 import { Ajv } from "ajv";
 import addErrors from "ajv-errors";
 import addFormats from "ajv-formats";
 import { ActivityType } from "discord.js";
-import { constants, copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
 import lodash from "lodash";
 
 import { isDevEnvironment } from "./functions/general/environment.js";
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const { capitalize } = lodash;
 
 export interface ActivityOption {
@@ -119,7 +118,7 @@ export function getConfigFile(): BotConfig {
         // Edit and then copy
 
         const defaultJson = parseFile(DEFAULT_CONFIG_FILE_NAME);
-        defaultJson.name = defaultJson.name + "-dev";
+        defaultJson.name = `${defaultJson.name}-dev`;
 
         writeFileSync(configFileName, `${JSON.stringify(defaultJson, null, "  ")}\n`, {
           encoding: "utf-8",
@@ -161,7 +160,6 @@ function parseFile(fileName: string): BotConfigJSON {
   if (manualInvalid.length !== 0) {
     let errorMsg = "Invalid config file:";
     manualInvalid.forEach(({ i }) => {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       errorMsg += `\n\t/activities/${i}/url should only have "url" property when "type" is "streaming"`;
     });
     throw new Error(errorMsg);

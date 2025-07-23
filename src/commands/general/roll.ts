@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { SlashCommandBuilder } from "discord.js";
 
 import Command from "../../structures/Command.js";

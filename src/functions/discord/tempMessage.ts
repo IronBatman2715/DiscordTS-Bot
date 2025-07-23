@@ -34,7 +34,7 @@ export default async (
   logger.verbose("Ticking tempMessage", { interaction, text });
   if (showCountdown) {
     // Show countdown to when message will delete itself
-    const newText = text + `...`;
+    const newText = `${text}...`;
     const message = await interaction.followUp({
       content: newText + durationInSeconds.toString(),
     });

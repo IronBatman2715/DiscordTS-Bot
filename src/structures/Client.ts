@@ -1,6 +1,5 @@
+import { join } from "node:path";
 import { DefaultExtractors } from "@discord-player/extractor";
-import { Player, useMainPlayer } from "discord-player";
-import { YoutubeiExtractor } from "discord-player-youtubei";
 import type {
   ChatInputCommandInteraction,
   EmbedData,
@@ -23,7 +22,8 @@ import {
   REST,
   Routes,
 } from "discord.js";
-import { join } from "path";
+import { Player, useMainPlayer } from "discord-player";
+import { YoutubeiExtractor } from "discord-player-youtubei";
 
 import type { BotConfig } from "../botConfig.js";
 import { getConfigFile } from "../botConfig.js";
@@ -66,7 +66,7 @@ export default class Client extends DiscordClient {
   /** Get/Generate singleton instance */
   static async get() {
     if (!Client.instance) {
-      Client.instance = new this();
+      Client.instance = new Client();
 
       try {
         /* Would like these two to be in constructor, but await is not allowed in constructor */
@@ -83,6 +83,7 @@ export default class Client extends DiscordClient {
     return Client.instance;
   }
 
+  // biome-ignore lint/correctness/noUnreachableSuper: may error
   private constructor() {
     try {
       logger.info("*** DISCORD.JS BOT: CONSTRUCTION ***");
@@ -101,7 +102,6 @@ export default class Client extends DiscordClient {
       logger.verbose("Verifying environment variables are set in a valid form... ");
 
       // Always required environment variables
-      /* eslint-disable @typescript-eslint/no-unnecessary-condition */
       if (process.env.DISCORD_TOKEN === undefined)
         throw new ReferenceError("DISCORD_TOKEN environment variable was not set!");
       if (process.env.DB_URL === undefined) throw new ReferenceError("DB_URL environment variable was not set!");
@@ -113,7 +113,6 @@ export default class Client extends DiscordClient {
           throw new TypeError("CLIENT_ID environment variable must contain only digits!");
         }
       }
-      /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
       // Development environment variables
       if (this.devMode) {
@@ -248,8 +247,7 @@ export default class Client extends DiscordClient {
       if (this.devMode) {
         logger.info(`\tDEVELOPMENT MODE. Only working in guild with "TEST_GUILD_ID" environment variable`);
 
-        // Can cast `TEST_GUILD_ID` to string since it is verified in constructor and this is a non-static method
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        // biome-ignore lint/style/noNonNullAssertion: this is a non-static method and `TEST_GUILD_ID` is verified in constructor
         const fullRoute = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.TEST_GUILD_ID!);
 
         await rest.put(fullRoute, {
@@ -304,7 +302,6 @@ export default class Client extends DiscordClient {
       } else if (eventEmitterType === EventEmitterType.MusicPlayer && event.isMusicPlayer()) {
         event.bindToEventEmitter(player);
       } else if (eventEmitterType === EventEmitterType.MusicPlayerGuildQueue && event.isMusicPlayerGuildQueue()) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         event.bindToEventEmitter(player.events);
       } else if (eventEmitterType === EventEmitterType.Prisma && event.isPrisma()) {
         event.bindToEventEmitter();
@@ -335,11 +332,11 @@ export default class Client extends DiscordClient {
     // Check for invalid entries
     if (data.title !== undefined && data.title.length > 256) {
       logger.warn("Had to shorten an embed title.", { embedTitle: data.title });
-      data.title = data.title.substring(0, 256 - 3) + "...";
+      data.title = `${data.title.substring(0, 256 - 3)}...`;
     }
     if (data.description !== undefined && data.description.length > 4096) {
       logger.warn("Had to shorten an embed description.", { embedDescription: data.description });
-      data.description = data.description.substring(0, 4096 - 3) + "...";
+      data.description = `${data.description.substring(0, 4096 - 3)}...`;
     }
     if (data.fields !== undefined) {
       // Cannot have more than 25 fields in one embed
@@ -350,21 +347,21 @@ export default class Client extends DiscordClient {
       data.fields.forEach((f) => {
         if (f.name.length > 256) {
           logger.warn("Had to shorten an embed field name.", { embedFieldName: f.name });
-          f.name = f.name.substring(0, 256 - 3) + "...";
+          f.name = `${f.name.substring(0, 256 - 3)}...`;
         }
         if (f.value.length > 1024) {
           logger.warn("Had to shorten an embed field value.", { embedFieldValue: f.value });
-          f.value = f.value.substring(0, 1024 - 3) + "...";
+          f.value = `${f.value.substring(0, 1024 - 3)}...`;
         }
       });
     }
     if (data.footer?.text !== undefined && data.footer.text.length > 2048) {
       logger.warn("Had to shorten an embed footer text.", { embedFooterText: data.footer.text });
-      data.footer.text = data.footer.text.substring(0, 2048 - 3) + "...";
+      data.footer.text = `${data.footer.text.substring(0, 2048 - 3)}...`;
     }
     if (data.author?.name !== undefined && data.author.name.length > 256) {
       logger.warn("Had to shorten an embed author name.", { embedAuthorName: data.author.name });
-      data.author.name = data.author.name.substring(0, 256 - 3) + "...";
+      data.author.name = `${data.author.name.substring(0, 256 - 3)}...`;
     }
 
     // Generate base embed
@@ -406,14 +403,13 @@ export default class Client extends DiscordClient {
     const otherReplyOptions = options.otherReplyOptions ?? {};
 
     const canFitOnOnePage = embedFields.length <= maxFieldsPerEmbed;
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     logger.verbose(`Using ${Math.ceil(embedFields.length / maxFieldsPerEmbed)} page${canFitOnOnePage ? "" : "s"}.`);
 
     const originalTitle = (() => {
       if (otherEmbedData.title !== undefined) {
         if (otherEmbedData.title.length > 256) {
           logger.warn("Had to shorten an embed title.", { embedTitle: otherEmbedData.title });
-          return otherEmbedData.title.substring(0, 256 - 3) + "...";
+          return `${otherEmbedData.title.substring(0, 256 - 3)}...`;
         }
 
         return otherEmbedData.title;
@@ -433,7 +429,6 @@ export default class Client extends DiscordClient {
       if (canFitOnOnePage) {
         fullEmbedData.title = originalTitle;
       } else {
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         const titlePageSubstr = `${startIndex + 1}-${startIndex + limitedEmbedFields.length} out of ${embedFields.length}`;
         if (originalTitle.length > 0) {
           fullEmbedData.title = `${originalTitle} (${titlePageSubstr})`;
@@ -492,7 +487,6 @@ export default class Client extends DiscordClient {
           if (e instanceof Error) {
             throw e;
           } else {
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             throw new Error(`Could not update message component collector: ${e}`);
           }
         });
@@ -543,7 +537,6 @@ export default class Client extends DiscordClient {
         break;
       }
 
-      case "general":
       default: {
         break;
       }

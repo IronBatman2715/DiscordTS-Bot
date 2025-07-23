@@ -1,6 +1,6 @@
 import type { Awaitable, ChatInputCommandInteraction, SharedSlashCommand } from "discord.js";
 
-import Client from "./Client.js";
+import type Client from "./Client.js";
 
 // ChatInputCommandInteraction<"raw" | "cached"> means that ChatInputCommandInteraction.inGuild() is true
 export type GuildChatInputCommandInteraction = ChatInputCommandInteraction<"raw" | "cached">;

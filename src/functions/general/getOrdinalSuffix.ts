@@ -27,7 +27,6 @@ export default (num: number): string => {
 
   if (category === "zero" || category === "many") {
     logger.warn(
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       new Error(`getOrdinalSuffix received an unexpected ordinal rule (${num} -> ${category})! Returning "th".`)
     );
     return "th";

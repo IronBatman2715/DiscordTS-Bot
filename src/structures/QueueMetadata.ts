@@ -1,5 +1,5 @@
-import type { Track } from "discord-player";
 import type { ChatInputCommandInteraction, Message, TextBasedChannel } from "discord.js";
+import type { Track } from "discord-player";
 
 import logger from "../logger.js";
 import type Client from "./Client.js";

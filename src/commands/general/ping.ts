@@ -12,7 +12,6 @@ export default new Command(
     const verbose = interaction.options.getBoolean("verbose") ?? false;
 
     const pingVerbose = ` Average time between regularly sent signals (websocket heartbeat).`;
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const pingStr = `Ping: **${client.ws.ping} ms**.${verbose ? pingVerbose : ""}`;
 
     const pingMessage = await interaction.followUp({
@@ -21,7 +20,6 @@ export default new Command(
 
     const rtLatencyVerbose = ` Time between command message creation and response message creation.`;
     const rtLatency = pingMessage.createdTimestamp - interaction.createdTimestamp;
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const rtLatencyStr = `Roundtrip latency: **${rtLatency} ms**.${verbose ? rtLatencyVerbose : ""}`;
 
     await pingMessage.edit({

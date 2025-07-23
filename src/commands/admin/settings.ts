@@ -1,6 +1,6 @@
-import { QueueRepeatMode } from "discord-player";
 import type { EmbedField } from "discord.js";
 import { SlashCommandBuilder } from "discord.js";
+import { QueueRepeatMode } from "discord-player";
 import lodash from "lodash";
 
 import {
@@ -16,7 +16,6 @@ import type Client from "../../structures/Client.js";
 import type { GuildChatInputCommandInteraction } from "../../structures/Command.js";
 import Command from "../../structures/Command.js";
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const { kebabCase, camelCase } = lodash;
 
 /** Omit `greetings` from `GuildConfig` */
@@ -41,7 +40,7 @@ builder
   .addSubcommand((option) =>
     option
       .setName(kebabCase(guildConfigSettings[0]))
-      .setDescription("ADMIN ONLY: " + guildConfigDescriptions[guildConfigSettings[0]])
+      .setDescription(`ADMIN ONLY: ${guildConfigDescriptions[guildConfigSettings[0]]}`)
       .addIntegerOption((subOption) =>
         subOption
           .setName("new-value")
@@ -72,7 +71,7 @@ builder
   .addSubcommand((option) =>
     option
       .setName(kebabCase(guildConfigSettings[2]))
-      .setDescription("ADMIN ONLY: " + guildConfigDescriptions[guildConfigSettings[2]])
+      .setDescription(`ADMIN ONLY: ${guildConfigDescriptions[guildConfigSettings[2]]}`)
       .addIntegerOption((subOption) =>
         subOption
           .setName("new-value")
@@ -179,11 +178,11 @@ async function displayCurrentSettings(client: Client, interaction: GuildChatInpu
       for (let i = 0; i < array.length; i++) {
         currentValue = currentValue + array[i];
         if (i !== array.length - 1) {
-          currentValue = currentValue + ", ";
+          currentValue = `${currentValue}, `;
         }
       }
 
-      currentValue = currentValue + " ]";
+      currentValue = `${currentValue} ]`;
     } else {
       currentValue = value;
     }
@@ -249,7 +248,6 @@ function getSettingDisplayValue(settingData: SettingData): string {
     case "defaultRepeatMode": {
       if (typeof settingData.value !== "number") throw new TypeError("settingData.value must be of type 'number'");
       if (!isQueueRepeatMode(settingData.value))
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new TypeError(`Invalid QueueRepeatMode value: "${settingData.value}"`);
 
       return `\`${toDisplayString(settingData.value)}\``;

@@ -1,5 +1,5 @@
-import { useMainPlayer } from "discord-player";
 import { GuildMember, SlashCommandBuilder } from "discord.js";
+import { useMainPlayer } from "discord-player";
 
 import { getGuildConfig } from "../../database/GuildConfig.js";
 import getQueue from "../../functions/music/getQueue.js";
@@ -58,7 +58,6 @@ export default new Command(
 
       const { defaultRepeatMode } = await getGuildConfig(interaction.guildId);
       if (!isQueueRepeatMode(defaultRepeatMode)) {
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new TypeError(`Invalid default QueueRepeatMode value in database: "${defaultRepeatMode}"`);
       }
 

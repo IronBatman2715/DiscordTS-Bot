@@ -1,5 +1,5 @@
-import { useQueue } from "discord-player";
 import type { ChatInputCommandInteraction } from "discord.js";
+import { useQueue } from "discord-player";
 
 import logger from "../../logger.js";
 import type QueueMetadata from "../../structures/QueueMetadata.js";
