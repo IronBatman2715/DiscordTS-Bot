@@ -7,7 +7,7 @@ export function isDevEnvironment(): boolean {
   switch (process.env.NODE_ENV) {
     case "development": {
       if (!loadedFile) {
-        config({ path: "dev.env" });
+        config({ path: "dev.env", quiet: true });
         loadedFile = true;
       }
       return true;
@@ -15,7 +15,7 @@ export function isDevEnvironment(): boolean {
     case undefined: // allow default to fallthrough to production
     case "production": {
       if (!loadedFile) {
-        config({ path: ".env" });
+        config({ path: ".env", quiet: true });
         loadedFile = true;
       }
       return false;
