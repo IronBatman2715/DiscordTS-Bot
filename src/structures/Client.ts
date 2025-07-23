@@ -8,6 +8,7 @@ import type {
   InteractionReplyOptions,
   InteractionUpdateOptions,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import {
   ActionRowBuilder,
@@ -494,6 +495,22 @@ export default class Client extends DiscordClient {
     }
 
     return embedMessage;
+  }
+
+  normalizeStringSelectMenuOptions(
+    options: StringSelectMenuOptionBuilder[]
+  ): [StringSelectMenuOptionBuilder[], boolean] {
+    // https://github.com/discordjs/discord.js/blob/main/packages/builders/src/components/Assertions.ts
+
+    if (options.length > 25) {
+      logger.warn(
+        new RangeError("Tried to generate a string select menu with more than 25 options! Truncating to 25.")
+      );
+
+      return [options.slice(0, 25), true];
+    } else {
+      return [options, false];
+    }
   }
 
   async runCommand(command: Command, interaction: ChatInputCommandInteraction): Promise<void> {

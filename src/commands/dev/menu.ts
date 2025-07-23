@@ -18,7 +18,7 @@ export default new Command(
           .setDescription("Number of options to generate.")
           .setRequired(true)
           .setMinValue(1)
-          .setMaxValue(25) // can not find documentation on this limit, but testing shows this is the maximum
+          .setMaxValue(25) // see Client.normalizeStringSelectMenuOptions
     ),
 
   async (_client, interaction) => {
