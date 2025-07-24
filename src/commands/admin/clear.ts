@@ -49,6 +49,9 @@ export default new Command(
     }
 
     // Confirmation message
-    await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, true, 3, 1);
+    await tempMessage(interaction, `Cleared \`${quantity}\` message${quantity === 1 ? "" : "s"}`, {
+      durationInSeconds: 3,
+      countdownIntervalInSeconds: 1,
+    });
   }
 );

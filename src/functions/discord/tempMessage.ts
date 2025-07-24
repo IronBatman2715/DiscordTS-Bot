@@ -5,21 +5,32 @@ import { isNaturalNumber } from "../general/math.js";
 import sleep from "../general/sleep.js";
 
 /**
- * Send a temporary message with content `text` to the channel that `interaction` is in.
- *
- * @param interaction
- * @param text
  * @param showCountdown [default: true] Don't display countdown
  * @param durationInSeconds [default: 10] Countdown duration in seconds
  * @param countdownIntervalInSeconds [default: 2] Second interval between updates to the countdown
  */
+export interface TempMessageOptions {
+  showCountdown: boolean;
+  durationInSeconds: number;
+  countdownIntervalInSeconds: number;
+}
+
+/**
+ * Send a temporary message with content `text` to the channel that `interaction` is in.
+ *
+ * @param interaction
+ * @param text
+ * @param options see {@link TempMessageOptions}
+ */
 export default async (
   interaction: ChatInputCommandInteraction,
   text: string,
-  showCountdown = true,
-  durationInSeconds = 10,
-  countdownIntervalInSeconds = 2
+  options: Partial<TempMessageOptions> = {}
 ) => {
+  const showCountdown = options.showCountdown ?? true;
+  const durationInSeconds = options.durationInSeconds ?? 10;
+  const countdownIntervalInSeconds = options.countdownIntervalInSeconds ?? 2;
+
   if (!isNaturalNumber(durationInSeconds)) {
     throw new RangeError(
       "tempMessage called with an invalid duration. Must be an integer greater than 0. Not sending message."
@@ -41,7 +52,6 @@ export default async (
 
     logger.verbose(durationInSeconds);
 
-    await sleep(1000 * countdownIntervalInSeconds);
     await countdown(durationInSeconds - countdownIntervalInSeconds, countdownIntervalInSeconds, message, newText);
   } else {
     // No visible countdown to when message will delete itself
@@ -54,6 +64,7 @@ export default async (
 };
 
 async function countdown(t: number, countdownIntervalInSeconds: number, tempMessage: Message, newText: string) {
+  await sleep(1000 * countdownIntervalInSeconds);
   const tempMsg = await tempMessage.edit({ content: newText + t.toString() });
 
   if (t <= 0) {
@@ -63,7 +74,6 @@ async function countdown(t: number, countdownIntervalInSeconds: number, tempMess
     const newT = t - countdownIntervalInSeconds;
     logger.verbose(t);
 
-    await sleep(1000 * countdownIntervalInSeconds);
     await countdown(newT, countdownIntervalInSeconds, tempMsg, newText);
   }
 }
