@@ -514,6 +514,9 @@ export default class Client extends DiscordClient {
   }
 
   async runCommand(command: Command, interaction: ChatInputCommandInteraction): Promise<void> {
+    // Show user that command is loading
+    await interaction.deferReply();
+
     // For now, all commands should assume we are in a guild.
     // Subject to change.
     if (!interaction.inGuild()) {

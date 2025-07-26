@@ -14,11 +14,6 @@ export default new ClientEvent("interactionCreate", async (interaction) => {
     // If command name is not valid, do nothing
     if (!command) return;
 
-    // Show user that command is loading
-    await interaction.deferReply().catch((error: unknown) => {
-      logger.error(error);
-    });
-
     await client.runCommand(command, interaction);
   }
 });
