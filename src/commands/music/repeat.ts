@@ -1,9 +1,10 @@
 import { SlashCommandBuilder } from "discord.js";
-import { QueueRepeatMode } from "discord-player";
+import { QueueRepeatMode, useQueue } from "discord-player";
 
-import getQueue from "../../functions/music/getQueue.js";
 import { isQueueRepeatMode, toDisplayString } from "../../functions/music/queueRepeatMode.js";
+import logger from "../../logger.js";
 import Command from "../../structures/Command.js";
+import type QueueMetadata from "../../structures/QueueMetadata.js";
 
 export default new Command(
   new SlashCommandBuilder()
@@ -23,8 +24,8 @@ export default new Command(
     ),
 
   async (_client, interaction) => {
-    const guildQueue = await getQueue(interaction);
-    if (!guildQueue) return;
+    const queue = useQueue<QueueMetadata>(interaction.guildId);
+    if (!queue) return;
 
     const repeatMode = interaction.options.getInteger("option", true);
     if (!isQueueRepeatMode(repeatMode)) {
@@ -34,15 +35,13 @@ export default new Command(
     const repeatModeDisplay = toDisplayString(repeatMode);
 
     // Change the repeat behavior of the queue
-    if (guildQueue.repeatMode === repeatMode) {
-      await interaction.followUp({
-        content: `Already set to that repeat mode (${repeatModeDisplay})!`,
-      });
+    if (queue.repeatMode === repeatMode) {
+      logger.info(`Already set to that repeat mode (${repeatModeDisplay})!`);
     } else {
-      guildQueue.setRepeatMode(repeatMode);
-      await interaction.followUp({
-        content: `Set music queue repeat mode to: ${repeatModeDisplay}!`,
-      });
+      queue.setRepeatMode(repeatMode);
+      logger.info(`Set music queue repeat mode to: ${repeatModeDisplay}!`);
     }
+
+    await interaction.deleteReply();
   }
 );

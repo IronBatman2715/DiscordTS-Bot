@@ -1,24 +1,24 @@
 import { SlashCommandBuilder } from "discord.js";
+import { useQueue } from "discord-player";
 
-import getQueue from "../../functions/music/getQueue.js";
+import logger from "../../logger.js";
 import Command from "../../structures/Command.js";
+import type QueueMetadata from "../../structures/QueueMetadata.js";
 
 export default new Command(
   new SlashCommandBuilder().setName("pause").setDescription("Pause music."),
 
   async (_client, interaction) => {
-    const guildQueue = await getQueue(interaction);
-    if (!guildQueue) return;
+    const queue = useQueue<QueueMetadata>(interaction.guildId);
+    if (!queue) return;
 
-    if (guildQueue.node.isPaused()) {
-      await interaction.followUp({
-        content: "Queue is already paused right now.",
-      });
+    if (queue.node.isPaused()) {
+      logger.info("Queue is already paused right now.");
     } else {
-      guildQueue.node.setPaused(true);
-      await interaction.followUp({
-        content: "Paused the music queue!",
-      });
+      queue.node.setPaused(true);
+      logger.info("Paused the music queue!");
     }
+
+    await interaction.deleteReply();
   }
 );

@@ -1,23 +1,23 @@
 import { SlashCommandBuilder } from "discord.js";
+import { useQueue } from "discord-player";
 
-import getQueue from "../../functions/music/getQueue.js";
+import logger from "../../logger.js";
 import Command from "../../structures/Command.js";
+import type QueueMetadata from "../../structures/QueueMetadata.js";
 
 export default new Command(
   new SlashCommandBuilder().setName("shuffle").setDescription("Shuffles the tracks currently in the music queue."),
   async (_client, interaction) => {
-    const guildQueue = await getQueue(interaction);
-    if (!guildQueue) return;
+    const queue = useQueue<QueueMetadata>(interaction.guildId);
+    if (!queue) return;
 
-    if (guildQueue.tracks.toArray().length > 1) {
-      guildQueue.tracks.shuffle();
-      await interaction.followUp({
-        content: "Shuffled the music queue!",
-      });
+    if (queue.tracks.toArray().length > 1) {
+      queue.tracks.shuffle();
+      logger.info("Shuffled the music queue!");
     } else {
-      await interaction.followUp({
-        content: "The queue has only one song in it! Use `/play` to queue more songs.",
-      });
+      logger.warn("The queue has only one song in it! Use `/play` to queue more songs.");
     }
+
+    await interaction.deleteReply();
   }
 );

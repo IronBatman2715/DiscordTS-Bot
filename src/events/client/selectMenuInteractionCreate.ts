@@ -1,8 +1,12 @@
 import type { EmbedField } from "discord.js";
+import { useQueue } from "discord-player";
 
+import { fromKebabString } from "../../functions/music/queuePageState.js";
 import logger from "../../logger.js";
 import Client from "../../structures/Client.js";
 import { ClientEvent } from "../../structures/Event.js";
+import type QueueMetadata from "../../structures/QueueMetadata.js";
+import { QueuePageState } from "../../structures/QueueMetadata.js";
 
 export default new ClientEvent("interactionCreate", async (interaction) => {
   if (interaction.isStringSelectMenu()) {
@@ -54,6 +58,32 @@ export default new ClientEvent("interactionCreate", async (interaction) => {
         await interaction.editReply({
           embeds: [helpMenuEmbed],
         });
+
+        break;
+      }
+      case `${client.config.name}-audio-queue-select-menu`: {
+        const [pageStr] = interaction.values;
+
+        if (!interaction.guildId) throw new ReferenceError("Could not retrieve guildId from interaction");
+        const queue = useQueue<QueueMetadata>(interaction.guildId);
+        if (!queue) throw new Error("Could not get queue");
+
+        switch (fromKebabString(pageStr)) {
+          case QueuePageState.NowPlaying: {
+            await queue.metadata.showNowPlaying();
+            break;
+          }
+          case QueuePageState.Queue: {
+            if (pageStr.includes("-")) {
+              const queuePageNum = parseInt(pageStr.split("-")[1]);
+              await queue.metadata.showQueue(queuePageNum);
+            } else {
+              await queue.metadata.showQueue();
+            }
+
+            break;
+          }
+        }
 
         break;
       }
