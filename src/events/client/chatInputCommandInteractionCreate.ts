@@ -12,7 +12,10 @@ export default new ClientEvent("interactionCreate", async (interaction) => {
     const command = client.commands.get(interaction.commandName);
 
     // If command name is not valid, do nothing
-    if (!command) return;
+    if (!command) {
+      await interaction.reply({ content: `'/${command}' is not valid for this bot!` });
+      return;
+    }
 
     await client.runCommand(command, interaction);
   }
