@@ -143,6 +143,35 @@ export default class QueueMetadata {
     });
   }
 
+  private generateComponents(queue: GuildQueue<QueueMetadata>) {
+    // State page select menu
+    const queuePages: string[] = [];
+    if (queue.tracks.toArray().length > MAX_TRACKS_PER_QUEUE_EMBED) {
+      const startStr = toDisplayString(QueuePageState.Queue);
+
+      const trackCount = queue.tracks.toArray().length;
+      const pageCount = Math.ceil(trackCount / MAX_TRACKS_PER_QUEUE_EMBED);
+      for (let i = 0; i < pageCount; i++) {
+        queuePages.push(`${startStr}: ${i}`);
+      }
+    } else {
+      queuePages.push(toDisplayString(QueuePageState.Queue));
+    }
+    const options = [toDisplayString(QueuePageState.NowPlaying), ...queuePages].map((v) => {
+      return new StringSelectMenuOptionBuilder().setLabel(v).setValue(kebabCase(v));
+    });
+    const statePageSelectMenuRow = new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(
+      new StringSelectMenuBuilder()
+        .setCustomId(`${this.client.config.name}-audio-queue-select-menu`)
+        .setPlaceholder("Select an audio page")
+        .setMinValues(1)
+        .setMaxValues(1)
+        .setOptions(options)
+    );
+
+    return [statePageSelectMenuRow];
+  }
+
   private generateNowPlayingEmbed() {
     const queue = useQueue<QueueMetadata>(this.latestInteraction.guildId);
     if (!queue) throw new Error("Could not get queue");
@@ -232,32 +261,7 @@ export default class QueueMetadata {
       }
     }
 
-    // Generate state options
-    const queuePages: string[] = [];
-    if (queue.tracks.toArray().length > MAX_TRACKS_PER_QUEUE_EMBED) {
-      const startStr = toDisplayString(QueuePageState.Queue);
-
-      const trackCount = queue.tracks.toArray().length;
-      const pageCount = Math.ceil(trackCount / MAX_TRACKS_PER_QUEUE_EMBED);
-      for (let i = 0; i < pageCount; i++) {
-        queuePages.push(`${startStr}: ${i}`);
-      }
-    } else {
-      queuePages.push(toDisplayString(QueuePageState.Queue));
-    }
-    const options = [toDisplayString(QueuePageState.NowPlaying), ...queuePages].map((v) => {
-      return new StringSelectMenuOptionBuilder().setLabel(v).setValue(kebabCase(v));
-    });
-    const components = [
-      new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(
-        new StringSelectMenuBuilder()
-          .setCustomId(`${this.client.config.name}-audio-queue-select-menu`)
-          .setPlaceholder("Select an audio page")
-          .setMinValues(1)
-          .setMaxValues(1)
-          .setOptions(options)
-      ),
-    ];
+    const components = this.generateComponents(queue);
 
     if (this.stateMessage) {
       // Update state message
