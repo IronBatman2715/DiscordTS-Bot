@@ -1,4 +1,4 @@
-import type { EmbedField, Message } from "discord.js";
+import type { EmbedAssetData, EmbedField, Message } from "discord.js";
 import {
   ActionRowBuilder,
   DiscordAPIError,
@@ -127,7 +127,6 @@ export default class QueueMetadata {
 
     await this.latestInteraction.editReply({
       embeds: [nowPlayingEmbed],
-      files: [],
     });
   }
 
@@ -139,7 +138,6 @@ export default class QueueMetadata {
 
     await this.latestInteraction.editReply({
       embeds: [queueEmbeds[this._statePage]],
-      files: ["assets/icons/music.png"],
     });
   }
 
@@ -210,9 +208,12 @@ export default class QueueMetadata {
     const queue = useQueue<QueueMetadata>(this.latestInteraction.guildId);
     if (!queue) throw new Error("Could not get queue");
 
+    let thumbnail: EmbedAssetData | undefined;
     const fields: EmbedField[] = [];
     if (queue.currentTrack) {
       const track = queue.currentTrack;
+
+      thumbnail = { url: track.thumbnail };
 
       fields.unshift({
         name: `Now playing: ${track.title}`,
@@ -239,9 +240,7 @@ export default class QueueMetadata {
       this.client.genEmbed({
         title: `Music Queue [Repeat mode: ${queueRepeatModeToDisplayString(queue.repeatMode)}]`,
         fields,
-        thumbnail: {
-          url: "attachment://music.png",
-        },
+        thumbnail,
       })
     );
   }
@@ -272,7 +271,6 @@ export default class QueueMetadata {
           await this.stateMessage.edit({
             embeds: [this.generateNowPlayingEmbed()],
             components,
-            files: [],
           });
 
           break;
@@ -284,7 +282,6 @@ export default class QueueMetadata {
           await this.stateMessage.edit({
             embeds: [queueEmbeds[this._statePage ?? 0]],
             components,
-            files: ["assets/icons/music.png"],
           });
 
           break;
@@ -301,7 +298,6 @@ export default class QueueMetadata {
           this.stateMessage = await this.latestInteraction.followUp({
             embeds: [this.generateNowPlayingEmbed()],
             components,
-            files: [],
           });
 
           break;
@@ -313,7 +309,6 @@ export default class QueueMetadata {
           this.stateMessage = await this.latestInteraction.followUp({
             embeds: [queueEmbeds[this._statePage ?? 0]],
             components,
-            files: ["assets/icons/music.png"],
           });
 
           break;
