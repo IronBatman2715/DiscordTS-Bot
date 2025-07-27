@@ -10,17 +10,12 @@ export function toDisplayString(value: QueuePageState): string {
 }
 
 export function fromKebabString(s: string): QueuePageState {
-  switch (s) {
-    case "now-playing":
-      return QueuePageState.NowPlaying;
-    case "queue":
-      return QueuePageState.Queue;
-
-    default:
-      if (/^queue-(0|[1-9][0-9]*)$/.test(s)) {
-        return QueuePageState.Queue;
-      }
-
-      throw new Error("aah");
+  if (/^now-playing$/.test(s)) {
+    return QueuePageState.NowPlaying;
   }
+  if (/^queue(-(0|[1-9][0-9]*))?$/.test(s)) {
+    return QueuePageState.Queue;
+  }
+
+  throw new Error(`Could not get valid 'QueuePageState' from "${s}"`);
 }
