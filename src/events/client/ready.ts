@@ -16,6 +16,10 @@ export default new ClientEvent("ready", async () => {
 });
 
 function setRandomBotPresence(client: Client, unusedActivities: ActivityOption[]) {
+  if (!client.user) {
+    throw new Error("Could not get bot client user");
+  }
+
   // If used all of them, regenerate array to restart
   if (unusedActivities.length < 1) {
     unusedActivities = client.config.activities.slice();
@@ -24,7 +28,7 @@ function setRandomBotPresence(client: Client, unusedActivities: ActivityOption[]
   // Get random unused activity index
   const randomIndex = Math.floor(Math.random() * unusedActivities.length);
 
-  client.user?.setPresence({
+  client.user.setPresence({
     status: "online",
     afk: false,
     activities: [unusedActivities[randomIndex]],
