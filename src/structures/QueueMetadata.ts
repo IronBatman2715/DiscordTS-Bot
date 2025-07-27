@@ -29,6 +29,8 @@ export enum QueuePageState {
   Queue = 1,
 }
 
+const MAX_TRACKS_PER_QUEUE_EMBED = 5;
+
 export default class QueueMetadata {
   private stateMessage?: Message;
   private _state: QueuePageState;
@@ -176,8 +178,6 @@ export default class QueueMetadata {
   }
 
   private generateQueueEmbeds() {
-    const MAX_FIELDS = 5;
-
     const queue = useQueue<QueueMetadata>(this.latestInteraction.guildId);
     if (!queue) throw new Error("Could not get queue");
 
@@ -202,8 +202,8 @@ export default class QueueMetadata {
     );
 
     const normalizedFields = [];
-    for (let i = 0; i < fields.length; i += MAX_FIELDS) {
-      normalizedFields.push(fields.slice(i, i + MAX_FIELDS));
+    for (let i = 0; i < fields.length; i += MAX_TRACKS_PER_QUEUE_EMBED) {
+      normalizedFields.push(fields.slice(i, i + MAX_TRACKS_PER_QUEUE_EMBED));
     }
 
     return normalizedFields.map((fields) =>
@@ -234,11 +234,11 @@ export default class QueueMetadata {
 
     // Generate state options
     const queuePages: string[] = [];
-    if (queue.tracks.toArray().length > 5) {
+    if (queue.tracks.toArray().length > MAX_TRACKS_PER_QUEUE_EMBED) {
       const startStr = toDisplayString(QueuePageState.Queue);
 
       const trackCount = queue.tracks.toArray().length;
-      const pageCount = Math.ceil(trackCount / 5);
+      const pageCount = Math.ceil(trackCount / MAX_TRACKS_PER_QUEUE_EMBED);
       for (let i = 0; i < pageCount; i++) {
         queuePages.push(`${startStr}: ${i}`);
       }
